@@ -28,13 +28,15 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+				<a class="navbar-brand" href="#">
+					<img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="110px" style="position:relative; top:-10px;" />
+				</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
+				{{-- <ul class="nav navbar-nav">
 					<li><a href="{{App::make('url')->to('/')}}">Home</a></li>
-				</ul>
+				</ul> --}}
 
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
