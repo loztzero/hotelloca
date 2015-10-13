@@ -1,63 +1,127 @@
-@extends('app')
-
+@extends('layouts.foundation-login')
 @section('content')
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
-				<div class="panel-body">
-					@if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<strong>Whoops!</strong> There were some problems with your input.<br><br>
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
+<div class="row">
+	<div class="large-8 columns hide-for-small hide-for-medium">
+		<ul class="example-orbit" data-orbit data-options="bullets:false;">
+		  <li>
+		    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 1" />
+		    <div class="orbit-caption">
+		      Caption One.
+		    </div>
+		  </li>
+		  <li class="active">
+		    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 2" />
+		    <div class="orbit-caption">
+		      Caption Two.
+		    </div>
+		  </li>
+		  <li>
+		    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 3" />
+		    <div class="orbit-caption">
+		      Caption Three.
+		    </div>
+		  </li>
+		</ul>
+	</div>
 
-					<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/login">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
-								<input type="password" class="form-control" name="password">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember"> Remember Me
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary" style="margin-right: 15px;">
-									Login
-								</button>
-
-								<a href="/password/email">Forgot Your Password?</a>
-							</div>
-						</div>
-					</form>
-				</div>
+	<div class="large-4 columns">
+		<div class="panel">
+			<b>Partner Login</b>
+			<hr>
+			@if (count($errors) > 0)
+			<div data-alert class="alert-box alert">
+				<a href="#" class="close">&times;</a>
+				<strong>Whoops!</strong> There were some problems with your input.<br><br>
+				
+					@foreach ($errors->all() as $error)
+					- {{ $error }}<br>
+					@endforeach
+				
 			</div>
+			@endif
+
+			<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/login">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<label>Email Address
+					<input type="email" class="sm" name="email" value="{{ old('email') }}">
+				</label>
+
+				<label>Password
+					<input type="password" name="password">
+				</label>
+
+				<button type="submit" class="button small right">LOGIN</button>
+				<div style="clear:both;"></div>
+			</form>
 		</div>
 	</div>
+
 </div>
+
+<div class="row">
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			This Is The Fifth Panel
+			The Special Center One
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<div class="panel">
+			Put The Promotion Here
+			Using Picture Or Panel
+		</div>
+	</div>
+
+</div>
+
 @endsection

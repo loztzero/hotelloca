@@ -10,6 +10,21 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
+
+
+/*Pure Routes Start Here*/
+// Route::get('/', function()
+// {
+// 	return redirect('auth/login');
+// });
+Route::controller('api', 'ApiController');
+Route::controller('hotel-admin', 'HotelAdminController');
+Route::controller('main', 'MainController');
+
+
+/*LOTS OF SAMPLE BELOW*/
+
 Route::filter('auth', function($route, $request)
 {
     // Login check (Default)
@@ -28,11 +43,15 @@ Route::controllers([
 
 
 Route::controller('angular', 'AngularController');
+Route::get('/bebek', function()
+{
+	return view('layouts.underconstruction');
+});
 
 $router->group(['middleware' => 'yolo'], function() {
 	Route::get('/', function()
 	{
-		echo 'kambing lewat';
+		return view('layouts.underconstruction');
 	});
 });
 
