@@ -19,7 +19,7 @@
 // 	return redirect('auth/login');
 // });
 Route::controller('api', 'ApiController');
-Route::controller('hotel-admin', 'HotelAdminController');
+Route::controller('hotel-agent', 'HotelAgentController');
 Route::controller('main', 'MainController');
 
 

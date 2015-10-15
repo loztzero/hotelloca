@@ -8,7 +8,9 @@
   <link media="all" type="text/css" rel="stylesheet" href="{{App::make('url')->to('/')}}/assets/css/foundation-icons/foundation-icons.css">
   <link href="{{ App::make('url')->to('/') }}/assets/css/foundation.min.css" rel="stylesheet">  
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
-  <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet">  
+  <link href="{{ App::make('url')->to('/') }}/assets/css/jquery.bxslider.css" rel="stylesheet" /> 
+  <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet"> 
+<!-- bxSlider CSS file -->
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/modernizr.js"></script>
 
 </head>
@@ -29,46 +31,52 @@
 
 
       <div class="sticky">
-        <nav class="top-bar hide-for-small" data-topbar role="navigation">
-          <ul class="title-area">
-            <li class="name">
-              <a href="#">
-                <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="100px" style="position:relative;padding-left:10px;padding-top:5px;" />
-              </a>
-            </li>
-          </ul>
-
-          <section class="top-bar-section">
-            <!-- Right Nav Section -->
-            <ul class="right">
-              <li><a href="#"><i class="fi-home"></i>&nbsp; Home</a></li>
-              <li><a href="#"><i class="fi-power"></i>&nbsp; Logout</a></li>
+          <nav class="top-bar hide-for-small" data-topbar role="navigation">
+            <ul class="title-area">
+              <li class="name">
+                <a href="#">
+                  <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="100px" style="position:relative;padding-left:10px;padding-top:5px;" />
+                </a>
+              </li>
             </ul>
-          </section>
-        </nav>
+
+
+            <section class="top-bar-section">
+              <!-- Right Nav Section -->
+              <ul class="right">
+                <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
+                <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
+                <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
+                <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
+                <li><a href="{{url('main/contact-us')}}"><i class="fi-mail"></i>&nbsp; Contact Us</a></li>
+              </ul>
+            </section>
+          </nav>
       </div>
 
       <aside class="left-off-canvas-menu">
         <ul class="off-canvas-list">
-          <li><a href="#"><i class="fi-home"></i> Home</a></li>
-          <li><a href="#"><i class="fi-home"></i> Wew</a></li>
+          <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
+          <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
+          <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
+          <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
+          <li><a href="{{url('main/contact-us')}}"><i class="fi-mail"></i>&nbsp; Contact Us</a></li>
         </ul>
       </aside>
 
       <section class="main-section">
-        <aside class="colums medium-3 large-2 hide-for-small panel" style="position:fixed; padding:0; height:100%">
-          <ul class="side-nav">
-            <li><a href="#"><i class="fi-home"></i> Home</a></li>
-            <li><a href="#"><i class="fi-home"></i> Wew</a></li>
-          </ul>
-        </aside>
-
-        <content class="columns medium-9 medium-offset-3 large-10 large-offset-2">
-          <div style="min-height: 530px">
+        <content class="columns medium-12 large-12">
+          <div style="min-height: 530px;margin-top:10px;">
             @yield('content')
           </div>
           <div style="clear:both"></div>
-          <footer class="footer">
+        </content>
+      </section>
+      <a class="exit-off-canvas"></a>
+    </div>
+  </div>   
+
+  <footer class="footer">
             <div class="row full-width">
               <div class="small-12 medium-3 large-4 columns">
                 <i class="fi-laptop"></i>
@@ -99,12 +107,7 @@
                 <ul>
               </div>
             </div>
-          </footer>
-        </content>
-      </section>
-      <a class="exit-off-canvas"></a>
-    </div>
-  </div>    
+          </footer> 
   {{-- <div class="container" style="padding-top:10px;">
     @yield('content')
   </div> --}}<!-- /.container -->

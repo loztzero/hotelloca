@@ -3,6 +3,6 @@
 use Illuminate\Database\Eloquent\Model;
 use App\Emodel;
 class Country extends Emodel {
-	protected $table = 'MST040';
+	protected $table = 'MST002';
 
 }

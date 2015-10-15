@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="ui.hotelloca">
 <head>
   <title>Hotelloca</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,7 @@
   <link href="{{ App::make('url')->to('/') }}/assets/css/foundation.min.css" rel="stylesheet">  
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/jquery.bxslider.css" rel="stylesheet" /> 
+  <link href="{{ App::make('url')->to('/') }}/assets/css/foundation-datepicker.min.css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet"> 
 <!-- bxSlider CSS file -->
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/modernizr.js"></script>
@@ -44,11 +45,9 @@
             <section class="top-bar-section">
               <!-- Right Nav Section -->
               <ul class="right">
-                <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
-                <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
-                <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
-                <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
-                <li><a href="{{url('main/contact-us')}}"><i class="fi-mail"></i>&nbsp; Contact Us</a></li>
+                <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
+                <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; My Profile</a></li>
+                <li><a href="{{url('main/contact-us')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
               </ul>
             </section>
           </nav>
@@ -114,8 +113,10 @@
 
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/jquery.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/fastclick.js"></script>
+  <script src="{{App::make('url')->to('/')}}/assets/js/moment.js"></script>
 </body>
 <script src="{{App::make('url')->to('/')}}/assets/js/foundation.min.js"></script>
+<script src="{{App::make('url')->to('/')}}/assets/js/foundation-datepicker.min.js"></script>
 <script src="{{App::make('url')->to('/')}}/assets/js/angular.min.js"></script>
 <script>
 $(document).foundation();

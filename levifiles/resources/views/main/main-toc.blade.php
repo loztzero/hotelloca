@@ -1,4 +1,4 @@
-@extends('layouts.foundation-login')
+@extends('layouts.foundation-angular')
 @section('content')
 
 <div class="row" style="padding:20px 0px;">

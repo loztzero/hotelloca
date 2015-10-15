@@ -1,4 +1,4 @@
-@extends('layouts.foundation-login')
+@extends('layouts.foundation-angular')
 @section('content')
 <div class="row">
 	<div class="large-8 columns hide-for-small hide-for-medium">
