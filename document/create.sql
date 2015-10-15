@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-15 10:28                                #
+# Created on:            2015-10-15 10:36                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -117,6 +117,29 @@ CREATE TABLE `TRX001` (
 ENGINE=InnoDB;;
 
 # ---------------------------------------------------------------------- #
+# Add table "MST010"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `MST010` (
+    `id` VARCHAR(100) NOT NULL,
+    `mst001_id` VARCHAR(100) NOT NULL COMMENT 'Email user, sebagai user code',
+    `comp_name` VARCHAR(100) NOT NULL,
+    `address` VARCHAR(1024) NOT NULL COMMENT 'Role : user/admin',
+    `postcode` VARCHAR(15) NOT NULL,
+    `mst002_id` VARCHAR(100) NOT NULL,
+    `mst003_id` VARCHAR(100) NOT NULL,
+    `phone_number` VARCHAR(40) NOT NULL,
+    `fax_number` VARCHAR(40),
+    `email` VARCHAR(40) NOT NULL,
+    `website` VARCHAR(40),
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_MST010` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_MST010_1` UNIQUE (`mst001_id`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
@@ -125,3 +148,12 @@ ALTER TABLE `MST003` ADD CONSTRAINT `MST002_MST003`
 
 ALTER TABLE `MST005` ADD CONSTRAINT `MST004_MST005` 
     FOREIGN KEY (`mst004_id`) REFERENCES `MST004` (`id`);
+
+ALTER TABLE `MST010` ADD CONSTRAINT `MST001_MST010` 
+    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
+
+ALTER TABLE `MST010` ADD CONSTRAINT `MST002_MST010` 
+    FOREIGN KEY (`mst002_id`) REFERENCES `MST002` (`id`);
+
+ALTER TABLE `MST010` ADD CONSTRAINT `MST003_MST010` 
+    FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
