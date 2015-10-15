@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-13 23:13                                #
+# Created on:            2015-10-15 10:28                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -90,6 +90,29 @@ CREATE TABLE `MST005` (
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST005` PRIMARY KEY (`id`),
     CONSTRAINT `TUC_MST005_1` UNIQUE (`begin_date`, `mst004_id`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
+# Add table "TRX001"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `TRX001` (
+    `id` VARCHAR(100) NOT NULL,
+    `order_no` VARCHAR(40) NOT NULL COMMENT 'Email user, sebagai user code',
+    `order_date` DATE NOT NULL,
+    `email` VARCHAR(40) NOT NULL COMMENT 'Role : user/admin',
+    `transfer_to` VARCHAR(100) NOT NULL,
+    `payment_val` DOUBLE(30,10) NOT NULL,
+    `transfer_date` DATE NOT NULL,
+    `bank_transfer` VARCHAR(100) NOT NULL,
+    `account_transfer` VARCHAR(40) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `note` VARCHAR(1024),
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_TRX001` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_TRX001_1` UNIQUE (`order_no`)
 )
 ENGINE=InnoDB;;
 
