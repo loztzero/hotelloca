@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-15 10:36                                #
+# Created on:            2015-10-15 13:15                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -36,8 +36,8 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `MST002` (
     `id` VARCHAR(100) NOT NULL,
-    `country_code` VARCHAR(40) NOT NULL COMMENT 'Email user, sebagai user code',
-    `country_name` VARCHAR(100) NOT NULL,
+    `country_code` VARCHAR(40) NOT NULL COMMENT 'kode negara',
+    `country_name` VARCHAR(100) NOT NULL COMMENT 'nama negara',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST002` PRIMARY KEY (`id`),
@@ -51,9 +51,9 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `MST003` (
     `id` VARCHAR(100) NOT NULL,
-    `city_kode` VARCHAR(40) NOT NULL,
-    `city_name` VARCHAR(100) NOT NULL,
-    `mst002_id` VARCHAR(100) NOT NULL COMMENT 'Email user, sebagai user code',
+    `city_kode` VARCHAR(40) NOT NULL COMMENT 'kode Kota',
+    `city_name` VARCHAR(100) NOT NULL COMMENT 'nama Kota',
+    `mst002_id` VARCHAR(100) NOT NULL COMMENT 'negara',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST003` PRIMARY KEY (`id`),
@@ -67,8 +67,8 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `MST004` (
     `id` VARCHAR(100) NOT NULL,
-    `curr_code` VARCHAR(40) NOT NULL,
-    `curr_name` VARCHAR(100) NOT NULL,
+    `curr_code` VARCHAR(40) NOT NULL COMMENT 'kode valuta',
+    `curr_name` VARCHAR(100) NOT NULL COMMENT 'nama valuta',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST004` PRIMARY KEY (`id`),
@@ -82,10 +82,10 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `MST005` (
     `id` VARCHAR(100) NOT NULL,
-    `begin_date` DATE NOT NULL COMMENT 'Email user, sebagai user code',
-    `end_date` DATE NOT NULL,
-    `mst004_id` VARCHAR(100) NOT NULL,
-    `kurs_val` DOUBLE(30,10) NOT NULL,
+    `begin_date` DATE NOT NULL COMMENT 'tgl awal',
+    `end_date` DATE NOT NULL COMMENT 'tgl akhir',
+    `mst004_id` VARCHAR(100) NOT NULL COMMENT 'valuta',
+    `kurs_val` DOUBLE(30,10) NOT NULL COMMENT 'nilai kurs',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST005` PRIMARY KEY (`id`),
@@ -122,16 +122,17 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `MST010` (
     `id` VARCHAR(100) NOT NULL,
-    `mst001_id` VARCHAR(100) NOT NULL COMMENT 'Email user, sebagai user code',
-    `comp_name` VARCHAR(100) NOT NULL,
-    `address` VARCHAR(1024) NOT NULL COMMENT 'Role : user/admin',
-    `postcode` VARCHAR(15) NOT NULL,
-    `mst002_id` VARCHAR(100) NOT NULL,
-    `mst003_id` VARCHAR(100) NOT NULL,
-    `phone_number` VARCHAR(40) NOT NULL,
-    `fax_number` VARCHAR(40),
-    `email` VARCHAR(40) NOT NULL,
-    `website` VARCHAR(40),
+    `mst001_id` VARCHAR(100) NOT NULL COMMENT 'user',
+    `comp_name` VARCHAR(100) NOT NULL COMMENT 'nama company',
+    `address` VARCHAR(1024) NOT NULL COMMENT 'alamat',
+    `postcode` VARCHAR(15) NOT NULL COMMENT 'kode pos',
+    `mst002_id` VARCHAR(100) NOT NULL COMMENT 'negara',
+    `mst003_id` VARCHAR(100) NOT NULL COMMENT 'kota',
+    `phone_number` VARCHAR(40) NOT NULL COMMENT 'no telepon',
+    `fax_number` VARCHAR(40) COMMENT 'nomor fax',
+    `email` VARCHAR(40) NOT NULL COMMENT 'email',
+    `website` VARCHAR(40) COMMENT 'website',
+    `active_flg` VARCHAR(100) NOT NULL COMMENT 'aktif = dah kirim email ke agent untuk passwordnya',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST010` PRIMARY KEY (`id`),
