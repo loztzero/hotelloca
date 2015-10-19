@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-15 13:15                                #
+# Created on:            2015-10-19 22:13                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -99,16 +99,16 @@ ENGINE=InnoDB;;
 
 CREATE TABLE `TRX001` (
     `id` VARCHAR(100) NOT NULL,
-    `order_no` VARCHAR(40) NOT NULL COMMENT 'Email user, sebagai user code',
-    `order_date` DATE NOT NULL,
-    `email` VARCHAR(40) NOT NULL COMMENT 'Role : user/admin',
-    `transfer_to` VARCHAR(100) NOT NULL,
-    `payment_val` DOUBLE(30,10) NOT NULL,
-    `transfer_date` DATE NOT NULL,
-    `bank_transfer` VARCHAR(100) NOT NULL,
-    `account_transfer` VARCHAR(40) NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `note` VARCHAR(1024),
+    `order_no` VARCHAR(40) NOT NULL COMMENT 'Nomor Order',
+    `order_date` DATE NOT NULL COMMENT 'Tangga Order',
+    `email` VARCHAR(40) NOT NULL COMMENT 'Email',
+    `transfer_to` VARCHAR(100) NOT NULL COMMENT 'Transfer ke bank',
+    `payment_val` DOUBLE(30,10) NOT NULL COMMENT 'nilai transfer',
+    `transfer_date` DATE NOT NULL COMMENT 'tgl transfer',
+    `bank_transfer` VARCHAR(100) NOT NULL COMMENT 'bank transfer',
+    `account_transfer` VARCHAR(40) NOT NULL COMMENT 'nomor rekening transfer',
+    `name` VARCHAR(100) NOT NULL COMMENT 'atas nama transferan',
+    `note` VARCHAR(1024) COMMENT 'keterangan',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_TRX001` PRIMARY KEY (`id`),
@@ -141,6 +141,83 @@ CREATE TABLE `MST010` (
 ENGINE=InnoDB;;
 
 # ---------------------------------------------------------------------- #
+# Add table "TRX010"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `TRX010` (
+    `id` VARCHAR(100) NOT NULL,
+    `order_no` VARCHAR(40) NOT NULL COMMENT 'nomor order',
+    `oder_yrmo` VARCHAR(6) NOT NULL,
+    `order_date` DATE NOT NULL COMMENT 'tgl order',
+    `tot_gross_value` DOUBLE(30,10) NOT NULL COMMENT 'total gross value',
+    `disc_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai diskon',
+    `tot_dpp_value` DOUBLE(30,10) NOT NULL COMMENT 'total dppvalue : gross- diskon',
+    `ppn_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai PPN',
+    `tot_nett_value` DOUBLE(30,10) NOT NULL COMMENT 'total nett value = tot_dpp + PPN ',
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_TRX010` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_TRX010_1` UNIQUE (`order_no`, `oder_yrmo`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
+# Add table "TRX011"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `TRX011` (
+    `id` VARCHAR(100) NOT NULL,
+    `trx010_id` VARCHAR(100) NOT NULL,
+    `line_number` INTEGER(5) NOT NULL COMMENT 'tgl order',
+    `hotel_id` VARCHAR(100) NOT NULL,
+    `hotel_name` VARCHAR(100) NOT NULL COMMENT 'nama hotel',
+    `star` INTEGER(5) NOT NULL COMMENT 'bintang',
+    `type_room` VARCHAR(100) NOT NULL COMMENT 'tipe kamar',
+    `check_in_date` DATE NOT NULL COMMENT 'tgl check in',
+    `check_out_date` DATE NOT NULL COMMENT 'tanggal check out',
+    `day` INTEGER(5) NOT NULL COMMENT 'jumlah hari',
+    `gross_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai kamar sebelum PPN dan diskon promo',
+    `disc_value` DOUBLE(30,10) NOT NULL COMMENT 'diskon promo',
+    `ppn_value` DOUBLE NOT NULL COMMENT 'nilai PPN',
+    `tot_value` DOUBLE(30,10) NOT NULL COMMENT 'total nilai : gross value - disc+PPN',
+    `title` VARCHAR(40) NOT NULL COMMENT 'mr/mrs',
+    `guest_first_name` VARCHAR(100) NOT NULL COMMENT 'nama depan tamu',
+    `guest_last_name` VARCHAR(100) NOT NULL COMMENT 'nama akhir tamu',
+    `non_smoking_flag` VARCHAR(40) NOT NULL,
+    `interconnetion_flag` VARCHAR(40) NOT NULL,
+    `early_check_in_flag` VARCHAR(40) NOT NULL,
+    `late_check_in_flag` VARCHAR(40) NOT NULL,
+    `high_floor_flag` VARCHAR(40) NOT NULL,
+    `low_floor_flag` VARCHAR(40) NOT NULL,
+    `twin_flag` VARCHAR(40) NOT NULL,
+    `note` VARCHAR(1024) NOT NULL,
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_TRX011` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_TRX011_1` UNIQUE (`trx010_id`, `line_number`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
+# Add table "TRX012"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `TRX012` (
+    `id` VARCHAR(100) NOT NULL,
+    `trx010_id` VARCHAR(100) NOT NULL,
+    `payment_method` VARCHAR(100) NOT NULL COMMENT 'tipe pembayaran :deposit/transfer/card',
+    `card_type` VARCHAR(100) COMMENT 'tipe cc: master/visa',
+    `card_number` VARCHAR(40) COMMENT 'nomor cc',
+    `card_name` VARCHAR(100) COMMENT 'nama cc',
+    `ccv` INTEGER(5) COMMENT 'nomor ccv',
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_TRX012` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_TRX012_1` UNIQUE (`trx010_id`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
@@ -158,3 +235,9 @@ ALTER TABLE `MST010` ADD CONSTRAINT `MST002_MST010`
 
 ALTER TABLE `MST010` ADD CONSTRAINT `MST003_MST010` 
     FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
+
+ALTER TABLE `TRX011` ADD CONSTRAINT `TRX010_TRX011` 
+    FOREIGN KEY (`trx010_id`) REFERENCES `TRX010` (`id`);
+
+ALTER TABLE `TRX012` ADD CONSTRAINT `TRX010_TRX012` 
+    FOREIGN KEY (`trx010_id`) REFERENCES `TRX010` (`id`);
