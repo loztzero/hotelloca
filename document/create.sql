@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-19 22:13                                #
+# Created on:            2015-10-19 22:19                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -218,6 +218,23 @@ CREATE TABLE `TRX012` (
 ENGINE=InnoDB;;
 
 # ---------------------------------------------------------------------- #
+# Add table "BLNC001"                                                    #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `BLNC001` (
+    `id` VARCHAR(100) NOT NULL,
+    `mst001_id` VARCHAR(100) NOT NULL COMMENT 'user agent',
+    `mst004_id` VARCHAR(100) NOT NULL COMMENT 'valuta',
+    `deposit_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai deposit',
+    `used_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai pakai',
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_BLNC001` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_BLNC001_1` UNIQUE (`mst001_id`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
@@ -241,3 +258,9 @@ ALTER TABLE `TRX011` ADD CONSTRAINT `TRX010_TRX011`
 
 ALTER TABLE `TRX012` ADD CONSTRAINT `TRX010_TRX012` 
     FOREIGN KEY (`trx010_id`) REFERENCES `TRX010` (`id`);
+
+ALTER TABLE `BLNC001` ADD CONSTRAINT `MST001_BLNC001` 
+    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
+
+ALTER TABLE `BLNC001` ADD CONSTRAINT `MST004_BLNC001` 
+    FOREIGN KEY (`mst004_id`) REFERENCES `MST004` (`id`);
