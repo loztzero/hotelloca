@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-10-19 22:19                                #
+# Created on:            2015-10-20 21:24                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -149,11 +149,14 @@ CREATE TABLE `TRX010` (
     `order_no` VARCHAR(40) NOT NULL COMMENT 'nomor order',
     `oder_yrmo` VARCHAR(6) NOT NULL,
     `order_date` DATE NOT NULL COMMENT 'tgl order',
+    `mst001_id` VARCHAR(100) NOT NULL,
+    `tot_base_value` DOUBLE(30,10) NOT NULL COMMENT 'total modal',
     `tot_gross_value` DOUBLE(30,10) NOT NULL COMMENT 'total gross value',
     `disc_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai diskon',
     `tot_dpp_value` DOUBLE(30,10) NOT NULL COMMENT 'total dppvalue : gross- diskon',
     `ppn_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai PPN',
     `tot_nett_value` DOUBLE(30,10) NOT NULL COMMENT 'total nett value = tot_dpp + PPN ',
+    `status_flg` VARCHAR(40) NOT NULL COMMENT 'done/cancel/pending',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_TRX010` PRIMARY KEY (`id`),
@@ -176,6 +179,7 @@ CREATE TABLE `TRX011` (
     `check_in_date` DATE NOT NULL COMMENT 'tgl check in',
     `check_out_date` DATE NOT NULL COMMENT 'tanggal check out',
     `day` INTEGER(5) NOT NULL COMMENT 'jumlah hari',
+    `base_value` DOUBLE(30,10) NOT NULL COMMENT 'modal',
     `gross_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai kamar sebelum PPN dan diskon promo',
     `disc_value` DOUBLE(30,10) NOT NULL COMMENT 'diskon promo',
     `ppn_value` DOUBLE NOT NULL COMMENT 'nilai PPN',
@@ -235,6 +239,22 @@ CREATE TABLE `BLNC001` (
 ENGINE=InnoDB;;
 
 # ---------------------------------------------------------------------- #
+# Add table "LOG001"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `LOG001` (
+    `id` VARCHAR(100) NOT NULL,
+    `trx001_id` VARCHAR(100) NOT NULL COMMENT 'user agent',
+    `blnc001_id` VARCHAR(100) NOT NULL,
+    `used_value` DOUBLE(30,10) NOT NULL COMMENT 'nilai pakai',
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_LOG001` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_LOG001_1` UNIQUE (`trx001_id`)
+)
+ENGINE=InnoDB;;
+
+# ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
@@ -253,6 +273,9 @@ ALTER TABLE `MST010` ADD CONSTRAINT `MST002_MST010`
 ALTER TABLE `MST010` ADD CONSTRAINT `MST003_MST010` 
     FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
 
+ALTER TABLE `TRX010` ADD CONSTRAINT `MST001_TRX010` 
+    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
+
 ALTER TABLE `TRX011` ADD CONSTRAINT `TRX010_TRX011` 
     FOREIGN KEY (`trx010_id`) REFERENCES `TRX010` (`id`);
 
@@ -264,3 +287,9 @@ ALTER TABLE `BLNC001` ADD CONSTRAINT `MST001_BLNC001`
 
 ALTER TABLE `BLNC001` ADD CONSTRAINT `MST004_BLNC001` 
     FOREIGN KEY (`mst004_id`) REFERENCES `MST004` (`id`);
+
+ALTER TABLE `LOG001` ADD CONSTRAINT `TRX001_LOG001` 
+    FOREIGN KEY (`trx001_id`) REFERENCES `TRX001` (`id`);
+
+ALTER TABLE `LOG001` ADD CONSTRAINT `BLNC001_LOG001` 
+    FOREIGN KEY (`blnc001_id`) REFERENCES `BLNC001` (`id`);
