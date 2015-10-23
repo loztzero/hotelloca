@@ -1,12 +1,16 @@
 @if (Session::has('error'))
-    <div class="alert alert-danger" role="alert">
-	  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-	  <span class="sr-only">Error:</span>
-	  {{Session::get('error')}}
+	<div data-alert class="alert-box alert ">
+		<i class="fi-alert"></i> Error<br>
+		@foreach(Session::get('error') as $error)
+		- {{$error}}<br>
+		@endforeach
+	  <a href="#" class="close">&times;</a>
 	</div>
 @elseif(Session::has('message'))
-	<div class="alert alert-info" role="alert">
-	  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-	  {{Session::get('message')}}
+	<div data-alert class="alert-box success ">
+		@foreach(Session::get('message') as $message)
+		- {{$message}}<br>
+		@endforeach
+	  <a href="#" class="close">&times;</a>
 	</div>
 @endif 

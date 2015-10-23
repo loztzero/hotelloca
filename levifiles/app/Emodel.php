@@ -3,6 +3,9 @@
 use Illuminate\Database\Eloquent\Model;
 use Uuid;
 class Emodel extends Model {
+
+    public $incrementing = false;
+    
 	public static function boot()
     {
         parent::boot();

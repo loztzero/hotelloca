@@ -4,7 +4,7 @@ namespace Illuminate\Foundation\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Country;
 trait RegistersUsers
 {
     use RedirectsUsers;
@@ -16,7 +16,12 @@ trait RegistersUsers
      */
     public function getRegister()
     {
-        return view('auth.register');
+        $indonesia = Country::where('country_name', '=', 'Indonesia')->first();
+        $countries = Country::lists('country_name', 'id');
+        return view('auth.register')->with('countries', $countries)
+        ->with('indonesia', $indonesia->id);
+        //echo "<pre>";
+        //print_r($countries->toArray());
     }
 
     /**

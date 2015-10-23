@@ -20,15 +20,7 @@
 		          <label for="right-label" class="show-for-small-only">Pac Passport</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <select id="right-label">
-		          	@foreach($countries as $country)
-		          		@if($country->country_name == 'Indonesia')
-		          		<option selected>{{$country->country_name}}</option>
-		          		@else
-		          		<option>{{$country->country_name}}</option>
-		          		@endif
-		          	@endforeach
-		          </select>
+		         {!! Form::select('country', $countries, null, array('ng-model' => 'field.passport','required')) !!}
 		        </div>
 		    </div>
 
@@ -38,15 +30,7 @@
 		          <label for="right-label" class="show-for-small-only">Destination Country</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <select id="right-label">
-		          	@foreach($countries as $country)
-		          		@if($country->country_name == 'Indonesia')
-		          		<option selected>{{$country->country_name}}</option>
-		          		@else
-		          		<option>{{$country->country_name}}</option>
-		          		@endif
-		          	@endforeach
-		          </select>
+		          	{!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required')) !!}
 		        </div>
 		    </div>
 
@@ -56,7 +40,9 @@
 		          <label for="right-label" class="show-for-small-only">Destination City</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <select id="right-label">
+		          <select ng-model="field.city" name="city" required id="city">
+		          	<option value=""></option>
+		          	<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
 		          </select>
 		        </div>
 		    </div>
@@ -171,6 +157,21 @@ $("#dp2").change(function(){
 
 var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
+
+	$scope.field = {};
+	$scope.field.passport = '{{$indonesia}}';
+	$scope.field.country = '{{$indonesia}}';
+	$scope.cities = [];
+	$scope.getCity = function(){
+		$http.post('{{url("/auth/city-from-country")}}', $scope.field).success(function(response){
+			$scope.cities = response;
+			$scope.field.city = '';
+			// console.log(response);
+
+		})
+	}
+	$scope.getCity();
+	$scope.field.city = '{{old("city")}}';
 
 });
 

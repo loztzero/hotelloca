@@ -24,6 +24,7 @@
         "Illuminate\\View\\ViewServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Maatwebsite\\Excel\\ExcelServiceProvider",
+        "Illuminate\\Html\\HtmlServiceProvider",
         "App\\Providers\\BusServiceProvider",
         "App\\Providers\\ConfigServiceProvider",
         "App\\Providers\\EventServiceProvider",
@@ -129,7 +130,9 @@
         "auth.password.tokens": "Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider",
         "translator": "Illuminate\\Translation\\TranslationServiceProvider",
         "translation.loader": "Illuminate\\Translation\\TranslationServiceProvider",
-        "dompdf": "Barryvdh\\DomPDF\\ServiceProvider"
+        "dompdf": "Barryvdh\\DomPDF\\ServiceProvider",
+        "html": "Illuminate\\Html\\HtmlServiceProvider",
+        "form": "Illuminate\\Html\\HtmlServiceProvider"
     },
     "when": {
         "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider": [],
@@ -143,6 +146,7 @@
         "Illuminate\\Redis\\RedisServiceProvider": [],
         "Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider": [],
         "Illuminate\\Translation\\TranslationServiceProvider": [],
-        "Barryvdh\\DomPDF\\ServiceProvider": []
+        "Barryvdh\\DomPDF\\ServiceProvider": [],
+        "Illuminate\\Html\\HtmlServiceProvider": []
     }
 }

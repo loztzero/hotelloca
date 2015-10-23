@@ -20,6 +20,7 @@
 // });
 Route::controller('api', 'ApiController');
 Route::controller('hotel-agent', 'HotelAgentController');
+Route::controller('hotel-admin', 'HotelAdminController');
 Route::controller('main', 'MainController');
 
 

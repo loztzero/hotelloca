@@ -1,48 +1,290 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Routing\UrlGenerator;
-use Input, Auth, Request, Session, Redirect, Hash;
+use Illuminate\Http\Request;
+use Input, Auth, Session, Redirect, Hash;
 use App;
 use App\User;
 use App\Libraries\Helpers;
 use DB;
 use App\Models\Country;
+use App\Models\City;
+use App\Models\ConfirmationPayment;
 class HotelAgentController extends Controller {
 
-	public function getIndex()
-	{
-		$countries = Country::all();
-		return view('hotelagent.hotel-agent-browse')->with('countries', $countries);
+	public function getIndex(){
+		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
+        $countries = Country::lists('country_name', 'id');
+		return view('hotelagent.hotel-agent-browse')->with('countries', $countries)->with('indonesia', $indonesia);
 	}
 
-	public function getInsertCountry()
-	{
-		$url = 'http://api.travelmart.com.cn/webservice.asmx/GetCountry?UserID=api&Password=888888&Lang=en';
-		$countries = Helpers::xmlToJson($url);
-		$countries = json_decode($countries);
+	public function postDataHotel(){
 
-		echo '<pre>';
-		//print_r($countries->Countrys->Country);
-		DB::beginTransaction();
-		try {
-
-			foreach($countries->Countrys->Country as $key => $value):
-				$negara = ucfirst(strtolower($value->CountryName));
-				$country = new Country();
-				$country->cntry_code = $negara;
-				$country->cntry_name = $negara;
-				$country->save();
-			endforeach;	
-
-		} catch (Exception $e) {
-			DB::rollback();
-			echo 'terjadi error cuy';
-		}
-
-		DB::commit();
-
-		echo 'simpan telah berhasil';
 	}
+
+	public function getHotel(){
+
+	}
+
+	public function getBookingHotel(){
+		return view('hotelagent.hotel-agent-booking-hotel');
+	}
+
+	public function postDataBookingHotel(){
+
+	}
+
+	public function getPayment(){
+
+	}
+
+	public function getConfirmationPayment(){
+		return view('hotelagent.hotel-agent-confirmation-payment');
+	}
+
+	public function postValidateConfirmationPayment(Request $request){
+
+		$confirmationPayment = new ConfirmationPayment();
+        $errorBag = $confirmationPayment->rules($request->all());
+        if(count($errorBag) > 0){
+            Session::flash('error', $errorBag);
+            return redirect('hotel-agent/confirmation-payment')->withInput($request->all());
+        } else {
+
+            DB::beginTransaction();
+
+            try {
+
+                $confirmationPayment = $confirmationPayment->doParams($confirmationPayment, $request->all());
+                $confirmationPayment->save();
+                DB::commit();
+                Session::flash('message', array('success' => 'Confirmation payment success, we will process your data as soon as possible.'));
+                return redirect('hotel-agent/confirmation-payment');
+
+
+            } catch (Exception $e) {
+
+                DB::rollback();
+                Session::flash('error', array('error' => $e));
+                return redirect('hotel-agent/confirmation-payment')->withInput($request->all());
+            }
+            
+        }
+
+	}
+
+	// public function getInsertCountry()
+	// {
+	// 	$url = 'http://api.travelmart.com.cn/webservice.asmx/GetCountry?UserID=api&Password=888888&Lang=en';
+	// 	$countries = Helpers::xmlToJson($url);
+	// 	$countries = json_decode($countries);
+
+	// 	echo '<pre>';
+	// 	//print_r($countries->Countrys->Country);
+	// 	DB::beginTransaction();
+	// 	try {
+
+	// 		foreach($countries->Countrys->Country as $key => $value):
+	// 			$negara = ucfirst(strtolower($value->CountryName));
+	// 			$country = new Country();
+	// 			$country->cntry_code = $negara;
+	// 			$country->cntry_name = $negara;
+	// 			$country->save();
+	// 		endforeach;	
+
+	// 	} catch (Exception $e) {
+	// 		DB::rollback();
+	// 		echo 'terjadi error cuy';
+	// 	}
+
+	// 	DB::commit();
+
+	// 	echo 'simpan telah berhasil';
+	// }
+
+	// public function getInsertCity($x){
+	// 	$countries = Country::orderBy('country_code')->skip($x)->take(5)->get();
+	// 	// $countries = Country::where('country_code', '=', 'China')->get();
+		
+	// 	DB::beginTransaction();
+	// 	try {
+			
+	// 		foreach($countries as $country):
+	// 			$negara = str_replace(' ', '%20', $country->country_name);
+	// 			//echo $negara.'<br>';
+	// 			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetCity?UserID=api&Password=888888&Lang=en&Country='.$negara.'&Province=&City=';
+	// 			$cities = Helpers::xmlToJson($url);
+	// 			$cities = json_decode($cities);
+
+	// 			// foreach($cities as $city)
+	// 			echo $this->getCity($country, $cities).'<br><br>';
+				
+	// 		endforeach;
+
+	// 	} catch (Exception $e) {
+	// 		DB::rollback();
+	// 		print_r($e);
+	// 	}
+	// 	DB::commit();
+	// 	echo 'data kota berhasil di simpan';
+	// }
+
+	// public function getBebek(){
+	// 	echo 'Chantilly/Compi鑗ne';
+	// }
+
+	// public function getCity($country, $cities){
+
+	// 	// echo '<pre>';
+	// 	//print_r($cities);
+	// 	if(isset($cities->Countrys)){
+
+	// 		if(is_array($cities->Countrys->Country->Provinces->Province)){
+			
+	// 			foreach($cities->Countrys->Country->Provinces->Province as $province):
+	// 				if(is_array($province->Citys->CityName)){
+	// 					foreach($province->Citys->CityName as $key):
+	// 						$key = str_replace("Chantilly/Compi鑗ne", "Chantilly/Compié‘—ne", $key);
+	// 						$key = str_replace("Montlu鏾n", "Montlué¾n", $key);
+	// 						if(!City::where('city_name', '=', $key)->first()){
+	// 							$kota = new City();
+	// 							$kota->city_code = $key;
+	// 							$kota->city_name = $key;
+	// 							$kota->mst002_id = $country->id;
+	// 							$kota->save();
+	// 						}
+	// 					endforeach;
+	// 				} else {
+	// 					$key = str_replace("Chantilly/Compi鑗ne", "Chantilly/Compié‘—ne", $province->Citys->CityName);
+	// 					$key = str_replace("Montlu鏾n", "Montlué¾n", $province->Citys->CityName);
+	// 					if(!City::where('city_name', '=', $key)->first()){
+	// 						$kota = new City();
+	// 						$kota->city_code = $province->Citys->CityName;
+	// 						$kota->city_name = $province->Citys->CityName;
+	// 						$kota->mst002_id = $country->id;
+	// 						$kota->save();
+	// 						//echo $province->Citys->CityName.'<br>';
+	// 					}
+	// 				}
+	// 			endforeach;
+
+	// 		} else {
+
+	// 			if(is_array($cities->Countrys->Country->Provinces->Province->Citys->CityName)){
+	// 				foreach($cities->Countrys->Country->Provinces->Province->Citys->CityName as $key):
+
+	// 					$key = str_replace("Chantilly/Compi鑗ne", "Chantilly/Compié‘—ne", $key);
+	// 					$key = str_replace("Montlu鏾n", "Montlué¾n", $key);
+	// 					if(!City::where('city_name', '=', $key)->first()){
+	// 						$kota = new City();
+	// 						$kota->city_code = $key;
+	// 						$kota->city_name = $key;
+	// 						$kota->mst002_id = $country->id;
+	// 						$kota->save();
+	// 					}
+
+	// 				endforeach;
+	// 			} else {
+
+	// 				$key = str_replace("Chantilly/Compi鑗ne", "Chantilly/Compié‘—ne", $cities->Countrys->Country->Provinces->Province->Citys->CityName);
+	// 				$key = str_replace("Montlu鏾n", "Montlué¾n", $cities->Countrys->Country->Provinces->Province->Citys->CityName);
+	// 				if(!City::where('city_name', '=', $key)->first()){
+	// 					$kota = new City();
+	// 					$kota->city_code = $key;
+	// 					$kota->city_name = $key;
+	// 					$kota->mst002_id = $country->id;
+	// 					$kota->save();
+	// 					//echo $province->Citys->CityName.'<br>';
+	// 				}
+	// 			}	
+
+	// 		}
+
+	// 	}
+		
+	// 	// foreach($cities->Countrys->Country->Provinces->Province as $province):
+
+	// 	// 	print_r($province).'<br>';
+	// 	// endforeach;
+
+	// 	return $country->country_name;
+
+	// }
+
+	// public function getCity2($country, $cities){
+	// 	// $url = 'http://api.travelmart.com.cn/webservice.asmx/GetCity?UserID=api&Password=888888&Lang=en&Country='.$country->country_name.'&Province=&City=';
+	// 	// $cities = Helpers::xmlToJson($url);
+	// 	// $cities = json_decode($cities);
+	// 	// echo '<pre>';
+	// 	// print_r($cities->Countrys->Country->Provinces->Province);
+	// 	foreach($cities->Countrys->Country->Provinces->Province as $province):
+			
+	// 		// echo '<pre>';
+	// 		// print_r($province);
+	// 		if(!isset($province->Citys)){
+
+	// 			// echo '<pre>kambing';
+	// 			// print_r($province);
+	// 			// if(is_array($province->CityName)){
+
+	// 			// 	foreach($province->CityName as $key):
+	// 			// 		if(!City::where('city_name', '=', $key)->first()){
+	// 			// 			$kota = new City();
+	// 			// 			$kota->city_code = $key;
+	// 			// 			$kota->city_name = $key;
+	// 			// 			$kota->mst002_id = $country->id;
+	// 			// 			$kota->save();
+	// 			// 		}
+	// 			// 	endforeach;
+
+	// 			// } else {
+	// 			// 	if(!City::where('city_name', '=', $province->CityName)->first()){
+	// 			// 		$kota = new City();
+	// 			// 		$kota->city_code = $province->CityName;
+	// 			// 		$kota->city_name = $province->CityName;
+	// 			// 		$kota->mst002_id = $country->id;
+	// 			// 		$kota->save();
+	// 			// 		//echo $province->Citys->CityName.'<br>';
+	// 			// 	}
+	// 			// }
+
+	// 		} else {
+	// 			echo '<pre>kambing';
+	// 			print_r($province);
+	// 			// if(is_array($province->Citys->CityName)){
+	// 			// 	foreach($province->Citys->CityName as $key):
+
+	// 			// 		if(!City::where('city_name', '=', $key)->first()){
+	// 			// 			$kota = new City();
+	// 			// 			$kota->city_code = $key;
+	// 			// 			$kota->city_name = $key;
+	// 			// 			$kota->mst002_id = $country->id;
+	// 			// 			$kota->save();
+	// 			// 		}
+	// 			// 	endforeach;
+	// 			// } else {
+
+	// 			// 	if(!City::where('city_name', '=', $province->Citys->CityName)->first()){
+	// 			// 		$kota = new City();
+	// 			// 		$kota->city_code = $province->Citys->CityName;
+	// 			// 		$kota->city_name = $province->Citys->CityName;
+	// 			// 		$kota->mst002_id = $country->id;
+	// 			// 		$kota->save();
+	// 			// 		//echo $province->Citys->CityName.'<br>';
+	// 			// 	}
+	// 			// }	
+				
+	// 		}
+			
+	// 		// echo '<pre>';
+	// 		// print_r($province);
+	// 		// echo '<br><br>';
+	// 	endforeach;
+	// 	// echo '<pre>';
+	// 	// print_r($cities);
+	// 	return $country->country_name;
+
+	// }
 
 	public function getCities($country){
 

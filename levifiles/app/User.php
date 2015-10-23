@@ -59,7 +59,6 @@ class User extends Emodel implements AuthenticatableContract, CanResetPasswordCo
 
 		return $error;
 	}
-
 	
 
 }

@@ -31,6 +31,20 @@
     min-height: 280px;
   }
 }
+
+
+@media only screen and (max-width: 40em) {
+   .middle-text {
+    margin-left: 15px;
+  }
+}
+
+.middle-text {
+    font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
+    font-size:15px;
+}
+
+
 .footer-links {
   list-style-type: none;
 }

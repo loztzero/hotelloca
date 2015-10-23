@@ -137,6 +137,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Illuminate\Html\HtmlServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -199,6 +200,8 @@ return [
 		'Uuid' => 'Webpatser\Uuid\Uuid',
 		'PDF' => 'Barryvdh\DomPDF\Facade',
 		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+		'Form'=> 'Illuminate\Html\FormFacade', 
+		'HTML'=> 'Illuminate\Html\HtmlFacade',
 	],
 
 ];
