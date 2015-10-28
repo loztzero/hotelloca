@@ -35,7 +35,7 @@ class HotelAgentController extends Controller {
 	}
 
 	public function getPayment(){
-
+		return view('hotelagent.hotel-agent-payment');
 	}
 
 	public function getConfirmationPayment(){

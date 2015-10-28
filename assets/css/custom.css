@@ -56,3 +56,18 @@
 .footer-links li {
   margin-top: .5rem;
 }
+
+.info-hotel {
+  border:0;width:100%;
+}
+
+.info-hotel td {
+  padding:3px;
+}
+
+.info-hotel td:first-child {font-weight: bold;text-align:right; width:15em;
+}
+
+.info-hotel tr:nth-of-type(even) {
+      background-color: transparent !important;
+}

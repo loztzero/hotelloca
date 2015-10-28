@@ -20,12 +20,9 @@
 
 			<fieldset>
 				<legend>Information Hotel</legend>
-				<style>
-					.info-hotel td:first-child {font-weight: bold;text-align:right; width:15em;}
-				</style>
 				<div class="row">
 					<div class="large-6 medium-12 small-12 column">
-						<table class="info-hotel" style="border:0;width:100%;">
+						<table class="info-hotel">
 							<tr>
 								<td>Nama Hotel</td>
 								<td>10 Bintang</td>
@@ -42,7 +39,7 @@
 								<td>10 Bintang</td>
 							</tr>
 							<tr>
-								<td>Night</td>
+								<td>Night :</td>
 								<td>10 Bintang</td>
 							</tr>
 							<tr>
@@ -138,17 +135,26 @@
 			</div>
 			
 			<div class="row">
-				<div class="large-4 columns">
-			      <label>Note
+				<div class="large-10 columns">
+			      <label><b>Note</b>
 			        <textarea>
 			        </textarea>
 			      </label>
 			    </div>
 			</div>
 
+			<div class="row">
+				<div class="large-10 columns">
+			      <label>Cancellation Policy
+			      	<b>Table Cancellation Policy Field</b>
+			      </label>
+
+			    </div>
+			</div>
+
 		    <div class="row">
 		        <div class="small-12 medium-9 large-4 large-offset-3 medium-offset-3 columns left">
-		          <button type="submit" class="button small">Confirm Payment</button>
+		          <button type="submit" class="button small">Go To Payment</button>
 		        </div>
 		    </div>
 
