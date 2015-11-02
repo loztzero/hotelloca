@@ -5,26 +5,20 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2015-10-22 22:16                                #
+# Created on:            2015-11-02 22:22                                #
 # ---------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------- #
-# Drop foreign key constraints                                           #
-# ---------------------------------------------------------------------- #
-
-ALTER TABLE `TRX011` DROP FOREIGN KEY `TRX010_TRX011`;
-
-# ---------------------------------------------------------------------- #
-# Drop table "TRX011"                                                    #
+# Drop table "TEMP001"                                                   #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `TRX011` DROP PRIMARY KEY;
+ALTER TABLE `TEMP001` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_TRX011_1` ON `TRX011`;
+DROP INDEX `TUC_TEMP001_1` ON `TEMP001`;
 
 # Drop table #
 
-DROP TABLE `TRX011`;
+DROP TABLE `TEMP001`;
