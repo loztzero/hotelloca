@@ -10,15 +10,99 @@ use DB;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\ConfirmationPayment;
+use App\Models\TempHotel;
+use App\Models\TempHotelDetail;
 class HotelAgentController extends Controller {
 
 	public function getIndex(){
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
-        $countries = Country::lists('country_name', 'id');
+        $countries = Country::lists('country_name', 'country_name');
 		return view('hotelagent.hotel-agent-browse')->with('countries', $countries)->with('indonesia', $indonesia);
 	}
 
-	public function postDataHotel(){
+	public function getBasicSearchHotel(){
+		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
+        $countries = Country::lists('country_name', 'country_name');
+		return view('hotelagent.hotel-agent-basic-search')->with('countries', $countries)->with('indonesia', $indonesia);	
+	}
+
+	public function postDataHotel(Request $request){
+
+		$city = $request->city;
+		$checkIn = $request->checkIn;
+		$checkOut = $request->checkOut;
+		
+		$checkIn = Helpers::dateFormatter($checkIn);
+		$checkOut = Helpers::dateFormatter($checkOut);
+		if($city != null){
+
+			$cityDetail = City::where('id', '=', $city)->first();
+			$country = Country::where('id', '=', $cityDetail->mst002_id)->first();
+			
+			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country='.$country->country_code.'&Province=&City='.$cityDetail->city_code.'&SupplyID=&HotelID=&Prod=&roomid=&checkin='.$checkIn.'&checkout='.$checkOut;
+			$return = Helpers::xmlToJson($url);
+			$result = json_decode($return);			
+
+			echo '<pre>';
+			$hotelList = $result->Supply->Hotels; 
+			// print_r($hotelList);
+
+			DB::beginTransaction();
+			try {
+
+				foreach($hotelList as $key){
+					$tempHotel = new TempHotel();
+					$tempHotel->hotel_id = $key->HotelID;
+					$tempHotel->hotel_name = $key->HotelName;
+					$tempHotel->curr_code = $key->Curr;
+					$tempHotel->city = $cityDetail->city_code;
+					$tempHotel->save();
+
+					//details
+					$product = $key->Product;
+				// 	print_r($product);
+					$rooms = $product->Rooms;
+					if(is_array($rooms)){
+						
+						foreach($rooms as $key2){
+							$tempHotelDetail = new TempHotelDetail();
+							$tempHotelDetail->temp001_id = $tempHotel->id;
+							$tempHotelDetail->check_in_date = $checkIn;
+							$tempHotelDetail->price = $key2->Stay->Price;
+							$tempHotelDetail->save();
+
+							// echo $key2->Stay->Price;
+							// echo '<br />';
+						}
+
+					} else {
+
+						$tempHotelDetail = new TempHotelDetail();
+						$tempHotelDetail->temp001_id = $tempHotel->id;
+						$tempHotelDetail->check_in_date = $checkIn;
+						$tempHotelDetail->price = $key2->Stay->Price;
+						$tempHotelDetail->save();
+
+					}
+					
+				// 	echo '-------<br />';
+				// }
+				//return view('hotel.hotel-browse-list')->with('hotels', $result);
+
+				} 
+
+			} catch (Exception $e) {
+				DB::rollback();
+				print_r($e);
+			}
+
+			DB::commit();
+
+			echo 'data saved';
+
+		} else {
+			abort(500, 'Unauthorized action.');
+		}
 
 	}
 
@@ -73,6 +157,17 @@ class HotelAgentController extends Controller {
 
 	}
 
+	public function postCityFromCountry(Request $request){
+        // print_r(Input::all());
+        if($request->country){
+        	$countryDetail = Country::where('country_code', '=', $request->country)->first();
+            $cities = City::where('mst002_id', '=', $countryDetail->id)->get();
+            return $cities;
+        } 
+
+        return json_encode(array());
+    }
+
 	// public function getInsertCountry()
 	// {
 	// 	$url = 'http://api.travelmart.com.cn/webservice.asmx/GetCountry?UserID=api&Password=888888&Lang=en';
@@ -87,8 +182,8 @@ class HotelAgentController extends Controller {
 	// 		foreach($countries->Countrys->Country as $key => $value):
 	// 			$negara = ucfirst(strtolower($value->CountryName));
 	// 			$country = new Country();
-	// 			$country->cntry_code = $negara;
-	// 			$country->cntry_name = $negara;
+	// 			$country->country_code = $negara;
+	// 			$country->country_name = $negara;
 	// 			$country->save();
 	// 		endforeach;	
 
@@ -439,8 +534,8 @@ class HotelAgentController extends Controller {
 
 	}
 
-	public function getTrialRate(){
-		$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID=JD91737&Prod=1&roomid=&checkin=2012-12-21&checkout=2012-12-22';
+	public function getTrialRate($country, $city){
+		$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country='.$country.'&Province=&City='.$city.'&SupplyID=&HotelID=&Prod=1&roomid=&checkin=2015-12-01&checkout=2015-12-04';
 		$return = Helpers::xmlToJson($url);
 		$result = json_decode($return);
 		echo "<pre>";

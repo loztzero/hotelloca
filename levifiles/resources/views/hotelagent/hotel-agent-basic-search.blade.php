@@ -13,8 +13,7 @@
 
 
 		<h3>Hotel Search</h3>
-		<form class="form-horizontal" role="form" method="POST" action="{{url('/hotel-agent/data-hotel')}}">
-			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/login">
 			<div class="row">
 				<div class="large-2 medium-3 columns">
 		          <label for="right-label" class="right inline show-for-medium-up">Pac Passport</label>
@@ -27,35 +26,22 @@
 
 		    <div class="row">
 				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Destination Country</label>
-		          <label for="right-label" class="show-for-small-only">Destination Country</label>
+		          <label for="right-label" class="right inline show-for-medium-up">Country / City</label>
+		          <label for="right-label" class="show-for-small-only">Country / City</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          	{!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required')) !!}
-		        </div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Destination City</label>
-		          <label for="right-label" class="show-for-small-only">Destination City</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <select ng-model="field.city" name="city" required id="city">
-		          	<option value=""></option>
-		          	<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
-		          </select>
+		         <input type="text">
 		        </div>
 		    </div>
 
 		    <div class="row">
 		    	<div class="large-3 columns large-offset-2">
 		    		<label>Check In
-		    			<input type="text" class="span2" value="" id="dp1" readonly name="checkIn" style="float:left;">
+		    			<input type="text" class="span2" value="" id="dp1" readonly style="float:left;">
 		    		</label>
 		    	</div>
 
-		    	<div class="large-2 columns">
+		    	<div class="large-1 columns">
 		    		<label>Night
 		    			<select id="night">
 		    				@for($i = 1;$i <= 30; $i++)
@@ -70,7 +56,7 @@
 		    				$checkOut = new DateTime('+1 day');
 		    				//{{$checkOut->format('d-m-Y')}}
 		    			?>
-		    			<input type="text" class="span2" value="" id="dp2" readonly name="checkOut">
+		    			<input type="text" class="span2" value="" id="dp2" readonly>
 		    		</label>
 		    	</div>
 		    </div>

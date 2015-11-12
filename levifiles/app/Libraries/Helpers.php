@@ -19,6 +19,16 @@ class Helpers {
 		return $json;
 	} 
 
+	/**
+	parameter stringDate wajib menggunakan format ddmmyy
+	Format Tanggal menyesuaikan dengan tanggal di db mysql yymmdd
+	jika digunakan lagi maka akan kembali ke format ddmmyy
+	*/
+	public static function dateFormatter($stringDate){
+		$parseTgl = explode('-', $stringDate);
+		return $parseTgl[2].'-'.$parseTgl[1].'-'.$parseTgl[0];
+	}
+
 
 } 
 

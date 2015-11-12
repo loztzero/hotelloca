@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use App\Emodel;
-class Rate extends Emodel {
-	protected $table = 'MST004';
+class TempHotel extends Emodel {
+	protected $table = 'TEMP001';
 
 }
