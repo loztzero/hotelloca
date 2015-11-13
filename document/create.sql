@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-11-04 19:43                                #
+# Created on:            2015-11-13 19:49                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -47,12 +47,14 @@ CREATE TABLE `TEMP002` (
     `id` VARCHAR(100) NOT NULL,
     `temp001_id` VARCHAR(100) NOT NULL,
     `check_in_date` DATE NOT NULL COMMENT 'tanggal check in',
+    `line_number` INTEGER(5) NOT NULL,
     `curency_code` VARCHAR(40) NOT NULL,
     `price` DOUBLE(30,10) NOT NULL,
+    `sell_price` DOUBLE(30,10) NOT NULL,
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_TEMP002` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_TEMP002_1` UNIQUE (`temp001_id`, `check_in_date`)
+    CONSTRAINT `TUC_TEMP002_1` UNIQUE (`temp001_id`, `check_in_date`, `line_number`)
 )
 ENGINE=InnoDB;;
 
