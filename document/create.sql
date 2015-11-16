@@ -5,39 +5,13 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-11-13 19:49                                #
+# Created on:            2015-11-16 21:41                                #
 # ---------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
 # ---------------------------------------------------------------------- #
-
-# ---------------------------------------------------------------------- #
-# Add table "TEMP001"                                                    #
-# ---------------------------------------------------------------------- #
-
-CREATE TABLE `TEMP001` (
-    `id` VARCHAR(100) NOT NULL,
-    `hotel_id` VARCHAR(100) NOT NULL,
-    `hotel_name` VARCHAR(100) NOT NULL COMMENT 'nama hotel',
-    `star` DOUBLE(10,5) NOT NULL COMMENT 'bintang hotel',
-    `address` VARCHAR(1024) NOT NULL COMMENT 'alamat hotel',
-    `country` VARCHAR(100) NOT NULL,
-    `city` VARCHAR(100) NOT NULL,
-    `landmark_name` VARCHAR(1024),
-    `telp` VARCHAR(40) NOT NULL,
-    `fax` VARCHAR(40) NOT NULL,
-    `curr_code` VARCHAR(40) NOT NULL,
-    `hotel_desc` VARCHAR(1024) NOT NULL,
-    `meal_price` DOUBLE(30,10) NOT NULL,
-    `bed_price` DOUBLE(30,10) NOT NULL,
-    `updated_at` TIMESTAMP NOT NULL,
-    `created_at` TIMESTAMP NOT NULL,
-    CONSTRAINT `PK_TEMP001` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_TEMP001_1` UNIQUE (`hotel_id`)
-)
-ENGINE=InnoDB;;
 
 # ---------------------------------------------------------------------- #
 # Add table "TEMP002"                                                    #
@@ -47,16 +21,16 @@ CREATE TABLE `TEMP002` (
     `id` VARCHAR(100) NOT NULL,
     `temp001_id` VARCHAR(100) NOT NULL,
     `check_in_date` DATE NOT NULL COMMENT 'tanggal check in',
-    `line_number` INTEGER(5) NOT NULL,
+    `room_id` INTEGER(5) NOT NULL,
     `curency_code` VARCHAR(40) NOT NULL,
     `price` DOUBLE(30,10) NOT NULL,
     `sell_price` DOUBLE(30,10) NOT NULL,
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_TEMP002` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_TEMP002_1` UNIQUE (`temp001_id`, `check_in_date`, `line_number`)
+    CONSTRAINT `TUC_TEMP002_1` UNIQUE (`temp001_id`, `check_in_date`, `room_id`, `price`)
 )
-ENGINE=InnoDB;;
+ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
 
 # ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
