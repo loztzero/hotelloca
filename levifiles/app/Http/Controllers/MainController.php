@@ -11,7 +11,8 @@ class MainController extends Controller {
 
 	public function getIndex()
 	{
-		return redirect('/auth/login');
+		return view('layouts.foundation-angular');
+		//return redirect('/auth/login');
 	}
 
 	public function getCompanyProfile()

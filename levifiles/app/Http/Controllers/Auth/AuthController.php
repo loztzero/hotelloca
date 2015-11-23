@@ -25,6 +25,7 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers;
+    protected $redirectPath = '/'; //kalau tidak di handle .. ntar pulang nya pasti selalu ke home .. huff dasar aneh 
 
     /**
      * Create a new authentication controller instance.

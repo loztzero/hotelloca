@@ -138,6 +138,7 @@ return [
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -202,6 +203,7 @@ return [
 		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 		'Form'=> 'Illuminate\Html\FormFacade', 
 		'HTML'=> 'Illuminate\Html\HtmlFacade',
+		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 	],
 
 ];

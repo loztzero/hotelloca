@@ -2,7 +2,7 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+// use App\Exceptions\CustomException;
 class Handler extends ExceptionHandler {
 
 	/**
@@ -42,6 +42,12 @@ class Handler extends ExceptionHandler {
             return $this->renderHttpException($e);
         }
 
+        //tambahin sendiri
+        // if ($e instanceOf CustomException)
+        // {
+        // 	//print_r($e->getStatusCode());
+        //     return redirect()->to('exception/read');
+        // }
 
         if (config('app.debug'))
         {

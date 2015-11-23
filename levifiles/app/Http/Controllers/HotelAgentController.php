@@ -12,11 +12,312 @@ use App\Models\City;
 use App\Models\ConfirmationPayment;
 use App\Models\TempHotel;
 use App\Models\TempHotelDetail;
+use App\Models\Hotel;
+use App\Models\HotelPic;
 class HotelAgentController extends Controller {
 
+	public function getKambing(){
+		
+		for($i = 0; $i<10;$i++){
+			if($i == 3){
+				continue;
+			}
+			echo $i.'<br>';
+		}
+
+	}
+
+	public function getSavePictureHotel($x){
+
+		echo '<style>body {background-color:black;color:white;}</style>';
+		$hotels = Hotel::orderBy('hotel_id')->skip($x)->take(5)->get();
+		foreach($hotels as $hotel){
+			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetHotelPicture?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&HotelID='.$hotel->hotel_id.'&RoomID=';
+			$return = Helpers::xmlToJson($url);
+			$result = json_decode($return);
+
+
+			// try {
+			// 	$pics = $result->Hotel->Picture;
+			// } catch (\Exception $e) {
+			// 	echo '<pre>error nya disini';
+			// 	echo $hotel->hotel_id;
+			// 	print_r($result);
+			// 	die();
+			// }
+
+			$pics = null;
+			if(isset($result->Hotel)){
+				$pics = $result->Hotel->Picture;
+			} else {
+				$pics = array();
+			}
+			
+			foreach($pics as $pic){
+
+				if(is_object($pic)){
+
+					// foreach($pic as $kambing){
+					// 	echo $kambing . ' - itz nothing';
+					// }
+					// die();
+
+					foreach($pic as $smallPic){
+						$hotelPic = HotelPic::where('hotel_id', '=', $hotel->hotel_id)
+							->where('picture_path', '=', $smallPic)->first();
+						if(!$hotelPic){
+							$hotelPic = new HotelPic();
+							$hotelPic->hotel_id = $hotel->hotel_id;
+							$hotelPic->picture_path = $smallPic;
+							$hotelPic->save();
+						}
+						echo $smallPic.'<br>';
+					}
+
+				} else {
+
+					$hotelPic = HotelPic::where('hotel_id', '=', $hotel->hotel_id)
+							->where('picture_path', '=', $pic)->first();
+					if(!$hotelPic){
+						$hotelPic = new HotelPic();
+						$hotelPic->hotel_id = $hotel->hotel_id;
+						$hotelPic->picture_path = $pic;
+						$hotelPic->save();
+					}
+					echo $pic.'<br>';
+				}
+				
+			}
+			echo $hotel->hotel_name . ' -  gambar telah berhasil disimpan<br><br>';
+		}
+
+	}
+
+	public function getSaveHotels($x){
+
+		$city = City::orderBy('city_code')->skip($x)->take(5)->get();
+		echo '<style>body {background-color:black;color:white;}</style>';
+		foreach($city as $smallCity){
+
+			$reCity = urlencode($smallCity->city_code);
+			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetHotel?UserID=api&Password=888888&Lang=en&Country=&Province=&City='.$reCity.'&HotelID=';
+
+			try {
+				$return = Helpers::xmlToJson($url);
+			} catch (\Exception $e) {
+				continue;		
+			}
+			$result = json_decode($return);
+
+
+			if(isset($result->Hotels)){
+				$hotels = $result->Hotels;
+				// echo '<pre>';
+				// print_r($hotels);
+				// die();
+				if(is_array($hotels)){
+					foreach($hotels as $hotel){
+						
+						$namaHotel = null;
+						try {
+						
+							$existMaster = Hotel::where('hotel_id', '=', $hotel->HotelID)->first();
+							if(!$existMaster){
+								$master = new Hotel();
+								$master->hotel_id = $hotel->HotelID;
+
+								if(is_object($hotel->HotelName)){
+									if(count($hotel->HotelName) > 0){
+										$master->hotel_name = $hotel->HotelName->{0};
+										$namaHotel = $hotel->HotelName->{0};
+									} else {
+										$master->hotel_name = $hotel->HotelName;
+									}
+								} else {
+									$master->hotel_name = $hotel->HotelName;
+								}
+
+								$master->star = $hotel->Star;
+
+								if(is_object($hotel->Address)){
+									if(count($hotel->Address) > 0){
+										$master->address =  $hotel->Address->{0};
+									} else {
+										$master->address = $hotel->Address;
+									}
+								} else {
+									$master->address = $hotel->Address;
+								}
+
+								$master->country = $hotel->Country;
+								$master->city = $hotel->City;
+
+								// $master->telephone = count($hotel->Telephone) > 0 ? $hotel->Telephone{0} : $hotel->Telephone;
+								
+								if(is_object($hotel->Telephone)){
+									if(count($hotel->Telephone) > 0){
+										$master->telephone = $hotel->Telephone->{0};
+									} else {
+										$$master->telephone = $hotel->Telephone;
+									}
+								} else {
+									$master->telephone = $hotel->Telephone;
+								}
+								
+								if(is_object($hotel->Fax)){
+									if(count($hotel->Fax) > 0){
+										$master->fax = $hotel->Fax->{0};
+									} else {
+										$master->fax = $hotel->Fax;
+									}
+								} else {
+									$master->fax = $hotel->Fax;
+								}
+								
+								$master->lat = $hotel->Lat;
+								$master->lon = $hotel->Lon;
+
+								if(is_object($hotel->HotelDesc)){
+									if(count($hotel->HotelDesc) > 0){
+										$master->description = $hotel->HotelDesc->{0};
+									} else {
+										$master->description = $hotel->HotelDesc;
+									}
+								} else {
+									$master->description = $hotel->HotelDesc;
+								}
+
+								$master->currency = $hotel->CurrNo;
+								$master->meal_price = $hotel->MealPrice;
+								$master->bed_price = $hotel->BedPrice;
+								$master->recommend = $hotel->Recommend;
+								$master->save();
+							} else {
+								$namaHotel = $existMaster->hotel_name;
+							}
+
+						} catch (\Exception $e) {
+							echo '========================================================<br>';
+							print_r($e->getMessage());
+							print_r($e->getLine());
+							echo '<pre>';
+							print_r($hotel);
+							echo '========================================================<br>';
+							die();
+						}
+						
+						if($namaHotel != null){
+							echo $namaHotel .' hotel telah tersimpan<br>';	
+						} else {
+
+							try {
+								echo $hotel->HotelName.' hotel telah tersimpan<br>';
+								
+							} catch (\Exception $e) {
+								print_r($hotel->HotelName);
+							}
+						}
+					}
+
+				} else {
+
+					$existMaster = Hotel::where('hotel_id', '=', $hotels->HotelID)->first();
+					$namaHotel = null;
+					if(!$existMaster){
+						$master = new Hotel();
+						$master->hotel_id = $hotels->HotelID;
+
+						if(is_object($hotels->HotelName)){
+							if(count($hotels->HotelName) > 0){
+								$master->hotel_name = $hotels->HotelName->{0};
+								$namaHotel = $hotels->HotelName->{0};
+							} else {
+								$master->hotel_name = $hotels->HotelName;
+							}
+						} else {
+							$master->hotel_name = $hotels->HotelName;
+						}
+
+						$master->star = $hotels->Star;
+						
+						if(is_object($hotels->Address)){
+							if(count($hotels->Address) > 0){
+								$master->address =  $hotels->Address->{0};
+							} else {
+								$master->address = $hotels->Address;
+							}
+						} else {
+							$master->address = $hotels->Address;
+						}
+
+
+						$master->country = $hotels->Country;
+						$master->city = $hotels->City;
+
+						if(is_object($hotels->Telephone)){
+							if(count($hotels->Telephone) > 0){
+								$master->telephone = $hotels->Telephone->{0};
+							} else {
+								$$master->telephone = $hotels->Telephone;
+							}
+						} else {
+							$master->telephone = $hotels->Telephone;
+						}
+
+						if(is_object($hotels->Fax)){
+							if(count($hotels->Fax) > 0){
+								$master->fax = $hotels->Fax->{0};
+							} else {
+								$master->fax = $hotels->Fax;
+							}
+						} else {
+							$master->fax = $hotels->Fax;
+						}
+
+						$master->lat = $hotels->Lat;
+						$master->lon = $hotels->Lon;
+						
+						if(is_object($hotels->HotelDesc)){
+							if(count($hotels->HotelDesc) > 0){
+								$master->description = $hotels->HotelDesc->{0};
+							} else {
+								$master->description = $hotels->HotelDesc;
+							}
+						} else {
+							$master->description = $hotels->HotelDesc;
+						}
+
+						$master->currency = $hotels->CurrNo;
+						$master->meal_price = $hotels->MealPrice;
+						$master->bed_price = $hotels->BedPrice;
+						$master->recommend = $hotels->Recommend;
+						$master->save();
+					} else {
+						$namaHotel = $existMaster->hotel_name;
+					}
+
+					if($namaHotel){
+						echo $namaHotel .' hotel telah tersimpan<br>';	
+					} else {
+						echo $hotels->HotelName.' hotel telah tersimpan<br>';
+					}
+
+				}
+				
+			}
+
+			echo $smallCity->city_code .' kota telah selesai di eksekusi<br><br>';
+
+			// echo $smallCity->city_code.'<br>';
+		}
+		// $url = 'http://api.travelmart.com.cn/webservice.asmx/GetHotel?UserID=api&Password=888888&Lang=en&Country=&Province=&City=Beijing&HotelID=';
+		// return $city;
+
+	}
+
 	public function getIndex(){
-		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
-        $countries = Country::lists('country_name', 'country_name');
+		$indonesia = Country::where('country_name', '=', 'China')->first();
+        $countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
 		return view('hotelagent.hotel-agent-browse')->with('countries', $countries)->with('indonesia', $indonesia);
 	}
 
@@ -24,6 +325,26 @@ class HotelAgentController extends Controller {
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::lists('country_name', 'country_name');
 		return view('hotelagent.hotel-agent-basic-search')->with('countries', $countries)->with('indonesia', $indonesia);	
+	}
+
+	private function getTempData($cityDetail, $checkIn){
+		// DB::enableQueryLog();
+		// jika data nya di temukan maka 
+		$query = '
+			SELECT MIN( B.PRICE ) AS LOW_PRICE , A.HOTEL_NAME
+			FROM TEMP001 A
+			INNER JOIN TEMP002 B ON A.ID = B.TEMP001_ID
+			WHERE A.CITY = ?
+				AND B.CHECK_IN_DATE = ?
+			GROUP BY A.HOTEL_NAME
+			ORDER BY A.HOTEL_NAME
+		';
+
+		$result = DB::select($query, array($cityDetail->city_code, $checkIn));
+		// print_r($result);
+		// print_r(DB::getQueryLog());
+
+		return $result;
 	}
 
 	public function postDataHotel(Request $request){
@@ -34,71 +355,77 @@ class HotelAgentController extends Controller {
 		
 		$checkIn = Helpers::dateFormatter($checkIn);
 		$checkOut = Helpers::dateFormatter($checkOut);
+		$cityDetail = null;
 		if($city != null){
 
 			$cityDetail = City::where('id', '=', $city)->first();
 			$country = Country::where('id', '=', $cityDetail->mst002_id)->first();
 			
-			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country='.$country->country_code.'&Province=&City='.$cityDetail->city_code.'&SupplyID=&HotelID=&Prod=&roomid=&checkin='.$checkIn.'&checkout='.$checkOut;
-			$return = Helpers::xmlToJson($url);
-			$result = json_decode($return);			
+			//jika temp data di temukan maka langsung lempar data hotel
+			//diluar itu lanjutkan penyimpanan data
+			$tempDataResult = $this->getTempData($cityDetail, $checkIn);
+			if(count($tempDataResult) > 0){
+				return redirect('hotel-agent/hotel')->with('hotels', $tempDataResult);
+			}
 
-			echo '<pre>';
-			$hotelList = $result->Supply->Hotels; 
+
+			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country='.$country->country_code.'&Province=&City='.$cityDetail->city_code.'&SupplyID=&HotelID=&Prod=&roomid=&checkin='.$checkIn.'&checkout='.$checkOut;
+			
+			$return = Helpers::xmlToJson($url);
+			$result = json_decode($return);
+			// echo '<pre>';
+			// print_r($result);
+			// die();
+
+			/*echo '<pre>';
+			print_r($result);
+			die();*/
 			// print_r($hotelList);
 
 			DB::beginTransaction();
 			try {
 
-				foreach($hotelList as $key){
-					$tempHotel = new TempHotel();
-					$tempHotel->hotel_id = $key->HotelID;
-					$tempHotel->hotel_name = $key->HotelName;
-					$tempHotel->curr_code = $key->Curr;
-					$tempHotel->city = $cityDetail->city_code;
-					$tempHotel->save();
+				if(isset($result->Supply)){
+					$supply = $result->Supply;
+					if(is_array($supply)){
 
-					//details
-					$product = $key->Product;
-				// 	print_r($product);
-					$rooms = $product->Rooms;
-					if(is_array($rooms)){
-						
-						foreach($rooms as $key2){
-							$tempHotelDetail = new TempHotelDetail();
-							$tempHotelDetail->temp001_id = $tempHotel->id;
-							$tempHotelDetail->check_in_date = $checkIn;
-							$tempHotelDetail->price = $key2->Stay->Price;
-							$tempHotelDetail->save();
+						foreach($supply as $miniSupply){
 
-							// echo $key2->Stay->Price;
-							// echo '<br />';
+							//try {
+								$hotelList = $miniSupply->Hotels;
+								$this->handleHotel($hotelList, $cityDetail, $checkIn);		
+							// } catch (\Exception $e) {
+							// 	echo '<pre>';
+							// 	print_r($hotelList);
+							// 	die();
+							// }
+							
 						}
 
 					} else {
 
-						$tempHotelDetail = new TempHotelDetail();
-						$tempHotelDetail->temp001_id = $tempHotel->id;
-						$tempHotelDetail->check_in_date = $checkIn;
-						$tempHotelDetail->price = $key2->Stay->Price;
-						$tempHotelDetail->save();
-
+						$hotelList = $supply->Hotels;
+						$this->handleHotel($hotelList, $cityDetail, $checkIn);	
 					}
-					
-				// 	echo '-------<br />';
-				// }
-				//return view('hotel.hotel-browse-list')->with('hotels', $result);
-
-				} 
+				} else {
+					echo 'no hotel found';
+					die();
+				}
+				
 
 			} catch (Exception $e) {
 				DB::rollback();
-				print_r($e);
+				// print_r($e);
 			}
 
 			DB::commit();
 
-			echo 'data saved';
+			$tempDataResult = $this->getTempData($cityDetail, $checkIn);
+			if(count($tempDataResult) > 0){
+				return redirect('hotel-agent/hotel')->with('hotels', $tempDataResult);
+			}
+
+			return redirect('hotel-agent/hotel')->with('hotels', $result);
 
 		} else {
 			abort(500, 'Unauthorized action.');
@@ -106,7 +433,182 @@ class HotelAgentController extends Controller {
 
 	}
 
+	private function handleHotel($hotelList, $cityDetail, $checkIn){
+
+		if(is_array($hotelList)){
+
+			foreach($hotelList as $key){
+
+				$tempHotel = TempHotel::where('hotel_id', '=', $key->HotelID)->first();
+				if(!$tempHotel){
+					$tempHotel = new TempHotel();
+					$tempHotel->hotel_id = $key->HotelID;
+					$tempHotel->hotel_name = $key->HotelName;
+					$tempHotel->curr_code = $key->Curr;
+					$tempHotel->city = $cityDetail->city_code;
+					$tempHotel->save();
+				}
+
+				//details
+				$product = $key->Product;
+			// 	print_r($product);
+
+				//handling product jika dia array 
+				if(is_array($product)){
+
+					foreach($product as $miniProduct){
+						$rooms = $miniProduct->Rooms;
+						$this->handleRoom($rooms, $tempHotel, $checkIn);
+					}
+
+				} else {
+
+					$rooms = $product->Rooms;
+					$this->handleRoom($rooms, $tempHotel, $checkIn);
+
+				}
+
+				
+				
+			// 	echo '-------<br />';
+			// }
+			//return view('hotel.hotel-browse-list')->with('hotels', $result);
+
+			} 
+
+		} else {
+
+			//try {
+				
+				$tempHotel = TempHotel::where('hotel_id', '=', $hotelList->HotelID)->first();
+			// } catch (\Exception $e) {
+			// 	echo '<pre>';
+			// 	print_r($hotelList);
+			// 	die();
+			// }
+			if(!$tempHotel){
+				$tempHotel = new TempHotel();
+				$tempHotel->hotel_id = $hotelList->HotelID;
+				$tempHotel->hotel_name = $hotelList->HotelName;
+				$tempHotel->curr_code = $hotelList->Curr;
+				$tempHotel->city = $cityDetail->city_code;
+				$tempHotel->save();
+			}
+
+			//details
+			$product = $hotelList->Product;
+		// 	print_r($product);
+
+			//handling product jika dia array 
+			if(is_array($product)){
+
+				foreach($product as $miniProduct){
+					$rooms = $miniProduct->Rooms;
+					$this->handleRoom($rooms, $tempHotel, $checkIn);
+				}
+
+			} else {
+
+				$rooms = $product->Rooms;
+				$this->handleRoom($rooms, $tempHotel, $checkIn);
+
+			}
+
+		}
+		
+	}
+
+	private function handleRoom($rooms, $tempHotel, $checkIn){
+		
+		if(is_array($rooms)){
+			
+			foreach($rooms as $key2){
+
+				$stay = $key2->Stay;
+				if(is_array($stay)){
+
+					$counter = 0;
+					foreach($stay as $smallStay){
+						$counter++;
+						$this->handleStay($key2, $checkIn, $tempHotel, $smallStay, $counter);
+					}
+					
+				} else {
+					$this->handleStay($key2, $checkIn, $tempHotel, $stay, 1);
+				}
+
+				
+
+				// echo $key2->Stay->Price;
+				// echo '<br />';
+			}
+
+		} else {
+
+			$stay = $rooms->Stay;
+			if(is_array($stay)){
+
+				$counter = 0;
+				foreach($stay as $smallStay){
+					$counter++;
+					$this->handleStay($rooms, $checkIn, $tempHotel, $smallStay, $counter);
+				}
+
+			} else {
+
+				$this->handleStay($rooms, $checkIn, $tempHotel, $stay, 1);
+
+			}
+			/*$tempHotelDetail = TempHotelDetail::where('temp001_id', '=', $tempHotel->id)
+									->where('room_id', '=',$rooms->RoomID)
+									->where('check_in_date', '=',$checkIn)->first();
+
+			if(!$tempHotelDetail){
+				$tempHotelDetail = new TempHotelDetail();
+				$tempHotelDetail->temp001_id = $tempHotel->id;
+				$tempHotelDetail->room_id = $rooms->RoomID;
+				$tempHotelDetail->check_in_date = $checkIn;
+				$tempHotelDetail->price = $rooms->Stay->Price;
+				$tempHotelDetail->save();
+			}*/
+
+		}
+	}
+
+	private function handleStay($rooms, $checkIn, $tempHotel, $stay, $lineNumber){
+
+		$tempHotelDetail = TempHotelDetail::where('temp001_id', '=', $tempHotel->id)
+									// ->where('room_id', '=',$rooms->RoomID) - telah di handle dengan line number
+									->where('line_number', '=',$lineNumber)
+									->where('check_in_date', '=',$checkIn)
+									->where('price', '=', $stay->Price)->first();
+
+		if(!$tempHotelDetail){
+			$tempHotelDetail = new TempHotelDetail();
+			$tempHotelDetail->temp001_id = $tempHotel->id;
+			$tempHotelDetail->line_number = $lineNumber;//$rooms->RoomID;
+			$tempHotelDetail->check_in_date = $checkIn;
+			$tempHotelDetail->price = $stay->Price;	
+			$tempHotelDetail->save();
+		}
+
+	}
+
 	public function getHotel(){
+
+		$hotels = Session::get('hotels');
+		// echo '<pre>';
+		// print_r($hotels);
+		echo '<html>  
+				<head>
+			  		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+				</head> 
+				<body>';
+		if($hotels){
+			foreach($hotels as $hotel){
+				echo $hotel->LOW_PRICE. '-' . $hotel->HOTEL_NAME .'<br>';
+			}
+		}
 
 	}
 
@@ -161,7 +663,7 @@ class HotelAgentController extends Controller {
         // print_r(Input::all());
         if($request->country){
         	$countryDetail = Country::where('country_code', '=', $request->country)->first();
-            $cities = City::where('mst002_id', '=', $countryDetail->id)->get();
+            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
             return $cities;
         } 
 
