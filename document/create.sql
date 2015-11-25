@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-11-16 21:41                                #
+# Created on:            2015-11-25 23:04                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -14,21 +14,29 @@
 # ---------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------- #
-# Add table "TEMP002"                                                    #
+# Add table "MST020"                                                     #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `TEMP002` (
+CREATE TABLE `MST020` (
     `id` VARCHAR(100) NOT NULL,
-    `temp001_id` VARCHAR(100) NOT NULL,
-    `check_in_date` DATE NOT NULL COMMENT 'tanggal check in',
-    `room_id` INTEGER(5) NOT NULL,
-    `curency_code` VARCHAR(40) NOT NULL,
-    `price` DOUBLE(30,10) NOT NULL,
-    `sell_price` DOUBLE(30,10) NOT NULL,
+    `hotel_id` VARCHAR(100) NOT NULL COMMENT 'nama company',
+    `hotel_name` VARCHAR(100) NOT NULL COMMENT 'alamat',
+    `postcode` VARCHAR(15) NOT NULL COMMENT 'kode pos',
+    `mst002_id` VARCHAR(100) NOT NULL COMMENT 'negara',
+    `mst003_id` VARCHAR(100) NOT NULL COMMENT 'kota',
+    `phone_number` VARCHAR(40) NOT NULL COMMENT 'no telepon',
+    `fax_number` VARCHAR(40) COMMENT 'nomor fax',
+    `email` VARCHAR(40) NOT NULL COMMENT 'email',
+    `website` VARCHAR(40) COMMENT 'website',
+    `mst004_id` VARCHAR(100),
+    `meal_price` DOUBLE(30,10),
+    `bed_price` DOUBLE(30,10),
+    `active_flg` VARCHAR(100) NOT NULL COMMENT 'aktif = dah kirim email ke agent untuk passwordnya',
+    `mst001_id` VARCHAR(100) COMMENT 'user',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
-    CONSTRAINT `PK_TEMP002` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_TEMP002_1` UNIQUE (`temp001_id`, `check_in_date`, `room_id`, `price`)
+    CONSTRAINT `PK_MST020` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_MST020_1` UNIQUE (`hotel_id`)
 )
 ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
 
@@ -36,5 +44,14 @@ ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `TEMP002` ADD CONSTRAINT `TEMP001_TEMP002` 
-    FOREIGN KEY (`temp001_id`) REFERENCES `TEMP001` (`id`);
+ALTER TABLE `MST020` ADD CONSTRAINT `MST001_MST020` 
+    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
+
+ALTER TABLE `MST020` ADD CONSTRAINT `MST002_MST020` 
+    FOREIGN KEY (`mst002_id`) REFERENCES `MST002` (`id`);
+
+ALTER TABLE `MST020` ADD CONSTRAINT `MST003_MST020` 
+    FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
+
+ALTER TABLE `MST020` ADD CONSTRAINT `MST004_MST020` 
+    FOREIGN KEY (`mst004_id`) REFERENCES `MST004` (`id`);
