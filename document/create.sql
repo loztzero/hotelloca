@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-11-25 23:04                                #
+# Created on:            2015-11-25 23:21                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -21,12 +21,13 @@ CREATE TABLE `MST020` (
     `id` VARCHAR(100) NOT NULL,
     `hotel_id` VARCHAR(100) NOT NULL COMMENT 'nama company',
     `hotel_name` VARCHAR(100) NOT NULL COMMENT 'alamat',
-    `postcode` VARCHAR(15) NOT NULL COMMENT 'kode pos',
+    `postcode` VARCHAR(15) COMMENT 'kode pos',
     `mst002_id` VARCHAR(100) NOT NULL COMMENT 'negara',
     `mst003_id` VARCHAR(100) NOT NULL COMMENT 'kota',
     `phone_number` VARCHAR(40) NOT NULL COMMENT 'no telepon',
     `fax_number` VARCHAR(40) COMMENT 'nomor fax',
-    `email` VARCHAR(40) NOT NULL COMMENT 'email',
+    `landmark_name` VARCHAR(1024),
+    `email` VARCHAR(40) COMMENT 'email',
     `website` VARCHAR(40) COMMENT 'website',
     `mst004_id` VARCHAR(100),
     `meal_price` DOUBLE(30,10),
