@@ -3,7 +3,7 @@
 use Closure, Auth;
 use Illuminate\Contracts\Auth\Guard;
 
-class Authenticate {
+class RedirectByRole {
 
 	/**
 	 * The Guard implementation.
@@ -31,21 +31,13 @@ class Authenticate {
 	 * @return mixed
 	 */
 
-	public function handle($request, Closure $next)
+	public function handle($request, Closure $next, $role)
 	{
-		if ($this->auth->guest())
-		{
-			if ($request->ajax())
-			{
-				return response('Unauthorized.', 401);
-			}
-			else
-			{
-				return redirect()->guest('auth/login');
-			}
+		if(Auth::user()->role == $role){
+			return $next($request);
+		} else {
+			return redirect('/');
 		}
-
-		return $next($request);
 	}
 
 }

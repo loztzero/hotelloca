@@ -25,6 +25,7 @@
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Maatwebsite\\Excel\\ExcelServiceProvider",
         "Illuminate\\Html\\HtmlServiceProvider",
+        "Laravel\\Socialite\\SocialiteServiceProvider",
         "App\\Providers\\BusServiceProvider",
         "App\\Providers\\ConfigServiceProvider",
         "App\\Providers\\EventServiceProvider",
@@ -132,7 +133,8 @@
         "translation.loader": "Illuminate\\Translation\\TranslationServiceProvider",
         "dompdf": "Barryvdh\\DomPDF\\ServiceProvider",
         "html": "Illuminate\\Html\\HtmlServiceProvider",
-        "form": "Illuminate\\Html\\HtmlServiceProvider"
+        "form": "Illuminate\\Html\\HtmlServiceProvider",
+        "Laravel\\Socialite\\Contracts\\Factory": "Laravel\\Socialite\\SocialiteServiceProvider"
     },
     "when": {
         "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider": [],
@@ -147,6 +149,7 @@
         "Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider": [],
         "Illuminate\\Translation\\TranslationServiceProvider": [],
         "Barryvdh\\DomPDF\\ServiceProvider": [],
-        "Illuminate\\Html\\HtmlServiceProvider": []
+        "Illuminate\\Html\\HtmlServiceProvider": [],
+        "Laravel\\Socialite\\SocialiteServiceProvider": []
     }
 }

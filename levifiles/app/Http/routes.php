@@ -11,6 +11,39 @@
 |
 */
 
+Route::get('/', function()
+{
+	//return view('layouts.underconstruction');
+	if(Auth::check()){
+		if(Auth::user()->role == 'agent'){
+			return redirect('hotel-agent');
+		} else {
+			return redirect('hotel-admin');
+		}
+	}
+
+	return redirect('main');
+});
+
+$router->group(['middleware' => 'auth'], function() {
+
+	Route::group(['middleware' => 'role:agent'], function() {
+		Route::controller('hotel-agent', 'HotelAgentController');
+	});
+
+	Route::group(['middleware' => 'role:admin'], function() {
+		Route::controller('hotel-admin', 'HotelAdminController');
+	});
+	
+});
+	
+
+Route::controller('main', 'MainController');
+Route::get('/password', function()
+{
+	return Hash::make('enter123');
+});
+
 
 
 /*Pure Routes Start Here*/
@@ -19,10 +52,11 @@
 // 	return redirect('auth/login');
 // });
 Route::controller('api', 'ApiController');
-Route::controller('hotel-agent', 'HotelAgentController');
-Route::controller('hotel-admin', 'HotelAdminController');
-Route::controller('main', 'MainController');
 
+
+
+Route::get('/facebook', 'FacebookController@facebook');
+Route::get('/callback', 'FacebookController@callback');
 
 /*LOTS OF SAMPLE BELOW*/
 
@@ -47,13 +81,6 @@ Route::controller('angular', 'AngularController');
 Route::get('/bebek', function()
 {
 	return view('layouts.underconstruction');
-});
-
-$router->group(['middleware' => 'yolo'], function() {
-	Route::get('/', function()
-	{
-		return view('layouts.underconstruction');
-	});
 });
 
 Route::get('duck', function()

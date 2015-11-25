@@ -42,7 +42,7 @@
             <section class="top-bar-section">
               <!-- Right Nav Section -->
               <ul class="right">
-                <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
+                <li><a href="{{url('main')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
                 <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
                 <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
                 <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
@@ -54,7 +54,7 @@
 
       <aside class="left-off-canvas-menu">
         <ul class="off-canvas-list">
-          <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
+          <li><a href="{{url('main')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
           <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
           <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
           <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
@@ -75,37 +75,37 @@
   </div>   
 
   <footer class="footer">
-            <div class="row full-width">
-              <div class="small-12 medium-3 large-4 columns">
-                <i class="fi-laptop"></i>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum maiores alias ea sunt facilis impedit fuga dignissimos illo quaerat iure in nobis id quos, eaque nostrum! Unde, voluptates suscipit repudiandae!</p>
-              </div>
-              <div class="small-12 medium-3 large-4 columns">
-                <i class="fi-html5"></i>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit impedit consequuntur at! Amet sed itaque nostrum, distinctio eveniet odio, id ipsam fuga quam minima cumque nobis veniam voluptates deserunt!</p>
-              </div>
-              <div class="small-6 medium-3 large-2 columns">
-                <h4>Work With Me</h4>
-                <ul class="footer-links">
-                  <li><a href="#">What I Do</a></li>
-                  <li><a href="#">Pricing</a></li>
-                  <li><a href="#">Events</a></li>
-                  <li><a href="#">Blog</a></li>
-                  <li><a href="#">FAQ's</a></li>
-                <ul>
-              </div>
-              <div class="small-6 medium-3 large-2 columns">
-                <h4>Follow Me</h4>
-                <ul class="footer-links">
-                  <li><a href="#">GitHub</a></li>
-                  <li><a href="#">Facebook</a></li>
-                  <li><a href="#">Twitter</a></li>
-                  <li><a href="#">Instagram</a></li>
-                  <li><a href="#">Dribbble</a></li>
-                <ul>
-              </div>
-            </div>
-          </footer> 
+    <div class="row full-width">
+      <div class="small-12 medium-3 large-4 columns">
+        <i class="fi-laptop"></i>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum maiores alias ea sunt facilis impedit fuga dignissimos illo quaerat iure in nobis id quos, eaque nostrum! Unde, voluptates suscipit repudiandae!</p>
+      </div>
+      <div class="small-12 medium-3 large-4 columns">
+        <i class="fi-html5"></i>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit impedit consequuntur at! Amet sed itaque nostrum, distinctio eveniet odio, id ipsam fuga quam minima cumque nobis veniam voluptates deserunt!</p>
+      </div>
+      <div class="small-6 medium-3 large-2 columns">
+        <h4>Work With Me</h4>
+        <ul class="footer-links">
+          <li><a href="#">What I Do</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQ's</a></li>
+        <ul>
+      </div>
+      <div class="small-6 medium-3 large-2 columns">
+        <h4>Follow Me</h4>
+        <ul class="footer-links">
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Dribbble</a></li>
+        <ul>
+      </div>
+    </div>
+  </footer> 
   {{-- <div class="container" style="padding-top:10px;">
     @yield('content')
   </div> --}}<!-- /.container -->

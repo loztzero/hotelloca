@@ -34,4 +34,10 @@ return [
 		'secret' => '',
 	],
 
+	'facebook' => [
+	    'client_id' => '429718447219223',
+	    'client_secret' => 'd6c8e818a75dafc9c6c699c7a66aec54',
+	    'redirect' => 'http://hotelloca.com/callback',
+	],
+
 ];
