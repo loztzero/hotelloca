@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-11-25 23:21                                #
+# Created on:            2015-11-28 20:00                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -32,7 +32,9 @@ CREATE TABLE `MST020` (
     `mst004_id` VARCHAR(100),
     `meal_price` DOUBLE(30,10),
     `bed_price` DOUBLE(30,10),
+    `market` VARCHAR(100) NOT NULL COMMENT 'china/all/nonchina',
     `active_flg` VARCHAR(100) NOT NULL COMMENT 'aktif = dah kirim email ke agent untuk passwordnya',
+    `api_flg` VARCHAR(40) COMMENT 'Yes/No',
     `mst001_id` VARCHAR(100) COMMENT 'user',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
