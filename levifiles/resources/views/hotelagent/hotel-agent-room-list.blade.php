@@ -1,63 +1,136 @@
-@extends('layouts.frontangular')
+@extends('layouts.foundation-login')
 @section('content')
 <div class="row" ng-controller="MainCtrl">
+	
+	<div class="large-12 columns">
+		<a>
+			<b style="font-size:18px;">{{ $hotel->hotel_name }}</b>
+			<div class="rateit" data-rateit-value="{{ $hotel->star }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+		</a>
 
-<form method="post" action="{{App::make('url')->to('/hotel/search')}}">
-	<div class="form-group">
-		<label class="control-label">Hotels</label>
-		 <select class="form-control" name="hotel">
-			@if(isset($hotels->Hotels))
-				@foreach($hotels->Hotels As $key=>$value)
-				<option value="{{$value->HotelID}}">{{ $value->HotelName }}</option>
+		<p style="font-size:13px;">
+			{{ $hotel->address }}, {{ $hotel->city }}
+		</p>
+		
+		<div class="large-7">
+			<ul class="example-orbit" data-orbit data-options="bullets:false;">
+				@foreach($pictures as $picture)
+				  <li>
+				    <img src="{{ url('http://www.travelmart.com.cn/').$picture->picture_path }}" alt="slide 1" />
+				    <div class="orbit-caption">
+				      Caption
+				    </div>
+				  </li>
 				@endforeach
-			@endif
-		 </select>
+			</ul>
+		</div>
+
+		<br>
+		<u><big>Description</big></u>
+		<p style="text-align: justify;">
+			{{ $hotel->description }}
+		</p>
+
+		<style>
+		 .book {background-color: #d80001;margin-bottom:0px;}
+		 .book:hover {background-color: #f80000;}
+		</style>
+
+		<br>
+		<u><big>Rooms</big></u>
+		<table class="show-for-medium-up">
+			<tr>
+				<th>Room Type</th>
+				<th>Bed Type</th>
+				<th>Breakfast</th>
+				<th>CutOff</th>
+				<th>Rate</th>
+				<th>Book</th>
+			</tr>
+			@foreach($rooms as $room)
+			<tr>
+				<td>{{ $room->RoomName }}</td>
+				<td>{{ $room->BedType }}</td>
+				<td>{{ $room->BF }} - Person</td>
+				<td>{{ $room->CutOFF }}</td>
+				<td>
+					<a href="#" data-reveal-id="myModal" ng-click="loadRate({{ json_encode($room->stayDetail) }})">{{ $room->RoomRate }}</a>
+				</td>
+				<td>
+					<button class="button tiny book">Book</button>
+				</td>
+			</tr>
+			@endforeach
+		</table>
+
+		<div class="show-for-small">
+			@foreach($rooms as $room)
+				<table>
+					<tr>
+						<th>Room Type</th>
+						<td>{{ $room->RoomName }}</td>
+					</tr>
+					<tr>
+						<th>Bed Type</th>
+						<td>{{ $room->BedType }}</td>
+					</tr>
+					<tr>
+						<th>Breakfast</th>
+						<td>{{ $room->BF }} - Person</td>
+					</tr>
+					<tr>
+						<th>CutOff</th>
+						<td>{{ $room->CutOFF }}</td>
+					</tr>
+					<tr>
+						<th>Rate</th>
+						<td>{{ $room->RoomRate }}</td>
+					</tr>
+					<tr>
+						<th>Book</th>
+						<td><button class="button tiny book">Book</button></td>
+					</tr>
+				</table>
+			@endforeach
+		</div>
 	</div>
 
-	<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	<button type="submit" class="btn btn-primary">Get Hotel Detail</button>
-</form>
+	<div class="large-12 column">
+		<?php
+			echo '<pre>';
+			print_r($rooms);
+			echo '=========== data rate disini =======================';
+			print_r($rate);
+		?>
 
+	</div>
 
-@if(isset($rooms) && isset($rooms->Rooms))
-<table class="table table-striped">
-	<tr>
-		<th>Room Name</th>
-		<th>Bed Type</th>
-		<th>Action</th>
-	</tr>
-	@if(is_array($rooms->Rooms))
-		@foreach($rooms->Rooms As $key=>$value)
-		<tr>
-			<td>{{$value->RoomName}}</td>
-			<td>{{$value->BedType}}</td>
-			<td>
-				<button class="btn btn-primary btn-sm">Add To Cart</button>
-			</td>
-		</tr>
-		@endforeach
-	@else
-		<tr>
-			<td>
-				{{ $rooms->Rooms->RoomName }}
-			</td>
-			<td>
-				{{ $rooms->Rooms->RoomName }}
-			</td>
-			<td>
-				<button class="btn btn-primary btn-sm">Add To Cart</button>
-			</td>
-		</tr>
-	@endif
-</table>
-@endif
+	<div id="myModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+		<p class="lead">Your selected date</p>
+		<table>
+			<tr>
+				<th>Date</th>
+				<th>Rate</th>
+			</tr>
+			<tr ng-repeat="room in field">
+				<td>@{{ room.StayDate }}</td>
+				<td>@{{ room.Price }}</td>
+			</tr>
+		</table>
+		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+	</div>
+</div>
 
 @stop
 
 @section('script')
 <script>
-var app = angular.module("ui.boardingpassku", ['ngSanitize']);
+var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
+
+	$scope.loadRate = function(rates){
+		$scope.field = rates;
+	}
 
 
 });

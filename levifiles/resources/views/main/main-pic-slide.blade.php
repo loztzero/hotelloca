@@ -47,6 +47,7 @@
 				<input type="password" name="password">
 			</label>
 
+			<span style="font-size:12px;"><a href="{{ url('auth/register') }}">Register New Account Here</a></span>
 			<button type="submit" class="button small right">LOGIN</button>
 			<div style="clear:both;"></div>
 		</form>

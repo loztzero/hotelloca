@@ -106,6 +106,18 @@ class AuthController extends Controller
         
     }
 
+    public function postCityFromCountry(Request $request){
+        // print_r(Input::all());
+
+        if($request->country){
+            $countryDetail = Country::where('id', '=', $request->country)->first();
+            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
+            return $cities;
+        } 
+
+        return json_encode(array());
+    }
+
     public function getSuccessRegister(){
         return view('auth/success-register');
     }

@@ -71,3 +71,10 @@
 .info-hotel tr:nth-of-type(even) {
       background-color: transparent !important;
 }
+
+.paging {
+  text-align:right;
+}
+.paging ul {
+  display:inline-block;
+}

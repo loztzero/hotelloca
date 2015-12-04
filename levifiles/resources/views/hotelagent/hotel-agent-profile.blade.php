@@ -1,27 +1,23 @@
-@extends('layouts.foundation-angular')
+@extends('layouts.foundation-login')
 @section('content')
+	
 <div class="row" ng-controller="MainCtrl">
-	<h3>Agent Register</h3>
+	<div class="large-12 columns">
 
-{{-- 	@if(Session::get('error'))
-		@foreach(Session::get('error') as $key => $value)
-		{{$value}}<br>
-		@endforeach
-	@endif --}}
-	@include('layouts.message-helper')
+		<h3>Profile</h3>
+		@include('layouts.message-helper')
 
-	<div class="large-12 colums">
-		<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/save" data-abide>
+		<form class="form-horizontal" role="form" method="POST" action="{{url('/hotel-agent/update-profile')}}" data-abide>
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-			<?php print_r(old()) ;?>
+			<?php print_r(old());?>
 			<div class="row">
 				<div class="large-2 medium-3 columns">
 		          <label for="compName" class="right inline show-for-medium-up">Company Name *</label>
 		          <label for="compName" class="show-for-small-only">Company Name *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('comp_name')}}" id="compName" name="comp_name" required>
+		          <input type="text" class="span2" value="{{ old('comp_name', $profile->comp_name) }}" id="compName" name="comp_name">
 		          <small class="error">Company Name Required</small>
 		        </div>
 		    </div>
@@ -32,7 +28,7 @@
 		          <label for="address" class="show-for-small-only">Address *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-7 columns left">
-		          <textarea id="address"style="height:5em;" required name="address">{{old('address')}}</textarea>
+		          <textarea id="address"style="height:5em;" name="address">{{old('address', $profile->address)}}</textarea>
 		          <small class="error">Address Required</small>
 		        </div>
 		    </div>
@@ -43,7 +39,7 @@
 		          <label for="postCode" class="show-for-small-only">Postcode *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-3 columns left">
-		          <input type="text" class="span2" value="{{old('postcode')}}" id="postCode" name="postcode" required>
+		          <input type="text" class="span2" value="{{old('postcode', $profile->postcode)}}" id="postCode" name="postcode">
 		          <small class="error">Postcode Required</small>
 		        </div>
 		    </div>
@@ -54,7 +50,7 @@
 		          <label for="country" class="show-for-small-only">Country *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          {!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required')) !!}
+		          {{ $profile->mst002_id }}
 		        </div>
 		    </div>
 
@@ -64,11 +60,7 @@
 		          <label for="city" class="show-for-small-only">City *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <select ng-model="field.city" name="city" required id="city">
-		          	<option value=""></option>
-		          	<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
-		          </select>
-		          <small class="error">City must be selected</small>
+		          {{ $profile->mst003_id }}
 		        </div>
 		    </div>
 
@@ -78,7 +70,7 @@
 		          <label for="phoneNumber" class="show-for-small-only">Phone Number *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('phone_number')}}" id="phoneNumber" name="phone_number" required>
+		          <input type="text" class="span2" value="{{old('phone_number', $profile->phone_number)}}" id="phoneNumber" name="phone_number">
 		          <small class="error">Phone number required</small>
 		        </div>
 		    </div>
@@ -89,7 +81,7 @@
 		          <label for="faxNumber" class="show-for-small-only">Fax No</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('fax_number')}}" id="faxNumber" name="fax_number">
+		          <input type="text" class="span2" value="{{old('fax_number', $profile->fax_number)}}" id="faxNumber" name="fax_number">
 		        </div>
 		    </div>
 
@@ -99,8 +91,8 @@
 		          <label for="email" class="show-for-small-only">Email Address *</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="email" class="span2" value="{{old('email')}}" id="email" name="email" required>
-		          <small class="error">Email required</small>
+		          {{ $profile->email }}
+		          
 		        </div>
 		    </div>
 
@@ -110,50 +102,47 @@
 		          <label for="website" class="show-for-small-only">Website</label>
 		        </div>
 		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('website')}}" id="website">
+		          <input type="text" class="span2" value="{{old('website', $profile->website)}}" id="website">
 		        </div>
 		    </div>
 
 		    <div class="row">
 		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-					<input id="checkbox1" type="checkbox">
-					<small>
-						Check for agreed to the <a href="#">Terms & Conditions</a>
-					</small>		          
+					<button type="submit" class="button small">Update Profile</button>          
 		        </div>
 		    </div>
 
-	    	<div class="row">
-		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-					<button type="submit" class="button small">Register</button>          
-		        </div>
-		    </div>
-	    	
+			
 		</form>
 	</div>
 </div>
-
-@endsection
+@stop
 
 @section('script')
+<script type="text/javascript">
+
+$('#transferDate').fdatepicker({
+	format : 'dd-mm-yyyy'
+});
+
+//set default date
+$('#transferDate').fdatepicker('setDate', new Date());
+
+</script>
+
 <script>
-	var app = angular.module("ui.hotelloca", []);
-	app.controller("MainCtrl", function ($scope, $http, $filter) {
 
-		$scope.field = {};
-		$scope.field.country = '{{$indonesia}}';
-		$scope.cities = [];
-		$scope.getCity = function(){
-			$http.post('{{url("/auth/city-from-country")}}', $scope.field).success(function(response){
-				$scope.cities = response;
-				$scope.field.city = '';
-				// console.log(response);
+var app = angular.module("ui.hotelloca", []);
+app.controller("MainCtrl", function ($scope, $http, $filter) {
 
-			})
-		}
-		$scope.getCity();
-		$scope.field.city = '{{old("city")}}';
 
-	});
+});
+
+// app.directive('helloWorld', function(){
+// 	return {
+// 		restrict : 'E',
+// 		templateUrl : "{{url('/assets/directivepartial')}}/hello.html"
+// 	}
+// })
 </script>
 @stop

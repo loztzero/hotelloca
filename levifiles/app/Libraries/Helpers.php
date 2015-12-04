@@ -29,6 +29,10 @@ class Helpers {
 		return $parseTgl[2].'-'.$parseTgl[1].'-'.$parseTgl[0];
 	}
 
+	public static function currencyFormat($rate){
+		return number_format($rate, 0 , '' , ',' );
+	}
+
 
 } 
 

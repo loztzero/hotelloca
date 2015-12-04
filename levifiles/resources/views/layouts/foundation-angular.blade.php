@@ -28,27 +28,32 @@
       </nav>
 
 
+      <style>
+        .sticky nav {height : 75px;}
+      </style>
+
       <div class="sticky">
           <nav class="top-bar hide-for-small" data-topbar role="navigation">
-            <ul class="title-area">
-              <li class="name">
-                <a href="#">
-                  <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="100px" style="position:relative;padding-left:10px;padding-top:5px;" />
-                </a>
-              </li>
-            </ul>
-
-
-            <section class="top-bar-section">
-              <!-- Right Nav Section -->
-              <ul class="right">
-                <li><a href="{{url('main')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
-                <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
-                <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
-                <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
-                <li><a href="{{url('main/contact-us')}}"><i class="fi-mail"></i>&nbsp; Contact Us</a></li>
+            <div style="width:1028px;margin:0 auto;">
+              <ul class="title-area">
+                <li class="name">
+                  <a href="#">
+                    <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="150px" style="position:relative;padding-left:10px;padding-top:10px;" />
+                  </a>
+                </li>
               </ul>
-            </section>
+
+              <section class="top-bar-section" style="max-width:1024px;margin:0 auto;margin-top:30px;">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                  <li><a href="{{url('main')}}"><i class="fi-home"></i>&nbsp; Home</a></li>
+                  <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; Company Profile</a></li>
+                  <li><a href="{{url('main/services')}}"><i class="fi-wrench"></i>&nbsp; Services</a></li>
+                  <li><a href="{{url('main/term-and-condition')}}"><i class="fi-page"></i>&nbsp; Term And Condition</a></li>
+                  <li><a href="{{url('main/contact-us')}}"><i class="fi-mail"></i>&nbsp; Contact Us</a></li>
+                </ul>
+              </section>
+            </div>
           </nav>
       </div>
 

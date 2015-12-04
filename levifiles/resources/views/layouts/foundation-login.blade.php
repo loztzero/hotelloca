@@ -9,6 +9,7 @@
   <link href="{{ App::make('url')->to('/') }}/assets/css/jquery.bxslider.css" rel="stylesheet" /> 
   <link href="{{ App::make('url')->to('/') }}/assets/css/foundation-datepicker.min.css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet"> 
+  <link href="{{ App::make('url')->to('/') }}/assets/css/rateit.css" rel="stylesheet"> 
 <!-- bxSlider CSS file -->
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/modernizr.js"></script>
 
@@ -28,26 +29,35 @@
         </section>
       </nav>
 
+      <style>
+        .sticky nav {height : 75px;}
+      </style>
 
       <div class="sticky">
           <nav class="top-bar hide-for-small" data-topbar role="navigation">
-            <ul class="title-area">
-              <li class="name">
-                <a href="#">
-                  <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="100px" style="position:relative;padding-left:10px;padding-top:5px;" />
-                </a>
-              </li>
-            </ul>
-
-
-            <section class="top-bar-section">
-              <!-- Right Nav Section -->
-              <ul class="right">
-                <li><a href="{{url('/')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
-                <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; My Profile</a></li>
-                <li><a href="{{url('main/contact-us')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
+            <div style="width:1028px;margin:0 auto;">
+              <ul class="title-area">
+                <li class="name">
+                  <a href="#">
+                    <img src="{{App::make('url')->to('/')}}/assets/img/logo.gif" width="150px" style="position:relative;padding-left:10px;padding-top:10px;" />
+                  </a>
+                </li>
               </ul>
-            </section>
+
+              <section class="top-bar-section" style="max-width:1024px;margin:0 auto;margin-top:30px;">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                  <li><a href="{{url('/hotel-agent')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
+                  <li class="has-dropdown">
+                    <a href="#"><i class="fi-list"></i>&nbsp; Admin</a>
+                    <ul class="dropdown">
+                      <li><a href="{{url('main/company-profile')}}"><i class="fi-info"></i>&nbsp; My Profile</a></li>
+                      <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </section>
+            </div>
           </nav>
       </div>
 
@@ -116,6 +126,7 @@
 <script src="{{App::make('url')->to('/')}}/assets/js/foundation.min.js"></script>
 <script src="{{App::make('url')->to('/')}}/assets/js/foundation/foundation.tooltip.js"></script>
 <script src="{{App::make('url')->to('/')}}/assets/js/foundation-datepicker.min.js"></script>
+<script src="{{App::make('url')->to('/')}}/assets/js/jquery.rateit.min.js"></script>
 <script src="{{App::make('url')->to('/')}}/assets/js/angular.min.js"></script>
 <script>
 $(document).foundation();

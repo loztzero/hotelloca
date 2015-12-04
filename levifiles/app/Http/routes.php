@@ -11,13 +11,18 @@
 |
 */
 
+Route::get('hitung', function()
+{
+	echo (int) ((0.1 + 0.7) * 10);
+});
+
 Route::get('/', function()
 {
 	//return view('layouts.underconstruction');
 	if(Auth::check()){
-		if(Auth::user()->role == 'agent'){
+		if(Auth::user()->role == 'Agent'){
 			return redirect('hotel-agent');
-		} else {
+		} else if(Auth::user()->role == 'Admin'){
 			return redirect('hotel-admin');
 		}
 	}
@@ -27,11 +32,11 @@ Route::get('/', function()
 
 $router->group(['middleware' => 'auth'], function() {
 
-	Route::group(['middleware' => 'role:agent'], function() {
+	Route::group(['middleware' => 'role:Agent'], function() {
 		Route::controller('hotel-agent', 'HotelAgentController');
 	});
 
-	Route::group(['middleware' => 'role:admin'], function() {
+	Route::group(['middleware' => 'role:Admin'], function() {
 		Route::controller('hotel-admin', 'HotelAdminController');
 	});
 	
@@ -39,6 +44,7 @@ $router->group(['middleware' => 'auth'], function() {
 	
 
 Route::controller('main', 'MainController');
+Route::controller('hotel-grab', 'HotelGrabController');
 Route::get('/password', function()
 {
 	return Hash::make('enter123');
