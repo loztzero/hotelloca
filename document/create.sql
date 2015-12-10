@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-12-10 20:19                                #
+# Created on:            2015-12-10 20:49                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -43,7 +43,7 @@ CREATE TABLE `MST020` (
     CONSTRAINT `PK_MST020` PRIMARY KEY (`id`),
     CONSTRAINT `TUC_MST020_1` UNIQUE (`hotel_id`)
 )
-ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
+ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 # ---------------------------------------------------------------------- #
 # Add table "MST021"                                                     #
@@ -60,7 +60,7 @@ CREATE TABLE `MST021` (
     CONSTRAINT `PK_MST021` PRIMARY KEY (`id`),
     CONSTRAINT `TUC_MST021_1` UNIQUE (`mst020_id`, `line_number`)
 )
-ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
+ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 # ---------------------------------------------------------------------- #
 # Add table "MST022"                                                     #
@@ -85,7 +85,7 @@ CREATE TABLE `MST022` (
     CONSTRAINT `PK_MST022` PRIMARY KEY (`id`),
     CONSTRAINT `TUC_MST022_1` UNIQUE (`mst020_id`, `room_id`, `end_date`)
 )
-ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;;
+ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 # ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
