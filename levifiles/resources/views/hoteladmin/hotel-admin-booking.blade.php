@@ -7,7 +7,7 @@
 		<h3>Browse Payment</h3>
 		@include('layouts.message-helper')
 
-		<form class="form-horizontal" role="form" method="POST" action="{{url('/hotel-agent/validate-confirmation-payment')}}" data-abide>
+		<form class="form-horizontal" role="form" method="POST" actio n="{{url('/hotel-agent/validate-confirmation-payment')}}" data-abide>
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			<div class="row">
 				<div class="large-3 medium-3 columns">

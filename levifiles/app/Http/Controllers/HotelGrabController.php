@@ -647,7 +647,8 @@ class HotelGrabController extends Controller {
 	public function getRoomRate(){
 
 		//http://hotelloca.com/hotel-agent/room?hotel=JD30622&checkIn=28-12-2015&checkOut=29-12-2015
-		$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID=JD30622&Prod=1&roomid=&checkin=2015-12-23&checkout=2015-12-30';
+		//$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID=JD30622&Prod=1&roomid=&checkin=2015-12-23&checkout=2015-12-30';
+		$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID=JD91737&Prod=1&roomid=0010&checkin=24-12-2015&checkout=25-12-2015';
 		$return = Helpers::xmlToJson($url);
 		$result = json_decode($return);
 		echo "<pre>";

@@ -13,8 +13,6 @@
 	<div class="large-12 colums">
 		<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/save" data-abide>
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-			<?php print_r(old()) ;?>
 			<div class="row">
 				<div class="large-2 medium-3 columns">
 		          <label for="compName" class="right inline show-for-medium-up">Company Name *</label>

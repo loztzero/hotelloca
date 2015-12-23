@@ -51,7 +51,7 @@
 			<tr>
 				<td>{{ $room->RoomName }}</td>
 				<td>{{ $room->BedType }}</td>
-				<td>{{ $room->BF }} - Person</td>
+				<td>{{ $room->BF ? $room->BF  }} - Person</td>
 				<td>{{ $room->CutOFF }}</td>
 				<td>
 					<a href="#" data-reveal-id="myModal" ng-click="loadRate({{ json_encode($room->stayDetail) }})">{{ $room->RoomRate }}</a>
@@ -129,7 +129,12 @@ var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
 	$scope.loadRate = function(rates){
-		$scope.field = rates;
+
+		if(angular.isArray(rates)){
+			$scope.field = rates;
+		} else {
+			$scope.field = [rates];
+		}
 	}
 
 

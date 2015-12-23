@@ -10,6 +10,11 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('/gambar', function()
+{
+    $img = Image::make('http://localhost:8080/hotelloca/assets/img/promo.jpg')->resize(300, 200);
+    return $img->response('jpg');
+});
 
 Route::get('hitung', function()
 {
@@ -24,11 +29,24 @@ Route::get('/', function()
 			return redirect('hotel-agent');
 		} else if(Auth::user()->role == 'Admin'){
 			return redirect('hotel-admin');
+		} else if(Auth::user()->role == 'Hotel'){
+			return redirect('hotel-owner');
 		}
 	}
-
 	return redirect('main');
 });
+
+Route::get('/password', function()
+{
+	return Hash::make('enter123');
+});
+
+Route::controller('main', 'MainController');
+Route::controller('register-hotel', 'RegisterHotelController');
+Route::controller('hotel-grab', 'HotelGrabController');
+
+//penjagaan untuk agent dan admin
+Route::controller('hotel-admin', 'HotelAdminController');
 
 $router->group(['middleware' => 'auth'], function() {
 
@@ -37,14 +55,19 @@ $router->group(['middleware' => 'auth'], function() {
 	});
 
 	Route::group(['middleware' => 'role:Admin'], function() {
-		Route::controller('hotel-admin', 'HotelAdminController');
 	});
+
+	Route::group(['middleware' => 'role:Hotel'], function() {
+		Route::controller('hotel-owner', 'HotelOwnerController');
+	});
+
+	// Route::group(['middleware' => 'role:Hotel'], function() {
+	// 	Route::controller('hotel-admin', 'HotelAdminController');
+	// });
 	
 });
 	
 
-Route::controller('main', 'MainController');
-Route::controller('hotel-grab', 'HotelGrabController');
 Route::get('/password', function()
 {
 	return Hash::make('enter123');

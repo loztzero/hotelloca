@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost:8080/travel',
+	'url' => 'http://localhost:8080/hotelloca',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -139,6 +139,7 @@ return [
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -198,12 +199,13 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-		'Uuid' => 'Webpatser\Uuid\Uuid',
-		'PDF' => 'Barryvdh\DomPDF\Facade',
-		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
-		'Form'=> 'Illuminate\Html\FormFacade', 
-		'HTML'=> 'Illuminate\Html\HtmlFacade',
-		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
+		'Uuid' 		=> 'Webpatser\Uuid\Uuid',
+		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
+		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
+		'Form'		=> 'Illuminate\Html\FormFacade', 
+		'HTML'		=> 'Illuminate\Html\HtmlFacade',
+		'Socialize' => 'Laravel\Socialite\Facades\Socialite', 
+		'Image' 	=> 'Intervention\Image\Facades\Image'
 	],
 
 ];
