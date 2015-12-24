@@ -48,7 +48,7 @@
 				<form style="position:absolute;" method="post" action="{{ url('hotel-owner/delete-hotel-picture') }}">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" value="{{ $picture->id }}">
-					<button type="submit" class="tiny alert confirm-delete" style="opacity:0.8"><i class="fi-minus-circle"></i></button>
+					<button type="submit" class="tiny alert confirm-delete" style="opacity:0.8"><i class="fi-trash"></i></button>
 				</form>
 				<a class="th" role="button" aria-label="Thumbnail" href="{{ url('uploads/hotels/'.$hotelDetail->id.'/'.$picture->pict.'.jpg') }}" data-lightbox="image-1" data-title="{{ $picture->description }}">
 					<img src="{{ url('uploads/hotels/'.$hotelDetail->id.'/'.$picture->pict.'.jpg') }}">

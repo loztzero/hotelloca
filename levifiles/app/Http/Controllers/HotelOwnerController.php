@@ -89,7 +89,7 @@ class HotelOwnerController extends Controller {
 		$hotelPicture = new HotelPicture();
 		$errorBag = $hotelPicture->rules($request);
 		if(count($errorBag) > 0){
-			Session::flash('error', $error);
+			Session::flash('error', $errorBag);
 			return Redirect::to('hotel-owner/hotel-pictures');
 		}
 
@@ -130,6 +130,36 @@ class HotelOwnerController extends Controller {
 		}
 		Session::flash('error', array('The picture is not valid'));
 		return Redirect::to('hotel-owner/hotel-pictures');
+
+	}
+
+	public function getRoom(){
+		$user = User::where('email', '=', Auth::user()->email)->first();
+		$hotel = HotelDetail::where('mst001_id', '=', $user->id)->first();
+		return view('hotelowner.hotel-owner-room')->with('profile', $hotel);
+	}
+
+	public function getRoomInput(){
+		$numberPerson = array();
+		for($i=1;$i<=10;$i++){
+			$numberPerson[$i] = $i;
+		}
+
+		$user = User::where('email', '=', Auth::user()->email)->first();
+		$hotel = HotelDetail::where('mst001_id', '=', $user->id)->first();
+		return view('hotelowner.hotel-owner-room-input')->with('profile', $hotel)->with('numberPerson', $numberPerson);
+	}
+
+	public function postSaveRoom(Request $request){
+		echo '<pre>';
+		print_r($request->all());
+	}
+
+	public function postLoadRoom(){
+
+	}
+
+	public function postDeleteRoom(){
 
 	}
 }

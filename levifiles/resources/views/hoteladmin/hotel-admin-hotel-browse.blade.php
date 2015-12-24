@@ -1,4 +1,4 @@
-@extends('layouts.foundation-login')
+@extends('layouts.layout-hotel-admin')
 @section('content')
 
 <div class="row" ng-controller="MainCtrl">
@@ -59,10 +59,10 @@
 				<tr>
 					<th width="120px">Action</th> 	
 					<th>Hotel Name</th>
-					<th>Country</th>
-					<th>City</th>
-					<th>Address</th>
-					<th>Phone Number</th>
+					<th class="hide-for-small">Country</th>
+					<th class="hide-for-small">City</th>
+					<th class="hide-for-small">Address</th>
+					<th class="hide-for-small">Phone Number</th>
 					<th>Active</th>
 				</tr>
 			</thead>
@@ -90,10 +90,10 @@
 						@endif
 					</td>
 					<td>{{ $hotel->hotel_name }}</td>
-					<td>{{ $hotel->country->country_name }}</td>
-					<td>{{ $hotel->city->city_name }}</td>
-					<td>{{ $hotel->address }}</td>
-					<td>{{ $hotel->phone_number }}</td>
+					<td class="hide-for-small">{{ $hotel->country->country_name }}</td>
+					<td class="hide-for-small">{{ $hotel->city->city_name }}</td>
+					<td class="hide-for-small">{{ $hotel->address }}</td>
+					<td class="hide-for-small">{{ $hotel->phone_number }}</td>
 					<td>
 						{{ $hotel->active_flg }}
 					</td>
@@ -102,7 +102,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="7">
+					<td colspan="7" id="pagination">
 						{!! str_replace('/?', '?', $hotelList->appends(Request::only('hotel_name', 'country', 'city'))->render())!!}
 					</td>
 				</tr>
@@ -121,6 +121,16 @@ $('#transferDate').fdatepicker({
 
 //set default date
 $('#transferDate').fdatepicker('setDate', new Date());
+
+
+$(window).resize(function() {
+  windowsize = $(window).width();
+  if (windowsize < 641) {
+  	$('#pagination').attr("colspan", 3);
+  } else {
+  	$('#pagination').attr("colspan", 7);
+  }
+});
 
 </script>
 

@@ -7,7 +7,6 @@
   <link href="{{ App::make('url')->to('/') }}/assets/css/foundation.min.css" rel="stylesheet">  
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/jquery.bxslider.css" rel="stylesheet" /> 
-  <link href="{{ App::make('url')->to('/') }}/assets/css/foundation-datepicker.min.css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/lightbox.min.css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/sweetalert.css" rel="stylesheet"> 
   <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet"> 
@@ -49,9 +48,7 @@
               <section class="top-bar-section" style="max-width:1024px;margin:0 auto;margin-top:30px;">
                 <!-- Right Nav Section -->
                 <ul class="right">
-                  <li><a href="{{url('hotel-owner')}}"><i class="fi-torso-business"></i>&nbsp; Profile Hotel</a></li>
-                  <li><a href="{{url('hotel-owner/hotel-room')}}"><i class="fi-home"></i>&nbsp; Rooms</a></li>
-                  <li><a href="{{url('hotel-owner/hotel-pictures')}}"><i class="fi-photo"></i>&nbsp; Pictures</a></li>
+                  <li><a href="{{url('hotel-admin/hotel-browse')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
                   <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
                 </ul>
               </section>
@@ -61,9 +58,8 @@
 
       <aside class="left-off-canvas-menu">
         <ul class="off-canvas-list">
-          <li><a href="{{url('main')}}"><i class="fi-torso-business"></i>&nbsp; Profile Hotel</a></li>
-          <li><a href="{{url('main/services')}}"><i class="fi-home"></i>&nbsp; Rooms</a></li>
-          <li><a href="{{url('main/contact-us')}}"><i class="fi-photo"></i>&nbsp; Pictures</a></li>
+           <li><a href="{{url('hotel-admin/hotel-browse')}}"><i class="fi-torso-business"></i>&nbsp; Hotel</a></li>
+            <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
         </ul>
       </aside>
 
@@ -117,7 +113,6 @@
 
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/jquery.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/fastclick.js"></script>
-  <script src="{{App::make('url')->to('/')}}/assets/js/foundation-datepicker.min.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/lightbox.min.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/sweetalert.min.js"></script>
 </body>
