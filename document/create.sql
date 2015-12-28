@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2015-12-22 22:43                                #
+# Created on:            2015-12-28 22:23                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -39,10 +39,11 @@ CREATE TABLE `MST022` (
     `comm_type` VARCHAR(100) COMMENT 'tipe komisi %/value',
     `comm_pct` DOUBLE(5,2) NOT NULL COMMENT '% komisi',
     `comm_value` DOUBLE(30,5) NOT NULL COMMENT 'nilai komisi',
+    `image` VARCHAR(100) NOT NULL,
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST022` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_MST022_1` UNIQUE (`mst020_id`, `room_id`, `end_date`)
+    CONSTRAINT `TUC_MST022_1` UNIQUE (`mst020_id`, `room_id`, `end_date`, `room_name`)
 )
 ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
