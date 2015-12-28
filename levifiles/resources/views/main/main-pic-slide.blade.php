@@ -1,19 +1,19 @@
 <div class="large-8 columns hide-for-small hide-for-medium">
 	<ul class="example-orbit" data-orbit data-options="bullets:false;">
 	  <li>
-	    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 1" />
+	    <img src="{{ url() }}/assets/img/promo.jpg" alt="slide 1" />
 	    <div class="orbit-caption">
 	      Caption One.
 	    </div>
 	  </li>
 	  <li class="active">
-	    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 2" />
+	    <img src="{{ url() }}/assets/img/promo.jpg" alt="slide 2" />
 	    <div class="orbit-caption">
 	      Caption Two.
 	    </div>
 	  </li>
 	  <li>
-	    <img src="http://localhost:8080/hotelloca/assets/img/promo.jpg" alt="slide 3" />
+	    <img src="{{ url() }}/assets/img/promo.jpg" alt="slide 3" />
 	    <div class="orbit-caption">
 	      Caption Three.
 	    </div>

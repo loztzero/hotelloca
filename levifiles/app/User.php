@@ -45,11 +45,11 @@ class User extends Emodel implements AuthenticatableContract, CanResetPasswordCo
         );
 
 		$messages = array(
-            'password.required'		=> 'Sandi harus diisi',
-            'password.min'			=> 'Sandi minimal harus :min karakter',
-            'repassword.required'	=> 'Konfirmasi sandi harus diisi',
-            'repassword.same'		=> 'Konfirmasi sandi harus bernilai sama dengan sandi',
-			'email.required'		=> 'Email harus diisi'
+            'password.required'		=> 'Password required',
+            'password.min'			=> 'Password must at least :min character',
+            'repassword.required'	=> 'Confirm password required',
+            'repassword.same'		=> 'Confirm password must match with password',
+			'email.required'		=> 'Email required'
 		);
 		
         $v = Validator::make($data, $rules, $messages);

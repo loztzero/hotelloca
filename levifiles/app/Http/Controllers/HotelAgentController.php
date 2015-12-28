@@ -377,8 +377,8 @@ class HotelAgentController extends Controller {
 		$hotel = Hotel::where('hotel_id', '=', $hotel)->first();
 		$pictures = null;
 		if($hotel && $validCheckIn && $validCheckOut){
-			$checkInDate = DateTime::createFromFormat('d-m-Y', $checkIn);
-			$checkOutDate = DateTime::createFromFormat('d-m-Y', $checkOut);
+			$checkInDate = Helpers::dateFormatter($checkIn);
+			$checkOutDate = Helpers::dateFormatter($checkOut);
 
 			$url = 'http://api.travelmart.com.cn/webservice.asmx/GetRoom?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&HotelID='.$hotel->hotel_id.'&RoomID=';
 			$return = Helpers::xmlToJson($url);
@@ -393,21 +393,36 @@ class HotelAgentController extends Controller {
 					$resultRate = array();
 					if(count($rooms) > 1){
 						foreach($rooms as $room){
-							$urlRate = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID='.$hotel->hotel_id.'&Prod=1&roomid='.$room->RoomID.'&checkin='.$checkIn.'&checkout='.$checkOut;
+							
+							$urlRate = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID='.$hotel->hotel_id.'&Prod=1&roomid='.$room->RoomID.'&checkin='.$checkInDate.'&checkout='.$checkOutDate;
 							$returnRate = Helpers::xmlToJson($urlRate);
 							$resultRate = json_decode($returnRate);
 
-							$room->stayDetail = $resultRate->Supply->Hotels->Product->Rooms->Stay;
-							$room->RoomRate = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->Price;
-							$room->BF = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->BF;
-							$room->CutOFF = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->CutOFF;
+							if(isset($resultRate->Supply)){
+								$room->stayDetail = $resultRate->Supply->Hotels->Product->Rooms->Stay;
+								if(is_array($resultRate->Supply->Hotels->Product->Rooms->Stay)){
+									$room->RoomRate = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->Price;
+									$room->BF = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->BF;
+									$room->CutOFF = $resultRate->Supply->Hotels->Product->Rooms->Stay[0]->CutOFF;
+								} else {
+									$room->RoomRate = $resultRate->Supply->Hotels->Product->Rooms->Stay->Price;
+									$room->BF = $resultRate->Supply->Hotels->Product->Rooms->Stay->BF;
+									$room->CutOFF = $resultRate->Supply->Hotels->Product->Rooms->Stay->CutOFF;
+								}
+							} else {
+								return view('hotelagent.hotel-agent-not-found')->with('content', 'Sorry No Data Found');
+							}
+
+							/*echo '<pre>';
+							print_r($resultRate);
+							die();*/
 						}
+
 					} else {
-						$urlRate = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID='.$hotel->hotel_id.'&Prod=1&roomid='.$rooms->RoomID.'&checkin='.$checkIn.'&checkout='.$checkOut;
+						$urlRate = 'http://api.travelmart.com.cn/webservice.asmx/GetRate?UserID=api&Password=888888&Lang=en&Country=&Province=&City=&SupplyID=&HotelID='.$hotel->hotel_id.'&Prod=1&roomid='.$rooms->RoomID.'&checkin='.$checkInDate.'&checkout='.$checkOutDate;
 						$returnRate = Helpers::xmlToJson($urlRate);
 						$resultRate = json_decode($returnRate);
 					}
-
 
 					return view('hotelagent.hotel-agent-room-list')
 							->with('hotel', $hotel)
