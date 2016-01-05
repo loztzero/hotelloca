@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2015-12-30 19:12                                #
+# Created on:            2016-01-05 22:25                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -13,38 +13,54 @@
 # Drop foreign key constraints                                           #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `MST022` DROP FOREIGN KEY `MST020_MST022`;
+ALTER TABLE `TRX010` DROP FOREIGN KEY `MST001_TRX010`;
 
-ALTER TABLE `MST022` DROP FOREIGN KEY `MST004_MST022`;
+ALTER TABLE `TRX010` DROP FOREIGN KEY `MST004_TRX010`;
 
-ALTER TABLE `MST022` DROP FOREIGN KEY `MST023_MST022`;
+ALTER TABLE `TRX011` DROP FOREIGN KEY `TRX010_TRX011`;
 
-ALTER TABLE `MST023` DROP FOREIGN KEY `MST020_MST023`;
+ALTER TABLE `TRX011` DROP FOREIGN KEY `MST020_TRX011`;
 
-# ---------------------------------------------------------------------- #
-# Drop table "MST022"                                                    #
-# ---------------------------------------------------------------------- #
-
-# Drop constraints #
-
-ALTER TABLE `MST022` DROP PRIMARY KEY;
-
-DROP INDEX `TUC_MST022_1` ON `MST022`;
-
-# Drop table #
-
-DROP TABLE `MST022`;
+ALTER TABLE `TRX012` DROP FOREIGN KEY `TRX010_TRX012`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "MST023"                                                    #
+# Drop table "TRX011"                                                    #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `MST023` DROP PRIMARY KEY;
+ALTER TABLE `TRX011` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_MST023_1` ON `MST023`;
+DROP INDEX `TUC_TRX011_1` ON `TRX011`;
 
 # Drop table #
 
-DROP TABLE `MST023`;
+DROP TABLE `TRX011`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX012"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX012` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX012_1` ON `TRX012`;
+
+# Drop table #
+
+DROP TABLE `TRX012`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX010"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX010` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX010_1` ON `TRX010`;
+
+# Drop table #
+
+DROP TABLE `TRX010`;
