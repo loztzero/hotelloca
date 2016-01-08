@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2016-01-08 06:22                                #
+# Created on:            2016-01-08 21:27                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -13,20 +13,100 @@
 # Drop foreign key constraints                                           #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `MST005` DROP FOREIGN KEY `MST004_MST005`;
+ALTER TABLE `TRX010` DROP FOREIGN KEY `MST001_TRX010`;
 
-ALTER TABLE `MST005` DROP FOREIGN KEY `MST004_MST0052`;
+ALTER TABLE `TRX010` DROP FOREIGN KEY `MST004_TRX010`;
+
+ALTER TABLE `TRX011` DROP FOREIGN KEY `TRX010_TRX011`;
+
+ALTER TABLE `TRX011` DROP FOREIGN KEY `MST020_TRX011`;
+
+ALTER TABLE `TRX012` DROP FOREIGN KEY `TRX010_TRX012`;
+
+ALTER TABLE `BLNC002` DROP FOREIGN KEY `BLNC001_BLNC002`;
+
+ALTER TABLE `BLNC003` DROP FOREIGN KEY `BLNC001_BLNC003`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "MST005"                                                    #
+# Drop table "BLNC002"                                                   #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `MST005` DROP PRIMARY KEY;
+ALTER TABLE `BLNC002` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_MST005_1` ON `MST005`;
+DROP INDEX `TUC_BLNC002_1` ON `BLNC002`;
 
 # Drop table #
 
-DROP TABLE `MST005`;
+DROP TABLE `BLNC002`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX011"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX011` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX011_1` ON `TRX011`;
+
+# Drop table #
+
+DROP TABLE `TRX011`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "BLNC003"                                                   #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `BLNC003` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_BLNC003_1` ON `BLNC003`;
+
+# Drop table #
+
+DROP TABLE `BLNC003`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "BLNC001"                                                   #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `BLNC001` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_BLNC001_1` ON `BLNC001`;
+
+# Drop table #
+
+DROP TABLE `BLNC001`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX012"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX012` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX012_1` ON `TRX012`;
+
+# Drop table #
+
+DROP TABLE `TRX012`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX010"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX010` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX010_1` ON `TRX010`;
+
+# Drop table #
+
+DROP TABLE `TRX010`;
