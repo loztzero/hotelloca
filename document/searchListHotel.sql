@@ -1,4 +1,7 @@
-            select a.*, j.pict,h.nett_value
+  
+-- note endt date nya tu hrsnya check out date - 1 hari, soalnya klo lu tulis check out tgl 3 ya dia cm byr sampe tgl 2
+-- misalkan 1-5 jan , tgl 5 januari check out berarti sampe tgl 4 check outnya
+          select a.*, j.pict,h.nett_value
 			from MST020 a	
 			inner join 
 			(
