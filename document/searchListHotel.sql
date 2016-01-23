@@ -15,8 +15,10 @@
 
 			  and c.num_adults >= 0 
 			  and c.allotment-c.used_allotment >= 0 
-			  and c.from_date >= 2016-05-12 
-			  and c.end_date >= 2016-06-13) as h on h.mst020_id = a.id 
+			  and (c.from_date >= STR_TO_DATE('01/12/2016', '%m/%d/%Y') or c.end_date >= STR_TO_DATE('01/12/2016', '%m/%d/%Y'))
+               And (c.end_date <= STR_TO_DATE('01/13/2016', '%m/%d/%Y') or c.from_date <= STR_TO_DATE('01/13/2016', '%m/%d/%Y'))
+              And STR_TO_DATE('01/12/2016', '%m/%d/%Y') >= (select min(ab.from_date) from mst022 ab where ab.mst020_id = c.mst020_id)
+               And STR_TO_DATE('01/13/2016', '%m/%d/%Y') <= (select max(ac.end_date) from mst022 ac where ac.mst020_id = c.mst020_id)) as h on h.mst020_id = a.id 
             left join 
 			(select e.pict,e.mst020_id as mst020_id
 			 from MST021 e 
