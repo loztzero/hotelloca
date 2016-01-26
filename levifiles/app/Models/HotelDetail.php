@@ -26,6 +26,10 @@ class HotelDetail extends Emodel {
     	return $this->hasMany('App\Models\HotelPicture', 'mst020_id', 'id')->orderBy('line_number', 'desc');
     }
 
+    public function rooms(){
+    	return $this->hasMany('App\Models\HotelRoom', 'mst020_id', 'id');
+    }
+
 	public function rules($data)
 	{
 		$error = array();
@@ -105,6 +109,7 @@ class HotelDetail extends Emodel {
 		return $error;
 	}
 
+	//digunakan oleh hotel controller di modul admin
 	public function doParams($object, $data, $editMode = false)
 	{
 		$object->hotel_name = $data['hotel_name'];
@@ -120,14 +125,15 @@ class HotelDetail extends Emodel {
 		$object->email = $data['email'];
 		$object->website = $data['website'];
 		$object->mst004_id = $data['mst004_id'];
-		$object->meal_price = isset($data['meal_price']);
-		$object->bed_price = isset($data['bed_price']);
+		$object->meal_price = isset($data['meal_price']) ? $data['meal_price'] : 0;
+		$object->bed_price = isset($data['bed_price']) ? $data['bed_price'] : 0;
 		$object->market = isset($data['market']) ? $data['market'] : 'All';
 		if($editMode == false){
 			$object->active_flg = isset($data['active_flg']) ? $data['active_flg'] : 'Inactive';
 			$object->api_flg = isset($data['api_flg']) ? $data['api_flg'] : 'No';
 		}
 		// $object->mst001_id = $data['mst001_id'];
+		$object->description = isset($data['description']) ? $data['description'] : null;
 
 		return $object;
 	}
@@ -144,9 +150,10 @@ class HotelDetail extends Emodel {
 		$object->email = $data['email'];
 		$object->website = $data['website'];
 		$object->mst004_id = $data['mst004_id'];
-		$object->meal_price = isset($data['meal_price']);
-		$object->bed_price = isset($data['bed_price']);
+		$object->meal_price = isset($data['meal_price']) ? $data['meal_price'] : 0;
+		$object->bed_price = isset($data['bed_price']) ? $data['meal_price'] : 0;
 		$object->market = isset($data['market']) ? $data['market'] : 'All';
+		$object->description = isset($data['description']) ? $data['description'] : null;
 		return $object;
 	}
 

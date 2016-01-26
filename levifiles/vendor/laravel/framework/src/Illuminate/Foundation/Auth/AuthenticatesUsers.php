@@ -5,7 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-
+use Session; //tambahan handle activated controller nie
 trait AuthenticatesUsers
 {
     use RedirectsUsers;
@@ -116,6 +116,11 @@ trait AuthenticatesUsers
     public function getLogout()
     {
         Auth::logout();
+
+        //if from Activated controller pass the error, the pass again from here
+        if(Session::has('error')){
+            Session::flash('error', Session::get('error'));
+        }
 
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }

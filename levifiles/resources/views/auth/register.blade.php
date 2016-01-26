@@ -1,7 +1,7 @@
 @extends('layouts.foundation-angular')
 @section('content')
 <div class="row" ng-controller="MainCtrl">
-	<h3>Agent Register</h3>
+	<h3>Register as Agent</h3>
 
 {{-- 	@if(Session::get('error'))
 		@foreach(Session::get('error') as $key => $value)

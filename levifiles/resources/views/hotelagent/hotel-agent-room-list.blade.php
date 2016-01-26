@@ -51,7 +51,7 @@
 			<tr>
 				<td>{{ $room->RoomName }}</td>
 				<td>{{ $room->BedType }}</td>
-				<td>{{ $room->BF ? $room->BF  }} - Person</td>
+				<td>{{ $room->BF ? $room->BF : 0 }} - Person</td>
 				<td>{{ $room->CutOFF }}</td>
 				<td>
 					<a href="#" data-reveal-id="myModal" ng-click="loadRate({{ json_encode($room->stayDetail) }})">{{ $room->RoomRate }}</a>

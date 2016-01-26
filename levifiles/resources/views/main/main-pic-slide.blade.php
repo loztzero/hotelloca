@@ -37,6 +37,13 @@
 		</div>
 		@endif
 
+		@if(Session::has('error'))
+		<div data-alert class="alert-box alert">
+			<a href="#" class="close">&times;</a>
+			- {{ Session::get('error') }}			
+		</div>
+		@endif
+
 		<form class="form-horizontal" role="form" method="POST" action="{{App::make('url')->to('/')}}/auth/login">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			<label>Email Address

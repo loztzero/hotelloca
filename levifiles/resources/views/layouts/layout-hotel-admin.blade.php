@@ -8,6 +8,7 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/jquery.bxslider.css" rel="stylesheet" /> 
   <link href="{{ App::make('url')->to('/') }}/assets/css/lightbox.min.css" rel="stylesheet" />
+  <link href="{{ App::make('url')->to('/') }}/assets/css/foundation-datepicker.min.css" rel="stylesheet" />
   <link href="{{ App::make('url')->to('/') }}/assets/css/sweetalert.css" rel="stylesheet"> 
   <link href="{{ App::make('url')->to('/') }}/assets/css/custom.css" rel="stylesheet"> 
 <!-- bxSlider CSS file -->
@@ -48,7 +49,11 @@
               <section class="top-bar-section" style="max-width:1024px;margin:0 auto;margin-top:30px;">
                 <!-- Right Nav Section -->
                 <ul class="right">
-                  <li><a href="{{url('hotel-admin/hotel-browse')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
+                  <li><a href="{{url('admin/profile')}}"><i class="fi-home"></i>&nbsp; Profile</a></li>
+                  <li><a href="{{url('admin/agent')}}"><i class="fi-home"></i>&nbsp; Agent</a></li>
+                  <li><a href="{{url('admin/hotel')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
+                  <li><a href="{{url('admin/booking')}}"><i class="fi-book"></i>&nbsp; Booking</a></li>
+                  <li><a href="{{url('admin/rate')}}"><i class="fi-dollar"></i>&nbsp; Daily Rate</a></li>
                   <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
                 </ul>
               </section>
@@ -58,8 +63,10 @@
 
       <aside class="left-off-canvas-menu">
         <ul class="off-canvas-list">
-           <li><a href="{{url('hotel-admin/hotel-browse')}}"><i class="fi-torso-business"></i>&nbsp; Hotel</a></li>
-            <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
+          <li><a href="{{url('admin/profile/profile')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
+          <li><a href="{{url('admin/profile/booking')}}"><i class="fi-book"></i>&nbsp; Booking</a></li>
+          <li><a href="{{url('admin/profile/rate')}}"><i class="fi-dollar"></i>&nbsp; Daily Rate</a></li>
+          <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
         </ul>
       </aside>
 
@@ -114,6 +121,7 @@
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/jquery.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/vendor/fastclick.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/lightbox.min.js"></script>
+  <script src="{{App::make('url')->to('/')}}/assets/js/foundation-datepicker.min.js"></script>
   <script src="{{App::make('url')->to('/')}}/assets/js/sweetalert.min.js"></script>
 </body>
 <script src="{{App::make('url')->to('/')}}/assets/js/foundation.min.js"></script>

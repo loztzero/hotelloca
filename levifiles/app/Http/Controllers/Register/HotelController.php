@@ -1,0 +1,107 @@
+<?php namespace App\Http\Controllers\Register;
+
+use Illuminate\Routing\UrlGenerator;
+use Input, Auth, Request, Session, Redirect, Hash, Form;
+use App;
+use App\User;
+use App\Libraries\Helpers;
+use DB, StdClass;
+use App\Models\Country;
+use App\Models\City;
+use App\Models\Currency;
+use App\Models\HotelDetail;
+use App\Http\Controllers\Controller;
+class HotelController extends Controller {
+
+	public function getIndex()
+	{
+		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
+        $countries = Country::lists('country_name', 'id');
+        $currencies = Currency::lists('curr_code', 'id');
+		return view('register.hotel.register-hotel')
+			->with('countries', $countries)
+	        ->with('indonesia', $indonesia->id)
+	        ->with('currencies', $currencies);
+	}
+
+	public function getSuccess(){
+		return view('register.hotel.register-hotel-success');
+	}
+
+	public function postSave(Request $request){
+
+    	$data = $request->all();
+
+    	/*echo '<pre>';
+    	print_r($data);
+    	die();*/
+		$hotelDetail = new HotelDetail();
+		$errorBag = $hotelDetail->rules($request->all());
+
+		DB::beginTransaction();
+
+		try {
+
+			if(count($errorBag) > 0){
+				DB::rollback();
+
+				Session::flash('error', $errorBag);
+	   			return Redirect::to('register/hotel')->withInput(Input::all());
+			} else {
+
+
+					$userAccount = array();
+					$userAccount['email'] = $data['email_login'];
+					$password = Hash::make(uniqid());
+					$userAccount['password'] = $password;
+					$userAccount['repassword'] = $password;
+					$user = new User();
+					$errorUser = $user->rules($userAccount);
+					if(count($errorUser) > 0){
+						DB::rollback();
+
+						Session::flash('error', $errorUser);
+						return Redirect::to('register/hotel/input')->withInput(Input::all());
+					} else {
+						$userAccount['role'] = 'Hotel';
+						$user = $user::create($userAccount);
+					}
+
+					//simpan data hotel detail
+					$hotelDetail = $hotelDetail->doParamsOwner($hotelDetail, $data);
+					$hotelDetail->mst001_id = $user->id;
+		        	$hotelDetail->save();
+
+			}
+			
+		} catch (\Exception $e) {
+			
+			DB::rollback();			
+			Session::flash('error', array($e->getMessage()));
+			return Redirect::to('register/hotel')->withInput(Input::all());
+		}
+
+		DB::commit();
+
+		if(isset($request->id)){
+        	Session::flash('message', array('Hotel successfully updated'));
+		} else {
+			Session::flash('message', array('Hotel successfully created'));
+		}
+        return Redirect::to('register/hotel/success');
+
+	}
+
+	public function postCityFromCountry(Request $request){
+        // print_r(Input::all());
+        if($request->country){
+        	//$countryDetail = Country::where('country_code', '=', $request->country)->first();
+        	$countryDetail = Country::where('id', '=', $request->country)->first();
+            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
+            return $cities;
+        } 
+
+        return json_encode(array());
+    }
+
+}

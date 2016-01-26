@@ -13,16 +13,24 @@ class Agent extends Emodel {
         return $this->hasOne('App\User', 'id', 'mst001_id');
     }
 
+    public function city(){
+        return $this->hasOne('App\Models\City', 'id', 'mst003_id');
+    }
+
+    public function country(){
+        return $this->hasOne('App\Models\Country', 'id', 'mst002_id');
+    }
+
 	public static function rules($data){
 		$error = array();
 		$rules = array(
             'comp_name'      	=> 'required',
             'address'      		=> 'required',
             'postcode'      	=> 'required',
-            'country'      	=> 'required',
-            'city'      	=> 'required',
+            'country'      	=> isset($data['id']) ? '' : 'required',
+            'city'      	=> isset($data['id']) ? '' : 'required',
             'phone_number'      => 'required',
-            'email'      		=> 'required|email',
+            'email'      		=> isset($data['id']) ? '' : 'required|email',
         );
 
 		$messages = array(
@@ -56,14 +64,17 @@ class Agent extends Emodel {
 		$model->comp_name   = isset($data['comp_name']) ? $data['comp_name'] : null;
         $model->address     = isset($data['address']) ? $data['address'] : null;
         $model->postcode    = isset($data['postcode']) ? $data['postcode'] : null;
-        $model->mst002_id   = isset($data['country']) ? $data['country'] : null;
-        $model->mst003_id   = isset($data['city']) ? $data['city'] : null;
+
+        if(!isset($data['id'])){
+            $model->mst002_id   = isset($data['country']) ? $data['country'] : null;
+            $model->mst003_id   = isset($data['city']) ? $data['city'] : null;
+            $model->email       = isset($data['email']) ? $data['email'] : null;
+            $model->active_flg  = config('enums.activeState.Active');
+        }
+        
         $model->phone_number    = isset($data['phone_number']) ? $data['phone_number'] : null;
         $model->fax_number = isset($data['fax_number']) ? $data['fax_number'] : null;
-        $model->email       = isset($data['email']) ? $data['email'] : null;
         $model->website     = isset($data['website']) ? $data['website'] : null;
-        $model->active_flg  = config('enums.activeState.Active');
-        
         return $model;
 	}
 

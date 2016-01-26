@@ -82,3 +82,7 @@
 .rem-btm-margin {
   margin-bottom : 0px;
 }
+
+.numeric-value {
+  text-align:right;
+}

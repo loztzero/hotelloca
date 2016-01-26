@@ -21,7 +21,7 @@ class HotelPicture extends Emodel {
 			'files.required' => 'Picture is required',
 			'files.image' => 'Picture must be image',
 			'files.mimes' => 'Picture must be jpg file',
-			'files.smaxize' => 'Picture size can not more than :max kilobytes',
+			'files.maxsize' => 'Picture size can not more than :max kilobytes',
 			'title.required' => 'Title is required',
 		);
 

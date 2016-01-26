@@ -10,6 +10,59 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
+Route::get('/', function()
+{
+	//return view('layouts.underconstruction');
+
+	if(Auth::check()){
+		if(Auth::user()->role == 'Agent'){
+			return redirect('agent/profile');
+		} else if(Auth::user()->role == 'Admin'){
+			return redirect('admin/profile');
+		} else if(Auth::user()->role == 'Hotel'){
+			return redirect('hotel/profile');
+		}
+	}
+
+
+	//if from activated controller pass the error, the pass again from here
+	//go AuthenticatesUsers->getLogout
+    if(Session::has('error')){
+        // print_r(Session::get('error'));
+        // die();
+        Session::flash('error', Session::get('error'));
+    }
+    
+	return redirect('auth/login');
+});
+
+
+//khusus untuk register saja.. 
+Route::group(['prefix' => 'register'], function() {
+	Route::get('/', function()
+	{
+	    return redirect('main');
+	});
+	Route::controller('hotel', 'Register\HotelController');
+});
+
+
+
+//penjagaan untuk agent dan admin
+// Route::controller('admin', 'AdminController');
+require app_path('Http/ExtendedRoutes/admin.php');
+$router->group(['middleware' => 'auth'], function() {
+
+	require app_path('Http/ExtendedRoutes/agent.php');
+	Route::group(['middleware' => 'role:Admin'], function() {
+	});
+	require app_path('Http/ExtendedRoutes/hotel.php');	
+});
+	
+
+//OTHER SCRIPT HERE THE MAIN SCRIPT REVISION IS UPPER
+
 Route::get('/gambar', function()
 {
     $img = Image::make('http://localhost:8080/hotelloca/assets/img/promo.jpg')->resize(300, 200);
@@ -21,52 +74,15 @@ Route::get('hitung', function()
 	echo (int) ((0.1 + 0.7) * 10);
 });
 
-Route::get('/', function()
-{
-	//return view('layouts.underconstruction');
-	if(Auth::check()){
-		if(Auth::user()->role == 'Agent'){
-			return redirect('hotel-agent');
-		} else if(Auth::user()->role == 'Admin'){
-			return redirect('hotel-admin');
-		} else if(Auth::user()->role == 'Hotel'){
-			return redirect('hotel-owner');
-		}
-	}
-	return redirect('main');
-});
-
 Route::get('/password', function()
 {
 	return Hash::make('enter123');
 });
 
+Route::controller('generator', 'Generator\GeneratorController');
 Route::controller('main', 'MainController');
 Route::controller('register-hotel', 'RegisterHotelController');
 Route::controller('hotel-grab', 'HotelGrabController');
-
-//penjagaan untuk agent dan admin
-Route::controller('hotel-admin', 'HotelAdminController');
-
-$router->group(['middleware' => 'auth'], function() {
-
-	Route::group(['middleware' => 'role:Agent'], function() {
-		Route::controller('hotel-agent', 'HotelAgentController');
-	});
-
-	Route::group(['middleware' => 'role:Admin'], function() {
-	});
-
-	Route::group(['middleware' => 'role:Hotel'], function() {
-		Route::controller('hotel-owner', 'HotelOwnerController');
-	});
-
-	// Route::group(['middleware' => 'role:Hotel'], function() {
-	// 	Route::controller('hotel-admin', 'HotelAdminController');
-	// });
-	
-});
-	
 
 Route::get('/password', function()
 {
