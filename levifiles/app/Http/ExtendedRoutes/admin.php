@@ -1,7 +1,7 @@
 <?php
 
 //route khusus untuk user hotel
-Route::group(['prefix' => 'admin'], function() {
+Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin'], function() {
 	Route::get('/', function()
 	{
 	    return redirect('admin/profile');

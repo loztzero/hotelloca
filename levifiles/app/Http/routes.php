@@ -19,12 +19,11 @@ Route::get('/', function()
 		if(Auth::user()->role == 'Agent'){
 			return redirect('agent/profile');
 		} else if(Auth::user()->role == 'Admin'){
-			return redirect('admin/profile');
+			return redirect('admin/hotel');
 		} else if(Auth::user()->role == 'Hotel'){
 			return redirect('hotel/profile');
 		}
 	}
-
 
 	//if from activated controller pass the error, the pass again from here
 	//go AuthenticatesUsers->getLogout
@@ -51,17 +50,20 @@ Route::group(['prefix' => 'register'], function() {
 
 //penjagaan untuk agent dan admin
 // Route::controller('admin', 'AdminController');
-require app_path('Http/ExtendedRoutes/admin.php');
 $router->group(['middleware' => 'auth'], function() {
 
+	require app_path('Http/ExtendedRoutes/admin.php');
 	require app_path('Http/ExtendedRoutes/agent.php');
-	Route::group(['middleware' => 'role:Admin'], function() {
-	});
 	require app_path('Http/ExtendedRoutes/hotel.php');	
 });
 	
 
 //OTHER SCRIPT HERE THE MAIN SCRIPT REVISION IS UPPER
+
+Route::get('/travelo', function()
+{
+    return view('layouts.general-travel-layout');
+});
 
 Route::get('/gambar', function()
 {

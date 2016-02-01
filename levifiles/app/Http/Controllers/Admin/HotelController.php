@@ -16,7 +16,8 @@ use App\Models\HotelPicture;
 use App\Http\Controllers\Controller;
 class HotelController extends Controller {
 
-	public function getIndex(){
+	public function getIndex(Request $request){
+
 		$result = HotelDetail::where('api_flg', '=', 'No');
 		$result = isset($request->hotel_name) && $request->hotel_name != '' ? $result->where('hotel_name', 'like', $request->hotel_name) : $result;
 

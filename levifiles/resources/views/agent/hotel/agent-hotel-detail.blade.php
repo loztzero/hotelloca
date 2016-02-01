@@ -52,7 +52,7 @@
 	<div class="row">
 
 		<div class="large-12 column">
-			Room for 3 Nights from 12-12-2015 to 15-12-2015
+			Room for 3 Nights from {{ Input::get('checkIn') }} to {{ Input::get('checkOut') }}
 		</div>
 
 		<div class="large-12 column">
@@ -127,6 +127,13 @@
 	</div>
 
 	<div class="row">
+
+		<pre>
+			@foreach($period as $date)
+			{{ $date->format("Y-m-d") }}<br>
+			@endforeach
+		</pre>
+
 		<table>
 			<thead>
 				<tr>
@@ -135,73 +142,65 @@
 					<th>Jumlah Tamu</th>
 					<th>Jumlah</th>
 					<th>Harga Total</th>
+					<th>Net Value</th>
+					<th>From</th>
+					<th>End</th>
+					<th>Hari</th>
 					<th></th>
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr>
-					<td>
-						Gambar
-					</td>
-					<td>
-						Nama Kamar
-					</td>
-					<td>
-						2 Dewasa 1 Anak
-					</td>
-					<td>
-						Rp. 100,000
-					</td>
-					<td>
-						{!! Form::select('room', array('1' => '1', '2' => '2'), null) !!}
-					</td>
-					<td>
-						<button class="button warning" style="padding:8px;border-radius:5px;margin-bottom:0px;"><b style="font-size:12px;font-family: Arial 'San serif';">Booking</b></button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Gambar
-					</td>
-					<td>
-						Nama Kamar
-					</td>
-					<td>
-						2 Dewasa 1 Anak
-					</td>
-					<td>
-						{!! Form::select('room', array('1' => '1', '2' => '2'), null) !!}
-					</td>
-					<td>
-						Rp. 100,000
-					</td>
-					<td>
-						<button class="button warning" style="padding:8px;border-radius:5px;margin-bottom:0px;"><b style="font-size:12px;font-family: Arial 'San serif';">Booking</b></button>
-					</td>
-				</tr>
-
+				<?php $roomId = null ;?>
+				<?php $total = 0; ?>
 				@foreach($rooms as $room)
-				<tr>
-					<td>
-						{{ $room->image }}
-					</td>
-					<td>
-						{{ $room->room_name }}
-					</td>
-					<td>
-						{{ $room->num_adults }} Dewasa {{ $room->num_child }} Anak
-					</td>
-					<td>
-						{!! Form::select('room', array('1' => '1', '2' => '2'), null) !!}
-					</td>
-					<td>
-						Rp. 100,000
-					</td>
-					<td>
-						<button class="button warning" style="padding:8px;border-radius:5px;margin-bottom:0px;"><b style="font-size:12px;font-family: Arial 'San serif';">Booking</b></button>
-					</td>
-				</tr>
+
+					{{-- Looping hari per room --}}
+					@foreach($period as $date)
+						@if($helpers::isDate1BetweenDate2AndDate3($date->format("Y-m-d"), $room->from_date, $room->end_date))
+							<?php $total += $room->nett_value ;?>
+						@endif
+					@endforeach
+
+					{{-- Jika room id berbeda dengan room id yang sebelumnya --}}
+					@if($roomId != $room->mst023_id)
+					<?php $roomId = $room->mst023_id ;?>
+					<?php //$total = 0; ?>
+					<tr>
+						<td>
+							{{ $room->image }}
+						</td>
+						<td>
+							{{ $room->room_name }}
+						</td>
+						<td>
+							{{ $room->num_adults }} Dewasa {{ $room->num_child }} Anak
+						</td>
+						<td>
+							{!! Form::select('room', array('1' => '1', '2' => '2'), null) !!}
+						</td>
+						<td>
+							{{ $total }}
+						</td>
+						<td>
+							{{ $room->nett_value }}
+						</td>
+						<td>
+							{{ $room->from_date }}
+						</td>
+						<td>
+							{{ $room->end_date }}
+						</td>
+						<td>
+							@foreach($period as $date)
+							{{ $date->format("Y-m-d") . ' : ' . $helpers::isDate1BetweenDate2AndDate3($date->format("Y-m-d"), $room->from_date, $room->end_date) }}
+							@endforeach
+						</td>
+						<td>
+							<button class="button warning" style="padding:8px;border-radius:5px;margin-bottom:0px;"><b style="font-size:12px;font-family: Arial 'San serif';">Booking</b></button>
+						</td>
+					</tr>
+					@endif
 				@endforeach
 			</tbody>
 

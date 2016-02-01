@@ -40,15 +40,17 @@ class HotelController extends Controller {
 
 	public function getSearch(Request $request){
 		$hotels = $this->querySearch($request);
-		return view('agent.hotel.agent-hotel-search')->with('hotels', $hotels);
+		return view('agent.hotel.agent-hotel-search')
+			->with('hotels', $hotels)
+			->with('request', $request);
 	}
 
 	//untuk query search hotel
 	private function querySearch(Request $request){
 		$city = $request->city;
 		$country = $request->country;
-		$checkIn = $request->checkIn;
-		$checkOut = $request->checkOut;
+		$checkIn = $request->date_from;
+		$checkOut = $request->date_to;
 		
 		$checkIn = Helpers::dateFormatter($checkIn);
 		$checkOut = Helpers::dateFormatter($checkOut);
@@ -164,56 +166,76 @@ class HotelController extends Controller {
 	    // 			->where('mst020_id', '=', '0597bfb1-8f57-459d-af6e-d653775a0a73')
 	    // 			->get();
 
-    	$hotel = HotelDetail::find('0597bfb1-8f57-459d-af6e-d653775a0a73');
+    	$hotel = HotelDetail::find($request->hotel);
+    	$checkIn = $request->checkIn;
+		$checkOut = $request->checkOut;
+		
+		$checkIn = Helpers::dateFormatter($checkIn);
+		$checkOut = Helpers::dateFormatter($checkOut);
+
     	$pictures = HotelPicture::where('mst020_id', '=', $hotel->id)->get();
     	
     	$query = "
-    		select d.room_name, c.num_adults, c.num_child, c.num_breakfast, 
-			  min(c.allotment - c.used_allotment) as allotment,
-			  sum(c.nett_value) as tot_net_value
-			from MST022 c 
+    		select d.image, d.room_name, c.num_adults, c.num_child, c.num_breakfast, 
+    		  c.mst023_id,
+			  c.allotment - c.used_allotment,
+			  c.nett_value,c.from_date , c.end_date 
+			from MST022 c
 			inner join MST023 d on d.id = c.mst023_id
-			where  c.num_adults >= 0 
-			  and c.allotment - c.used_allotment >= 0 
-			  and 
+			where  c.num_adults >= 0
+			  and c.allotment - c.used_allotment >= 0
+			  and
 			  (
-			    c.from_date >= STR_TO_DATE('01/12/2016', '%m/%d/%Y') 
-			    or 
-			    c.end_date >= STR_TO_DATE('01/12/2016', '%m/%d/%Y')
+			    c.from_date >= STR_TO_DATE(?, '%Y-%m-%d')
+			    or
+			    c.end_date >= STR_TO_DATE(?, '%Y-%m-%d')
 			  )
-
-			  and 
+			 
+			  and
 			  (
-			    c.end_date <= STR_TO_DATE('02/13/2016', '%m/%d/%Y') 
-			    or 
-			    c.from_date <= STR_TO_DATE('02/13/2016', '%m/%d/%Y')
+			    c.end_date <= STR_TO_DATE(?, '%Y-%m-%d')
+			    or
+			    c.from_date <= STR_TO_DATE(?, '%Y-%m-%d')
 			  )
-
-			  and STR_TO_DATE('01/12/2016', '%m/%d/%Y') >= 
+			 
+			  and STR_TO_DATE(?, '%Y-%m-%d') >=
 			  (
-			    select min(ab.from_date) from mst022 ab where ab.mst020_id = c.mst020_id
+			    select min(ab.from_date) from MST022 ab where ab.mst020_id = c.mst020_id
 			  )
-
-			  and STR_TO_DATE('02/13/2016', '%m/%d/%Y') <= 
+			 
+			  and STR_TO_DATE(?, '%Y-%m-%d') <=
 			  (
-			    select max(ac.end_date) from mst022 ac where ac.mst020_id = c.mst020_id
-			  )
-			group by d.room_name
+			    select max(ac.end_date) from MST022 ac where ac.mst020_id = c.mst020_id
+			  ) 
+				
+			   and c.mst020_id = ?
     	";
 
 
-    	$params = array();
+    	$params = array($checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $hotel->id);
     	$result = DB::select($query, $params);
-    	$rooms = HotelRoom::join('MST022', 'MST023.id', '=', 'MST022.mst023_id')
-					->where('MST022.mst020_id', '=', $hotel->id)
-					->where('MST022.from_date', '>=', '2016-01-11')
-					->where('MST022.end_date', '<=', '2016-01-12')
-					->get();
+    	// $rooms = HotelRoom::join('MST022', 'MST023.id', '=', 'MST022.mst023_id')
+					// ->where('MST022.mst020_id', '=', $hotel->id)
+					// ->where('MST022.from_date', '>=', '2016-01-11')
+					// ->where('MST022.end_date', '<=', '2016-01-12')
+					// ->get();
+
+    	// echo '<pre>';
+    	// print_r($result);
+    	// die();
+
+    	$period = new DatePeriod(
+		     new DateTime($checkIn),
+		     new DateInterval('P1D'),
+		     new DateTime($checkOut)
+		);
 
     	return view('agent.hotel.agent-hotel-detail')
     		->with('hotel', $hotel)
     		->with('pictures', $pictures)
-    		->with('rooms', $rooms);
+    		->with('rooms', $result)
+    		->with('period', $period)
+    		->with('helpers', new Helpers());
     	
     }
 

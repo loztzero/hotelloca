@@ -1,4 +1,4 @@
-@extends('layouts.foundation-angular')
+@extends('layouts.general-travel-layout')
 @section('content')
 
 <div class="row" style="padding:20px 0px;">

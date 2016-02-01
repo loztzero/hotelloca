@@ -1,191 +1,104 @@
-@extends('layouts.layout-agent')
+@extends('layouts.general-travel-layout')
+
+@section('bigSlideshow')
+@include('layouts.general-travel-slideshow')
+@endsection
+
 @section('content')
-	
-<div class="row" ng-controller="MainCtrl">
-	<div class="small-12 columns">
-		<ul class="breadcrumbs">
-		  <li class="current"><a href="#">Hotel</a></li>
-		  <li class="unavailable"><a href="#">Result</a></li>
-		  <li class="unavailable"><a href="#">Package Detail</a></li>
-		  <li class="unavailable"><a href="#">Payment</a></li>
-		  <li class="unavailable"><a href="#">Confirm</a></li>
-		</ul>
 
-
-		<h3>Hotel Search</h3>
-		<form class="form-horizontal" role="form" method="GET" action="{{ url('agent/hotel/search') }}">
-			
-			<div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Pac Passport</label>
-		          <label for="right-label" class="show-for-small-only">Pac Passport</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		         {!! Form::select('country', $countries, null, array('ng-model' => 'field.passport','required')) !!}
-		        </div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Destination Country</label>
-		          <label for="right-label" class="show-for-small-only">Destination Country</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          	{!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required')) !!}
-		        </div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Destination City</label>
-		          <label for="right-label" class="show-for-small-only">Destination City</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <select ng-model="field.city" name="city" required id="city">
-		          	<option value=""></option>
-		          	<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
-		          </select>
-		        </div>
-		    </div>
-
-		    <div class="row">
-		    	<div class="large-3 columns large-offset-2">
-		    		<label>Check In
-		    			<input type="text" class="span2" value="" id="dp1" readonly name="checkIn" style="float:left;">
-		    		</label>
-		    	</div>
-
-		    	<div class="large-2 columns">
-		    		<label>Night
-		    			<select id="night">
-		    				@for($i = 1;$i <= 30; $i++)
-		    				<option value={{$i}}>{{$i}}</option>
-		    				@endfor
-		    			</select>
-		    		</label>
-		    	</div>
-		    	<div class="large-3 columns left">
-		    		<label>Check Out
-		    			<?php
-		    				$checkOut = new DateTime('+1 day');
-		    				//{{$checkOut->format('d-m-Y')}}
-		    			?>
-		    			<input type="text" class="span2" value="" id="dp2" readonly name="checkOut">
-		    		</label>
-		    	</div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Adult</label>
-		          <label for="right-label" class="show-for-small-only">Adult</label>
-		        </div>
-		        <div class="small-12 medium-9 large-2 columns left">
-		          {!! Form::select('adults', array('1' => '1', '2' => '2', '3' => '3', '4' => '4'), null) !!}
-		        </div>
-
-		        <div class="large-2 medium-12 columns">
-		        	<!-- foundation bug ?? -->
-		        </div>
-
-		        <div class="large-2 medium-3 large-offset-1 columns left">
-		          <label for="endDate" class="right inline show-for-medium-up">Children</label>
-		          <label for="endDate" class="show-for-small-only">Children</label>
-		        </div>
-		        <div class="small-12 medium-9 large-2 columns left">
-	          		{!! Form::select('children', array('0' => '0', '1' => '1', '2' => '2'), null) !!}
-		        </div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="right-label" class="right inline show-for-medium-up">Room</label>
-		          <label for="right-label" class="show-for-small-only">Room</label>
-		        </div>
-		        <div class="small-12 medium-9 large-2 columns left">
-		          	{!! Form::select('children', array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'), null) !!}
-		        </div>
-		    </div>
-	    	
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		        </div>
-		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-		          <button type="submit" class="button small">Search</button>
-		        </div>
-		    </div>
-
-		</form>
-	</div>
+<div class="search-box-wrapper" ng-controller="MainCtrl">
+    <div class="search-box container">
+        <ul class="search-tabs clearfix">
+            <li class="active"><a href="#hotels-tab" data-toggle="tab">HOTELS</a></li>
+        </ul>
+        <div class="visible-mobile">
+            <ul id="mobile-search-tabs" class="search-tabs clearfix">
+                <li class="active"><a href="#hotels-tab">HOTELS</a></li>
+            </ul>
+        </div>
+        
+        <div class="search-tab-content">
+            <div class="tab-pane fade active in" id="hotels-tab">
+                <form method="get" action="{{ url('agent/hotel/search') }}">
+                	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-md-3">
+                            <h4 class="title">Where</h4>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label>Country</label>
+                                    <div class="selector">
+                                        {!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required', 'class' => 'full-width')) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label>City</label>
+                                    <div class="selector" id="citySelector">
+										<select ng-model="field.city" name="city" required id="city">
+											<option value=""></option>
+											<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-sm-6 col-md-4">
+                            <h4 class="title">When</h4>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label>Check In</label>
+                                    <div class="datepicker-wrap">
+                                        <input type="text" name="date_from" class="input-text full-width" placeholder="dd-mm-yy" value="{{ date('d-m-Y') }}" required />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label>Check Out</label>
+                                    <div class="datepicker-wrap">
+                                        <input type="text" name="date_to" class="input-text full-width" placeholder="dd-mm-yy" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-sm-6 col-md-3">
+                            <h4 class="title">Who</h4>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <label>Rooms</label>
+                                    <div class="selector">
+                                        {!! Form::select('room', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), null, array('class' => 'full-width')) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>Adults</label>
+                                    <div class="selector">
+                                        {!! Form::select('adults', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), null, array('class' => 'full-width')) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label>Kids</label>
+                                    <div class="selector">
+                                        {!! Form::select('room', array('0' => '00', '1' => '01', '2' => '02', '3' => '03', '4' => '04'), null, array('class' => 'full-width')) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-sm-6 col-md-2 fixheight">
+                            <label class="hidden-xs">&nbsp;</label>
+                            <button type="submit" class="full-width icon-check animated" data-animation-type="bounce" data-animation-duration="1">SEARCH NOW</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
 @stop
 
 @section('script')
-<script type="text/javascript">
-var nowTemp = new Date();
-var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-var checkIn = $('#dp1').fdatepicker({
-	format : 'dd-mm-yyyy',
-	onRender: function (date) {
-		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}
-});
-
-var checkOut = $('#dp2').fdatepicker({
-	format : 'dd-mm-yyyy',
-	onRender: function (date) {
-		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}	
-})
-
-//set default date
-$('#dp1').fdatepicker('setDate', new Date());
-var tomorrow = new Date(nowTemp);
-tomorrow.setDate(nowTemp.getDate()+1);
-$('#dp2').fdatepicker('setDate', new Date(tomorrow));
-
-//pergantian jumlah malam
-$("#night").change(function(){
-	var tanggalCheckIn = new Date(moment($('#dp1').val(), "DD-MM-YYYY"));
-	var tanggalCheckOut = new Date(tanggalCheckIn);
-	tanggalCheckOut.setDate(tanggalCheckIn.getDate() + eval(this.value));
-	$('#dp2').fdatepicker('setDate', new Date(tanggalCheckOut));
-});
-
-//perubahan tanggal checkIn
-$("#dp1").change(function(){
-	var tanggalCheckIn = new Date(moment($('#dp1').val(), "DD-MM-YYYY"));
-	var tanggalCheckOut = new Date(moment($('#dp2').val(), "DD-MM-YYYY"));
-	if(tanggalCheckIn >= tanggalCheckOut){
-		tanggalCheckOut = new Date(tanggalCheckIn);
-		tanggalCheckOut.setDate(tanggalCheckIn.getDate() + 1)
-		// alert(tanggalCheckOut);
-		$('#dp2').fdatepicker('setDate', new Date(tanggalCheckOut));
-	} else {
-		var oneDay = 24*60*60*1000;
-		var diffDays = Math.round(Math.abs((tanggalCheckIn.getTime() - tanggalCheckOut.getTime())/(oneDay)));
-		$("#night").val(diffDays);
-
-	}
-});
-
-$("#dp2").change(function(){
-	var tanggalCheckIn = new Date(moment($('#dp1').val(), "DD-MM-YYYY"));
-	var tanggalCheckOut = new Date(moment($('#dp2').val(), "DD-MM-YYYY"));
-	var oneDay = 24*60*60*1000;
-	var diffDays = Math.round(Math.abs((tanggalCheckIn.getTime() - tanggalCheckOut.getTime())/(oneDay)));
-	if(diffDays > 30){
-		tanggalCheckOut = new Date(tanggalCheckIn);
-		tanggalCheckOut.setDate(tanggalCheckIn.getDate() + 30);
-
-		$("#night").val(30);
-		$('#dp2').fdatepicker('setDate', new Date(tanggalCheckOut));
-	} else {
-		$("#night").val(diffDays);
-	}
-});
-</script>
-
 <script>
 
 var app = angular.module("ui.hotelloca", []);
@@ -199,10 +112,11 @@ app.controller("MainCtrl", function ($scope, $http, $filter) {
 		$http.post('{{ url("agent/hotel/city-from-country") }}', $scope.field).success(function(response){
 			$scope.cities = response;
 			$scope.field.city = '';
+			tjq('#citySelector span').html('');
 			// console.log(response);
-
 		})
 	}
+
 	$scope.getCity();
 	$scope.field.city = '{{old("city")}}';
 

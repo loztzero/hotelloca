@@ -33,6 +33,11 @@ class Helpers {
 		return number_format($rate, 0 , '' , ',' );
 	}
 
+	//format must Y-m-d
+	public static function isDate1BetweenDate2AndDate3($date1, $date2, $date3){
+		return ((strtotime($date1) >= strtotime($date2)) && (strtotime($date1) <= strtotime($date3)));
+	}
+
 
 } 
 

@@ -1,15 +1,30 @@
-@extends('layouts.layout-hotel')
-@section('content')
-<div class="row" ng-controller="MainCtrl">
-	
-	<div class="large-12 columns">
+@extends('layouts.general-travel-layout')
 
-		<h3>Hotel Rooms</h3>
+@section('titleContainer')
+	<div class="page-title-container">
+	    <div class="container">
+	        <div class="page-title pull-left">
+	            <h2 class="entry-title">Hotel Room Rate</h2>
+	        </div>
+	        <ul class="breadcrumbs pull-right">
+	            <li><a href="#">Hotel</a></li>
+	            <li class="active">Hotel Room Rate</li>
+	        </ul>
+	    </div>
+	</div>
+@endsection
+
+@section('content')
+<div class="container" ng-controller="MainCtrl">
+	
+	<div class="travelo-box">
+
+		<h3>Hotel Rooms Rate</h3>
 		@include('layouts.message-helper')
 
-		<table>
+		<table class="table table-striped">
 			<caption style="text-align:left;">
-				<a href="{{ url('hotel/room-rate/input')}}">Add New Room Rate</a>
+				<i class="soap-icon-roundtriangle-right"></i>&nbsp;&nbsp; <a href="{{ url('hotel/room-rate/input')}}">Add New Room Rate</a>
 			</caption>
 			<thead>
 				<tr>
@@ -23,16 +38,16 @@
 			@foreach($rates as $rate)
 				<tr>
 					<td>
-						<form action="{{ url('hotel/room-rate/load-data')}}" method="post" class="left">
+						<form action="{{ url('hotel/room-rate/load-data') }}" method="post" class="left">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $rate->id }}" name="id">
-			            	<button type="submit" class="tiny rem-btm-margin" title="Edit Rate"><i class="fi-page-edit"></i></button>
+			            	<button type="submit" class="btn-primary" title="Edit Rate"><i class="glyphicon glyphicon-edit"></i></button>
 						</form>
 
 						<form action="{{ url('hotel/room-rate/delete')}}" method="post" class="right">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $rate->id }}" name="id">
-			            	<button type="submit" class="tiny alert rem-btm-margin" title="Delete Rate"><i class="fi-page-delete"></i></button>
+			            	<button type="submit" class="button red" title="Delete Rate"><i class="glyphicon glyphicon-close"></i></button>
 						</form>
 					</td>
 					<td>{{ $rate->room->room_name }}</td>

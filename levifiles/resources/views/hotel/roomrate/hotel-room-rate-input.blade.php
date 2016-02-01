@@ -1,14 +1,30 @@
-@extends('layouts.layout-hotel')
+@extends('layouts.general-travel-layout')
+
+@section('titleContainer')
+	<div class="page-title-container">
+	    <div class="container">
+	        <div class="page-title pull-left">
+	            <h2 class="entry-title">Hotel Room Input</h2>
+	        </div>
+	        <ul class="breadcrumbs pull-right">
+	            <li><a href="#">Hotel</a></li>
+	            <li>Hotel Room</li>
+	            <li class="active">Hotel Room Input</li>
+	        </ul>
+	    </div>
+	</div>
+@endsection
+
 @section('content')
-<div class="row" ng-controller="MainCtrl">
+<div class="container" ng-controller="MainCtrl">
 	
-	<a href="{{ url('hotel/room-rate') }}" class="button tiny secondary">Back</a>
+	<a href="{{ url('hotel/room-rate') }}" class="button tiny secondary"><< Back</a>
+	<div class="travelo-box">
 
-	<h3>Hotel Rooms</h3>
-	@include('layouts.message-helper')
+		<h3>Hotel Rooms</h3>
+		@include('layouts.message-helper')
 
-	<div class="large-12 colums">
-		<form class="form-horizontal" role="form" method="POST" action="{{ url('hotel/room-rate/save') }}" data-abide>
+		<form class="form-horizontal" role="form" method="POST" action="{{ url('hotel/room-rate/save') }}">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 			@if(!empty(old('id')))
@@ -16,235 +32,148 @@
 			@endif
 			<input type="hidden" value="{{ $profile->id }}" name="mst020_id">
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="hotelName" class="right inline show-for-medium-up">Hotel Name *</label>
-		          <label for="hotelName" class="show-for-small-only">Hotel Name *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ $profile->hotel_name }}" id="hotelName" name="hotel_name" readonly>
-		          <small class="error">Hotel Name Required</small>
+		    <div class="form-group">
+				<div class="col-xs-12">
+		          <label>Hotel Name *</label>
+		          <input type="text"class="input-text full-width" value="{{ $profile->hotel_name }}" id="hotelName" name="hotel_name" readonly>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="fromDate" class="right inline show-for-medium-up">Periode Start *</label>
-		          <label for="fromDate" class="show-for-small-only">Periode Start *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-3 columns left">
-		          <input type="text" class="span2" value="{{ old('from_date') }}" id="fromDate" name="from_date" required>
-		          <small class="error">From Date Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          <label>Periode Start *</label>
+		          <input type="text"class="input-text full-width" value="{{ old('from_date') }}" id="fromDate" name="from_date" required>
 		        </div>
 
-		        <div class="large-2 medium-12 columns">
-		        	<!-- foundation bug ?? -->
-		        </div>
-
-		        <div class="large-2 medium-3 large-offset-1 columns left">
-		          <label for="endDate" class="right inline show-for-medium-up">Periode End *</label>
-		          <label for="endDate" class="show-for-small-only">Periode End *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-3 columns left">
-		          <input type="text" class="span2" value="{{ old('end_date') }}" id="endDate" name="end_date" required>
-		          <small class="error">From Date Required</small>
+		        <div class="col-xs-6">
+		          <label>Periode End *</label>
+		          <input type="text" class="input-text full-width" value="{{ old('end_date') }}" id="endDate" name="end_date" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="roomName" class="right inline show-for-medium-up">Room Name *</label>
-		          <label for="roomName" class="show-for-small-only">Room Name *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	<select ng-model="field.mst023_id" name="mst023_id" ng-change="roomChange()">
-		        		<option ng-repeat="room in rooms" value="@{{ room.id }}">@{{ room.room_name }}</option>
-		        	</select>
-		          	<small class="error">Room Name Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          	<label>Room Name *</label>
+		          	<div class="selector">
+			         	<select ng-model="field.mst023_id" name="mst023_id" ng-change="roomChange()" class="full-width">
+			        		<option ng-repeat="room in rooms" value="@{{ room.id }}">@{{ room.room_name }}</option>
+			        	</select>
+			        </div>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="numAdults" class="right inline show-for-medium-up">Number Adults *</label>
-		          <label for="numAdults" class="show-for-small-only">Number Adults *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-1 columns left">
-	        		{!! Form::select('num_adults', $numberPerson , old('num_adults'), array('required', 'id' => 'numAdults')) !!}
-		          	<small class="error">Number Adult Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          	<label>Number Adults *</label>
+		          	<div class="selector">
+			         	{!! Form::select('num_adults', $numberPerson , old('num_adults'), array('required', 'id' => 'numAdults', 'class' => 'full-width')) !!}
+			        </div>
 		        </div>
 
-		        <div class="large-2 medium-12 columns">
-		        	<!-- foundation bug ?? -->
-		        </div>
-
-		        <div class="large-2 large-offset-3 medium-3 columns">
-		          <label for="numChild" class="right inline show-for-medium-up">Number Children *</label>
-		          <label for="numChild" class="show-for-small-only">Number Children *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-1 columns left">
-		          {!! Form::select('num_child', $numberChildren , old('num_child'), array('required', 'id' => 'numChild')) !!}
-		          <small class="error">Number Children Required</small>
+		        <div class="col-xs-6">
+		          	<label>Number Children *</label>
+		          	<div class="selector">
+			         	{!! Form::select('num_child', $numberChildren , old('num_child'), array('required', 'id' => 'numChild', 'class' => 'full-width')) !!}
+			        </div>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="bedType" class="right inline show-for-medium-up">Bed Type *</label>
-		          <label for="bedType" class="show-for-small-only">Bed Type *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	{!! Form::select('bed_type', array('Queen' => 'Queen', 'King' => 'King') , old('bed_type'), array('required', 'id' => 'bedType')) !!}
-		          <small class="error">Bed Type Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          	<label>Bed Type *</label>
+		          	<div class="selector">
+			         	{!! Form::select('bed_type', array('Queen' => 'Queen', 'King' => 'King') , old('bed_type'), array('required', 'id' => 'bedType', 'class' => 'full-width')) !!}
+			        </div>
 		        </div>
 
-		        <div class="large-2 medium-12 columns">
-		        	<!-- foundation bug ?? -->
-		        </div>
-
-		        <div class="large-2 medium-3 columns">
-		          <label for="floor" class="right inline show-for-medium-up">Floor</label>
-		          <label for="floor" class="show-for-small-only">Floor</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ old('floor') }}" id="floor" name="floor">
-		          <small class="error">Bed Type Required</small>
+		        <div class="col-xs-6">
+		          	<label>Floor</label>
+		          	<input type="text" class="input-text full-width" value="{{ old('floor') }}" id="floor" name="floor">
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="net" class="right inline show-for-medium-up">Internet *</label>
-		          <label for="net" class="show-for-small-only">Internet *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-2 columns left">
-		          {!! Form::select('net', array('Yes' => 'Yes', 'No' => 'No') , old('net'), array('required', 'id' => 'net')) !!}
-		          <small class="error">Internet Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+					<label>Internet *</label>
+					{!! Form::select('net', array('Yes' => 'Yes', 'No' => 'No') , old('net'), array('required', 'id' => 'net', 'class' => 'full-width')) !!}
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="netFee" class="right inline show-for-medium-up">Internet Fee *</label>
-		          <label for="netFee" class="show-for-small-only">Internet Fee *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ old('net_fee') }}" id="netFee" name="net_fee" required>
-		          <small class="error">Internet Fee Required</small>
+		    <div class="form-group">
+				<div class="col-xs-12">
+		          	<label>Internet Fee *</label>
+		          	<input type="text" class="input-text full-width" value="{{ old('net_fee') }}" id="netFee" name="net_fee" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="cutOff" class="right inline show-for-medium-up">Cut Off (In Day) *</label>
-		          <label for="cutOff" class="show-for-small-only">Cut Off *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ old('cut_off') }}" id="cutOff" name="cut_off" required>
-		          <small class="error">Cut Off Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          	<label>Cut Off (In Day) *</label>
+		          	<input type="number" class="input-text full-width" value="{{ old('cut_off') }}" id="cutOff" name="cut_off" required>
 		        </div>
 
-		        <div class="large-2 medium-12 columns">
-		        	<!-- foundation bug ?? -->
-		        </div>
-
-		        <div class="large-2 medium-3 columns">
-		          <label for="allotment" class="right inline show-for-medium-up">Allotment *</label>
-		          <label for="allotment" class="show-for-small-only">Allotment *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ old('allotment') }}" id="allotment" name="allotment" required>
-		          <small class="error">Allotment Required</small>
+		        <div class="col-xs-6">
+		          	<label>Allotment</label>
+		          	<input type="text" class="input-text full-width" value="{{ old('allotment') }}" id="allotment" name="allotment" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="numBreakfast" class="right inline show-for-medium-up">Breakfast (In Pax) *</label>
-		          <label for="numBreakfast" class="show-for-small-only">Breakfast (In Pax) *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-1 columns left">
-		          {!! Form::select('num_breakfast', array(0 => 0, 1 => 1, 2 => 2, 3 => 3, 4 => 4 ), old('num_breakfast'), array('required', 'id' => 'num_breakfast')) !!}
-		          <small class="error">Breakfast Required</small>
+		    <div class="form-group">
+				<div class="col-xs-6">
+					<label>Breakfast (In Pax) *</label>
+					{!! Form::select('num_breakfast', array(0 => 0, 1 => 1, 2 => 2, 3 => 3, 4 => 4 ), old('num_breakfast'), array('required', 'id' => 'num_breakfast', 'class' => 'full-width')) !!}
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="roomDesc" class="right inline show-for-medium-up">Desciption</label>
-		          <label for="roomDesc" class="show-for-small-only">Description</label>
-		        </div>
-		        <div class="small-12 medium-9 large-8 columns left">
-		          <textarea id="roomDesc" name="room_desc">{{ old('room_desc') }}</textarea>
+		    <div class="form-group">
+				<div class="col-xs-12">
+	          		<label>Description</label>
+					<textarea id="roomDesc" name="room_desc" class="input-text full-width">{{ old('room_desc') }}</textarea>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="panel">
-					<b>Rate</b>
-					<hr>
-					<div class="row">
-						<div class="large-2 medium-3 columns">
-				          <label for="rateType" class="right inline show-for-medium-up">Type</label>
-				          <label for="rateType" class="show-for-small-only">Type</label>
-				        </div>
-				        <div class="small-12 medium-9 large-2 columns left">
-				        	{!! Form::select('rate_type', array('Nett' => 'Nett', 'Commision' => 'Commision') , old('rate_type'), array('required', 'ng-model' => 'field.rate_type', 'ng-change' => 'rateTypeChange()', old('id') ? 'disabled' : '')) !!}
-				          <small class="error">Type Required</small>
-				        </div>
-
-				        <div class="large-2 medium-12 columns">
-				        	<!-- foundation bug ?? -->
-				        </div>
-
-				        <div class="large-2 medium-3 large-offset-2 columns">
-				          <label for="dailyPrice" class="right inline show-for-medium-up">Daily Price</label>
-				          <label for="dailyPrice" class="show-for-small-only">Daily Price</label>
-				        </div>
-				        <div class="small-12 medium-9 large-4 columns left">
-				          <input type="text" class="span2" id="dailyPrice" name="daily_price" value="{{ old('daily_price', 0) }}" required>
-				          <small class="error">Daily Price Required</small>
-				        </div>
-					</div>
-
-					<div class="row" ng-if="field.rate_type == 'Commision'">
-						<div class="large-2 medium-3 columns">
-				          <label for="commType" class="right inline show-for-medium-up">Type Commision</label>
-				          <label for="commType" class="show-for-small-only">Type Commision</label>
-				        </div>
-				        <div class="small-12 medium-9 large-2 columns left">
-				        	{!! Form::select('comm_type', array('%' => '%', 'Value' => 'Value') , null, array('required', 'ng-model' => 'field.comm_type', old('id') ? 'disabled' : '')) !!}
-				          <small class="error">Type Commision Required</small>
-				        </div>
-
-				        <div class="large-2 medium-12 columns">
-				        	<!-- foundation bug ?? -->
-				        </div>
-
-				        <div class="large-2 medium-3 large-offset-2 columns" ng-if="field.comm_type == '%'">
-				          <label for="commPct" class="right inline show-for-medium-up">% Commision</label>
-				          <label for="commPct" class="show-for-small-only">% Commision</label>
-				        </div>
-				        <div class="small-12 medium-9 large-4 columns left" ng-if="field.comm_type == '%'">
-				          <input type="text" class="span2" id="commPct" name="comm_pct" value="{{ old('comm_pct', 0) }}" required {{ old('id') ? 'disabled' : '' }}>
-				          <small class="error">% Commision Required</small>
-				        </div>
-
-				        <div class="large-2 medium-3 large-offset-2 columns" ng-if="field.comm_type == 'Value'">
-				          <label for="commValue" class="right inline show-for-medium-up"> Commision Value</label>
-				          <label for="commValue" class="show-for-small-only">Commision Value</label>
-				        </div>
-				        <div class="small-12 medium-9 large-4 columns left" ng-if="field.comm_type == 'Value'">
-				          <input type="text" class="span2" id="commValue" name="comm_value" value="{{ old('comm_value', 0) }}" required {{ old('id') ? 'disabled' : '' }}>
-				          <small class="error">Commision Value Required</small>
-				        </div>
-					</div>
-				</div>
+		    <div class="form-group">
+		    	<div class="col-xs-12">
+	          		<b>Rate</b>
+	          		<hr>
+		        </div>
 		    </div>
+
+		    <div class="form-group">
+				<div class="col-xs-6">
+		          	<label>Type *</label>
+		          	{!! Form::select('rate_type', array('Nett' => 'Nett', 'Commision' => 'Commision') , old('rate_type'), array('required', 'ng-model' => 'field.rate_type', 'ng-change' => 'rateTypeChange()', old('id') ? 'disabled' : '', 'class' => 'full-width')) !!}
+		        </div> 
+
+		        <div class="col-xs-6">
+		          	<label>Daily Price</label>
+		          	<input type="text" class="input-text full-width" id="dailyPrice" name="daily_price" value="{{ old('daily_price', 0) }}" required>
+		        </div>
+		    </div>
+			
+		    <div class="form-group" ng-show="field.rate_type == 'Commision'">
+				<div class="col-xs-6">
+		          	<label>Type Commision</label>
+		          	<div class="selector">
+			          	{!! Form::select('comm_type', array('%' => '%', 'Value' => 'Value') , null, array('required', 'ng-model' => 'field.comm_type', old('id') ? 'disabled' : '', 'class' => 'full-width')) !!}
+		          	</div>
+		        </div> 
+
+		        <div class="col-xs-6" ng-if="field.comm_type == '%'">
+		          	<label>% Commision</label>
+		          	<input type="text" class="input-text full-width" id="commPct" name="comm_pct" value="{{ old('comm_pct', 0) }}" required {{ old('id') ? 'disabled' : '' }}>
+		        </div>
+
+		        <div class="col-xs-6" ng-if="field.comm_type == 'Value'">
+		          	<label>Commision Value</label>
+		          	<input type="text" class="input-text full-width" id="commValue" name="comm_value" value="{{ old('comm_value', 0) }}" required {{ old('id') ? 'disabled' : '' }}>
+		        </div>
+		    </div>
+
 		
-	    	<div class="row">
-		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-					<button type="submit" class="button small">{{ empty(old('id')) ? 'Add New Room' : 'Update Room' }}</button>          
+	    	<div class="form-group">
+		        <div class="col-xs-12">
+					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Room' : 'Update Room' }}</button>          
 		        </div>
 		    </div>
 	    </form>

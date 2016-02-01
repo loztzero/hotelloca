@@ -1,62 +1,153 @@
-@extends('layouts.layout-agent')
-@section('content')
-<div class="row" ng-controller="MainCtrl">
-	
-	<div class="row">
-		<div class="large-4 column">
-			<div style="border:1px solid black">
-				Provide Your Content Here
-			</div>
-		</div>
-		<div class="large-8 column">
-			@foreach($hotels as $hotel)
-			<div class="panel" style="background-color:white;padding:10px;">
-				<div class="row">
-					<div class="large-3 column">
-						<img src="{{ url('uploads/hotels/'.$hotel->id.'/'.$hotel->pict.'.jpg') }}" width="100%">
-					</div>
-					<div class="large-9 column">
-						<div class="right" style="text-align:center;font-family:Arial, Helvetica, 'Sans-serif';">
-							<b style="font-size:12px;">Rate Per Night</b><br>
-							
-							{{-- <a href="{{ url('hotel-agent/room?') }}hotel={{ $hotel->HOTEL_ID }}&checkIn={{ $checkIn }}&checkOut={{ $checkOut }}" class="button alert">
-								<b style="font-size:1.2em;font-family: Arial 'San serif';">Rp. {{ $helpers::currencyFormat($hotel->LOW_PRICE * 2300) }}</b>
-							</a> --}}
-							<a class="button warning" style="padding:8px;border-radius:5px;margin-bottom:0px;"><b style="font-size:12px;font-family: Arial 'San serif';">Rp. {{ number_format($hotel->nett_value, 0, ',', '.') }}</b></a><br>
-						</div>
+@extends('layouts.general-travel-layout')
 
-						<a href="">
-							<u><b style="font-size:18px;">{{ $hotel->hotel_name }}</b></u>
-						</a><br>
-
-						<div class="rateit" data-rateit-value="{{ $hotel->star }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-
-						<p style="font-size:13px;">
-							{{ $hotel->address }}
-						</p>
-						<p style="font-size:14px;height:90px;overflow-y:hidden;text-align:justify;">
-							{{-- $hotel->DESCRIPTION --}}
-							
-							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-						</p>
-					</div>
-					
-				</div>
-			</div>
-			@endforeach
-			@if(count($hotels) == 0)
-			Data hotel tidak ditemukan silahkan mencoba lagi untuk kota atau negara lain.
-			@endif
-		</div>
-	</div>
-	
-	
+@section('titleContainer')
+<div class="page-title-container">
+    <div class="container">
+        <div class="page-title pull-left">
+            <h2 class="entry-title">Hotel Search Results</h2>
+        </div>
+        <ul class="breadcrumbs pull-right">
+            <li><a href="#">HOME</a></li>
+            <li class="active">Hotel Search Results</li>
+        </ul>
+    </div>
 </div>
-@stop
+@endsection
+
+
+@section('content')
+
+<div class="container" ng-controller="MainCtrl">
+    <div id="main">
+        <div class="row">
+            <div class="col-sm-4 col-md-3">
+                <h4 class="search-results-title"><i class="soap-icon-search"></i><b>1,984</b> results found.</h4>
+                <div class="toggle-container filters-container">
+                    <div class="panel style1 arrow-right">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#price-filter" class="collapsed">Price</a>
+                        </h4>
+                        <div id="price-filter" class="panel-collapse collapse">
+                            <div class="panel-content">
+                                <div id="price-range"></div>
+                                <br />
+                                <span class="min-price-label pull-left"></span>
+                                <span class="max-price-label pull-right"></span>
+                                <div class="clearer"></div>
+                            </div><!-- end content -->
+                        </div>
+                    </div>
+                    
+                    <div class="panel style1 arrow-right">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#rating-filter" class="collapsed">User Rating</a>
+                        </h4>
+                        <div id="rating-filter" class="panel-collapse collapse filters-container">
+                            <div class="panel-content">
+                                <div id="rating" class="five-stars-container editable-rating"></div>
+                                <br />
+                                <small>2458 REVIEWS</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel style1 arrow-right">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#modify-search-panel" class="collapsed">Modify Search</a>
+                        </h4>
+                        <div id="modify-search-panel" class="panel-collapse collapse">
+                            <div class="panel-content">
+                                <form method="post">
+                                    <div class="form-group">
+                                        <label>destination</label>
+                                        <input type="text" class="input-text full-width" placeholder="" value="Paris" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>check in</label>
+                                        <div class="datepicker-wrap">
+                                            <input type="text" name="date_from" class="input-text full-width" placeholder="mm/dd/yy" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>check out</label>
+                                        <div class="datepicker-wrap">
+                                            <input type="text" name="date_to" class="input-text full-width" placeholder="mm/dd/yy" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <button class="btn-medium icon-check uppercase full-width">search again</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 col-md-9">
+                <div class="sort-by-section clearfix">
+                    <h4 class="sort-by-title block-sm">Sort results by:</h4>
+                    <ul class="sort-bar clearfix block-sm">
+                        <li class="sort-by-name"><a class="sort-by-container" href="#"><span>name</span></a></li>
+                        <li class="sort-by-price"><a class="sort-by-container" href="#"><span>price</span></a></li>
+                        <li class="clearer visible-sms"></li>
+                        <li class="sort-by-rating active"><a class="sort-by-container" href="#"><span>rating</span></a></li>
+                        <li class="sort-by-popularity"><a class="sort-by-container" href="#"><span>popularity</span></a></li>
+                    </ul>
+                    
+                    <ul class="swap-tiles clearfix block-sm">
+                        <li class="swap-list active">
+                            <a href="hotel-list-view.html"><i class="soap-icon-list"></i></a>
+                        </li>
+                        <li class="swap-grid">
+                            <a href="hotel-grid-view.html"><i class="soap-icon-grid"></i></a>
+                        </li>
+                        <li class="swap-block">
+                            <a href="hotel-block-view.html"><i class="soap-icon-block"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="hotel-list listing-style3 hotel">
+                    @foreach($hotels as $hotel)
+                        <article class="box">
+                            <figure class="col-sm-5 col-md-4">
+                                <a title="" href="ajax/slideshow-popup.html" class="hover-effect popup-gallery"><img width="270" height="160" alt="" src="{{ url('uploads/hotels/'.$hotel->id.'/'.$hotel->pict.'.jpg') }}" width="100%"></a>
+                            </figure>
+                            <div class="details col-sm-7 col-md-8">
+                                <div>
+                                    <div>
+                                        <h4 class="box-title">{{ $hotel->hotel_name }}<small><i class="soap-icon-departure yellow-color"></i>{{ $hotel->address }}</small></h4>
+                                    </div>
+                                    <div>
+                                        <div class="five-stars-container">
+                                            <span class="five-stars" style="width: 80%;"></span>
+                                        </div>
+                                        <span class="review">270 reviews</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
+                                    <div>
+                                        <span class="price"><small>RATE/NIGHT</small>Rp. {{ number_format($hotel->nett_value, 0, ',', '.') }}</span>
+                                        <a class="button btn-small full-width text-center" title="" href="hotel-detailed.html">SELECT</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                    @if(count($hotels) == 0)
+                        Data Hotels not found, please try again with another filter.
+                    @endif
+                </div>
+                <a href="#" class="uppercase full-width button btn-large">load more listing</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
 
 @section('script')
 <script>
-var app = angular.module("ui.boardingpassku", ['ngSanitize']);
+var app = angular.module("ui.hotelloca", ['ngSanitize']);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
 	$scope.cities = {};
@@ -65,7 +156,7 @@ app.controller("MainCtrl", function ($scope, $http, $filter) {
 	// console.log($scope.cities);
 	$scope.getCity = function(){
 		$scope.loading = true;
-		$http.get("{{App::make('url')->to('/hotel/cities')}}/" + $scope.field.country).success(function(response) {
+		$http.get("{{ url('/hotel/cities')}}/" + $scope.field.country).success(function(response) {
 
 			// try {
 		 //        JSON.parse(response);
@@ -85,4 +176,4 @@ app.controller("MainCtrl", function ($scope, $http, $filter) {
 
 });
 </script>
-@stop
+@endsection

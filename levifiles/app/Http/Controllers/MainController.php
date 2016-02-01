@@ -11,8 +11,9 @@ class MainController extends Controller {
 
 	public function getIndex()
 	{
-		return view('auth.login');
+		//return view('auth.login');
 		//return redirect('/auth/login');
+		return view('main.main-page');
 	}
 
 	public function getCompanyProfile()
