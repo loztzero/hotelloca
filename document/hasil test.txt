@@ -10,5 +10,6 @@ Error : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 's
 
 register hotel waktu add:
 1. harusnya hotel name yg ke 2 itu description bukan hotel name
-2. chained combo negara ma kotana msh salah, pertama default indo kota dah kepilih bener indo punya
-g ganti ke negara italy ttp di indo kotana, g ganti ke indo br ganti kotanya ke negara italy
+2. chained combo negara ma kotan harus diakalin karena lelet jd ga keliatan ganti kotanya, g kirain ga keganti bis tunggu sekitar 5 detik br keganti
+   mungkin hrs ksh ky loading gt
+3.
