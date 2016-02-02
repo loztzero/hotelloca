@@ -1,66 +1,70 @@
-@extends('layouts.layout-hotel-admin')
+@extends('layouts.general-travel-layout')\
+
+@section('titleContainer')
+	<div class="page-title-container">
+	    <div class="container">
+	        <div class="page-title pull-left">
+	            <h2 class="entry-title">Rate Input</h2>
+	        </div>
+	        <ul class="breadcrumbs pull-right">
+	            <li><a href="#">Admin</a></li>
+	            <li><a href="{{ url('admin/rate') }}">Rate</a></li>
+	            <li class="active">Rate Input</li>
+	        </ul>
+	    </div>
+	</div>
+@endsection
+
 @section('content')
-<div class="row" ng-controller="MainCtrl">
+<div class="container" ng-controller="MainCtrl">
 	
-	<h3>Rate Input</h3>
-	@include('layouts.message-helper')
+	<a href="{{ url('admin/rate') }}" class="button tiny secondary"><< Back</a>
+	<div class="travelo-box">
+		<form class="form-horizontal" role="form" method="POST" action="{{ url('admin/rate/save') }}">
 
-	<div class="large-12 colums">
-		<form class="form-horizontal" role="form" method="POST" action="{{ url('admin/rate/save') }}" data-abide>
+			<h3>Rate Input</h3>
+			@include('layouts.message-helper')
+
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
 			@if(!empty(old('id')))
 				<input type="hidden" value="{{ old('id')}}" name="id">
 			@endif
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="curr1Id" class="right inline show-for-medium-up">Currency 1 *</label>
-		          <label for="curr1Id" class="show-for-small-only">Currency 1 *</label>
+		    <div class="row form-group">
+				<div class="col-xs-6">
+		          	<label>Currency 1 *</label>
+		          	<div class="selector">
+	        			{!! Form::select('curr1_id', $currencies , old('curr1_id'), array('required', 'id' => 'curr1Id', 'class' => 'full-width')) !!}
+		          	</div>
 		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	{!! Form::select('curr1_id', $currencies , old('curr1_id'), array('required', 'id' => 'curr1Id')) !!}
-		          <small class="error">Currency 1 must be selected</small>
+
+				<div class="col-xs-6">
+		          	<label>Currency 1 Value *</label>
+	        		<input type="number" name="kurs1_val" value="{{ old('kurs1_val', 1) }}" required readonly class="input-text full-width">
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="kurs1Val" class="right inline show-for-medium-up">Currency 1 Value *</label>
-		          <label for="kurs1Val" class="show-for-small-only">Currency 1  Value *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	<input type="text" name="kurs1_val" value="{{ old('kurs1_val', 1) }}" required readonly>
-		          	<small class="error">Currency 1 Value Required</small>
-		        </div>
+		    <div class="row form-group">
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="curr2Id" class="right inline show-for-medium-up">Currency 2 *</label>
-		          <label for="curr2Id" class="show-for-small-only">Currency 2 *</label>
+		    <div class="row form-group">
+				<div class="col-xs-6">
+		          	<label>Currency 2 *</label>
+		          	<div class="selector">
+	        			{!! Form::select('curr2_id', $currencies , old('curr2_id', $idr->id), array('required', 'id' => 'curr2Id', 'disabled', 'class' => 'full-width')) !!}
+		        		{!! Form::hidden('curr2_id', $idr->id) !!}
+		          	</div>
 		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	{!! Form::select('curr2_id', $currencies , old('curr2_id', $idr->id), array('required', 'id' => 'curr2Id', 'disabled')) !!}
-		        	{!! Form::hidden('curr2_id', $idr->id) !!}
-		          <small class="error">Currency 2 value must be selected</small>
-		        </div>
-		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="kurs2Value" class="right inline show-for-medium-up">Currency 2 Value *</label>
-		          <label for="kurs2Value" class="show-for-small-only">Currency 2 Value *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		        	<input type="text" name="kurs2_val" value="{{ old('kurs2_val', 0) }}" required>
-		          	<small class="error">Currency 2 Value Required</small>
+				<div class="col-xs-6">
+		          	<label>Currency 2 Value *</label>
+	        		<input type="text" name="kurs2_val" value="{{ old('kurs2_val', 0) }}" required class="input-text full-width">
 		        </div>
 		    </div>
 		
-	    	<div class="row">
-		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-					<button type="submit" class="button small">{{ empty(old('id')) ? 'Add New Rate' : 'Update Rate' }}</button>          
+	    	<div class="row form-group">
+		        <div class="col-xs-12">
+					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Rate' : 'Update Rate' }}</button>          
 		        </div>
 		    </div>
 	    </form>

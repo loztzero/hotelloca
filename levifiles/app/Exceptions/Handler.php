@@ -2,6 +2,7 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 // use App\Exceptions\CustomException;
 class Handler extends ExceptionHandler {
 
@@ -47,6 +48,12 @@ class Handler extends ExceptionHandler {
         // {
         // 	//print_r($e->getStatusCode());
         //     return redirect()->to('exception/read');
+        // }
+
+        // ini untuk handle token mismatch exception 
+        // if ($e instanceof TokenMismatchException){
+        //     //redirect to form an example of how I handle mine
+        //     return redirect($request->fullUrl())->with('csrf_error',"Opps! Seems you couldn't submit form for a longtime. Please try again");
         // }
 
         if (config('app.debug'))

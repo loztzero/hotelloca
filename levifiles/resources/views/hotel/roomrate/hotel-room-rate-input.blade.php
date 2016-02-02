@@ -42,12 +42,16 @@
 		    <div class="form-group">
 				<div class="col-xs-6">
 		          <label>Periode Start *</label>
-		          <input type="text"class="input-text full-width" value="{{ old('from_date') }}" id="fromDate" name="from_date" required>
+		          <div class="datepicker-wrap">
+			          <input type="text"class="input-text full-width" value="{{ old('date_from') }}" id="fromDate" name="date_from" required readonly>
+			      </div>
 		        </div>
 
 		        <div class="col-xs-6">
 		          <label>Periode End *</label>
-		          <input type="text" class="input-text full-width" value="{{ old('end_date') }}" id="endDate" name="end_date" required>
+		          <div class="datepicker-wrap">
+			          <input type="text" class="input-text full-width" value="{{ old('date_to') }}" id="endDate" name="date_to" required readonly>
+			      </div>
 		        </div>
 		    </div>
 
@@ -186,23 +190,7 @@
 @section('script')
 <script>
 
-var nowTemp = new Date();
-var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-var fromDate = $('#fromDate').fdatepicker({
-	format : 'dd-mm-yyyy',
-	onRender: function (date) {
-		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}	
-});
-
-var endDate = $('#endDate').fdatepicker({
-	format : 'dd-mm-yyyy',
-	onRender: function (date) {
-		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}	
-});
-
-$(".confirm-delete").on("click", function(e) {
+tjq(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
 	var form = $(this).parents('form');
 	swal({   
@@ -234,7 +222,7 @@ $(".confirm-delete").on("click", function(e) {
 		// $scope.field = {};
 		var kosong = [{'id' : '', 'room_name' : 'Select a Room'}]
 		$scope.rooms = kosong.concat({!! $rooms !!});
-		console.log($scope.rooms);
+		// console.log($scope.rooms);
 
 		$scope.rateTypeChange = function(){
 			if($scope.field.rate_type != 'Nett'){
@@ -249,13 +237,13 @@ $(".confirm-delete").on("click", function(e) {
 			var room = $filter('filter')($scope.rooms, { id: $scope.field.mst023_id});
 			if(room.length > 0){
 				var selectedRoom = room[0];
-				$('#numAdults').val(selectedRoom.num_adults);
-				$('#numChild').val(selectedRoom.num_child);
-				$('#bedType').val(selectedRoom.bed_type);
-				$('#net').val(selectedRoom.net);
-				$('#netFee').val(selectedRoom.net_fee);
-				$('#numBreakfast').val(selectedRoom.num_breakfast);
-				$('#roomDesc').val(selectedRoom.room_desc);
+				tjq('#numAdults').val(selectedRoom.num_adults);
+				tjq('#numChild').val(selectedRoom.num_child);
+				tjq('#bedType').val(selectedRoom.bed_type);
+				tjq('#net').val(selectedRoom.net);
+				tjq('#netFee').val(selectedRoom.net_fee);
+				tjq('#numBreakfast').val(selectedRoom.num_breakfast);
+				tjq('#roomDesc').val(selectedRoom.room_desc);
 			}
 
 		}

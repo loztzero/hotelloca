@@ -10,7 +10,7 @@
 
 			<h3>Profile</h3>
 			@include('layouts.message-helper')
-		    <div class="form-group">
+		    <div class="row form-group">
 		        <div class="col-xs-12">
 		            <label>Company Name *</label>
 		            <input type="text" class="input-text full-width" value="{{ old('comp_name', $profile->comp_name) }}" id="compName" name="comp_name">

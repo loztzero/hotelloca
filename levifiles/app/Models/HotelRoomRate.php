@@ -19,8 +19,8 @@ class HotelRoomRate extends Emodel {
 		$rules = array(
 			// 'mst020_id'    => 'required',
 			// 'room_id'      	=> 'required',
-			'from_date'      	=> 'required|date_format:"d-m-Y"',
-			'end_date'      	=> 'required|date_format:"d-m-Y"|after:from_date',
+			'date_from'      	=> 'required|date_format:"d-m-Y"',
+			'date_to'      	=> 'required|date_format:"d-m-Y"|after:from_date',
 			'mst023_id'      	=> 'required',
 			'num_adults'      	=> 'required|numeric',
 			'num_child'      	=> 'required|numeric',
@@ -46,9 +46,9 @@ class HotelRoomRate extends Emodel {
 		$messages = array(
 			// 'mst020_id.required' => 'Hotel detail data required',
 			// 'room_id.required' => 'Room id required',
-			'from_date.required' => 'Price from date must be filled',
-			'end_date.required' => 'Price end date must be filled',
-			'end_date.after' => 'Period End must greater than Period Start',
+			'date_from.required' => 'Price from date must be filled',
+			'date_to.required' => 'Price end date must be filled',
+			'date_to.after' => 'Period End must greater than Period Start',
 			'mst023_id.required' => 'Room name must be selected',
 			'num_adults.required' => 'Number of adults must be filled',
 			'num_adults.numeric' => 'Number of adults must be numeric',
@@ -82,7 +82,7 @@ class HotelRoomRate extends Emodel {
 			$error = $v->errors()->all();
 		} else {
 
-			$endDate = DateTime::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
+			$endDate = DateTime::createFromFormat('d-m-Y', $request->date_to)->format('Y-m-d');
 			$exists = HotelRoomRate::where('mst023_id', '=', $request->mst023_id)
 						->where('end_date', '=', $endDate)
 						->first();
@@ -102,8 +102,8 @@ class HotelRoomRate extends Emodel {
 /*		if(!isset($object->id)){
 			$object->room_id = uniqid();
 		}*/
-		$object->from_date = DateTime::createFromFormat('d-m-Y', $data['from_date'])->format('Y-m-d');
-		$object->end_date = DateTime::createFromFormat('d-m-Y', $data['end_date'])->format('Y-m-d');
+		$object->from_date = DateTime::createFromFormat('d-m-Y', $data['date_from'])->format('Y-m-d');
+		$object->end_date = DateTime::createFromFormat('d-m-Y', $data['date_to'])->format('Y-m-d');
 		$object->mst023_id = $data['mst023_id'];
 		$object->num_adults = $data['num_adults'];
 		$object->num_child = $data['num_child'];

@@ -7,7 +7,8 @@
             <h2 class="entry-title">Hotel Search Results</h2>
         </div>
         <ul class="breadcrumbs pull-right">
-            <li><a href="#">HOME</a></li>
+            <li><a href="#">Agent</a></li>
+            <li>Hotel</li>
             <li class="active">Hotel Search Results</li>
         </ul>
     </div>

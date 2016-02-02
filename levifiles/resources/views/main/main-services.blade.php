@@ -1,11 +1,23 @@
-@extends('layouts.foundation-angular')
-@section('content')
+@extends('layouts.general-travel-layout')
 
-<div class="row" style="padding:20px 0px;">
-	@include('main.main-pic-slide')
+@section('titleContainer')
+	<div class="page-title-container">
+	    <div class="container">
+	        <div class="page-title pull-left">
+	            <h2 class="entry-title">Services</h2>
+	        </div>
+	        <ul class="breadcrumbs pull-right">
+	            <li><a href="#">Main</a></li>
+	            <li class="active">Services</li>
+	        </ul>
+	    </div>
+	</div>
+@endsection
+
+@section('content')
+<div class="container">
 	
-	<div style="clear:both;"></div>
-	<div class="large-12 columns">
+	<div class="travelo-box long-description">
 		<div style="text-align:justify;">
 			<h1>Services</h1>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper leo neque, et convallis lacus porta ac. Praesent et justo eget tortor ullamcorper finibus non non lacus. Pellentesque facilisis, libero non lobortis porttitor, felis ante ornare nunc, nec accumsan elit risus hendrerit ipsum. In porttitor ullamcorper urna, vel pellentesque nisi finibus id. Quisque commodo lacinia ultrices. Suspendisse non ligula eu arcu aliquam maximus vel a neque. Etiam fermentum, quam a tincidunt commodo, lectus tortor faucibus ex, iaculis iaculis nunc est nec eros. Suspendisse vitae nibh urna. Donec erat arcu, egestas et quam et, facilisis iaculis nulla. Curabitur bibendum enim est.<br><br>

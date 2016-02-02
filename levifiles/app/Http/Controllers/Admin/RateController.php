@@ -13,14 +13,20 @@ class RateController extends Controller {
 
 	public function getIndex(Request $request){
 		$rates = AdminRate::orderBy('daily_period', 'desc');
-		if(isset($request->date_from) && !empty($request->date_from)){
-			$date = Helpers::dateFormatter($request->date_from);
-			$rates = $rates->where('daily_period', '>=', $date);
-		}
 
-		if(isset($request->date_end) && !empty($request->date_end)){
-			$date = Helpers::dateFormatter($request->date_end);
-			$rates = $rates->where('daily_period', '<=', $date);
+		try {
+			if(isset($request->date_from) && !empty($request->date_from)){
+				$date = Helpers::dateFormatter($request->date_from);
+				$rates = $rates->where('daily_period', '>=', $date);
+			}
+
+			if(isset($request->date_end) && !empty($request->date_end)){
+				$date = Helpers::dateFormatter($request->date_end);
+				$rates = $rates->where('daily_period', '<=', $date);
+			}
+			
+		} catch (\Exception $e) {
+			Session::flash('error', array('Please use the correct format date on date period from or date period to'));
 		}
 
 		$rates = $rates->get();

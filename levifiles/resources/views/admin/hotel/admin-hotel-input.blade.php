@@ -18,6 +18,7 @@
 @section('content')
 	<div class="container" ng-controller="MainCtrl">
 
+		<a href="{{ url('admin/hotel') }}" class="button tiny secondary"><< Back</a>
 		<div class="travelo-box col-xs-12 col-md-8">
 			<form action="{{url('/admin/hotel/save')}}" method="post" >
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
