@@ -1,0 +1,14 @@
+register hotel waktu edit mode:
+1. combo city ga muncul sesuai yg dah dipilih bali sebelmnya, pas edit mode, kepilihnya select a city pdhl bali, 
+  klo g mau klik balinya lg ga ada berubah apa, jd hrs klik org laen trus klik bali lg br bs
+2.waktu klik update
+Error : Undefined index: password
+padahal ga ada inputan password
+terus br muncul inputan password seolah2 ke halaman input baru
+terus g isi passwordnya klik register error
+Error : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'support@google.com' for key 'TUC_MST001_1' (SQL: insert into `MST001` (`email`, `password`, `id`, `updated_at`, `created_at`) values (support@google.com, yiBTEFfDpRzJ/vtj3T9yPO3GvskHygB9JTBrV8tycC56dbYfHRhX., 3aef9630-c0b5-4460-ab10-43b1bbb56628, 2016-02-02 13:32:30, 2016-02-02 13:32:30))
+
+register hotel waktu add:
+1. harusnya hotel name yg ke 2 itu description bukan hotel name
+2. chained combo negara ma kotana msh salah, pertama default indo kota dah kepilih bener indo punya
+g ganti ke negara italy ttp di indo kotana, g ganti ke indo br ganti kotanya ke negara italy
