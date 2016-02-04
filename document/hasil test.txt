@@ -10,3 +10,4 @@ inputan hotel room
 inputan room rate
 1. combo number adults sama number children ga ikutin roomnya
 2. error Price from date must be filled sama Price end date must be filled pdhl dah g isi
+3. combo type commision ga muncul pas pertama init tp klo g pilih value dl trus pilih % baru bs muncul
