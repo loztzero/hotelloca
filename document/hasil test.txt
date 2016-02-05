@@ -1,6 +1,7 @@
 
 register hotel waktu add:
 1. meal price dan bed price ksh default 0
+2. dihalaman browse combo city ga berubah sesuai negaranya
 
 
 inputan room rate
