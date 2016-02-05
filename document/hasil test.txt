@@ -1,13 +1,8 @@
 
 register hotel waktu add:
-1. waktu klik register Call to a member function doParams() on a non-object
-
-inputan hotel room
-1. menu hotel room judulnya hotel room rate hrsnya List room aja, i halaman browse
-2. internet fee ksh default 0
+1. meal price dan bed price ksh default 0
 
 
 inputan room rate
-1. combo number adults sama number children ga ikutin roomnya
-2. error Price from date must be filled sama Price end date must be filled pdhl dah g isi
-3. combo type commision ga muncul pas pertama init tp klo g pilih value dl trus pilih % baru bs muncul
+1. combo bed typenya, breakfast (In Pax) blm ngikuin masternya
+2. validasi tanggalnya belum ada ??
