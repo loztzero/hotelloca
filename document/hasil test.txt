@@ -7,3 +7,4 @@ register hotel waktu add:
 inputan room rate
 1. combo bed typenya, breakfast (In Pax) blm ngikuin masternya
 2. validasi tanggalnya belum ada ??
+3. order byr di halaman browse, order by room sama tgl valid
