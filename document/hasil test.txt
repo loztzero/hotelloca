@@ -5,6 +5,8 @@ register hotel waktu add:
 
 
 inputan room rate
-1. combo bed typenya, breakfast (In Pax) blm ngikuin masternya
-2. validasi tanggalnya belum ada ??
-3. order byr di halaman browse, order by room sama tgl valid
+1. Validasi tglnya pake query yg between or yg < > jdnya?soalnya kurang kynya
+   kalau pake <> hrs pake >= sama <= ada = nya
+1. Daily Price Foreigner kalau edit mode isinya 0 terus padahal hrsnya ada isinya
+2. kalau all market di check daily price = daily price foreigner
+3. all market flag ma daily_price_wna ga keisi
