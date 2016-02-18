@@ -1,12 +1,29 @@
+user admin:
+1 http://tester.hotelloca.com/admin/hotel
+  combo country sama city ga sesuai dicek lagicity ga berubah
+2.http://tester.hotelloca.com/admin/hotel/input
+  meal price sama bed price diksh default 0
 
-register hotel waktu add:
-1. meal price dan bed price ksh default 0
-2. dihalaman browse combo city ga berubah sesuai negaranya
+
+detail hotel
+http://tester.hotelloca.com/agent/hotel/hotel-detail?hotel=216686a2-393d-4fa6-b2e8-fc0b9f9ad26b&checkIn=31-03-2016&checkOut=04-04-2016&room=1
+1. query perharinya itu di order by tglnya
+2. contoh kasus
+   g search untuk tgl 31-3-2016 s/d 4-4-2016
+   dimana end date jd 3-4-2016
+   g pilih hotel 10
+   trus yang muncul hrsnya di hotel10_room2
+   31-3-2016   575000
+   1-4-2016    1.200.000
+   2-4-2016    1.200.000
+   3-4-2016    1.200.000
+   
+  yang muncul
+Pricing :
+31-03-2016 : 550000 : 0
+31-03-2016 : 575000 : 0
+01-04-2016 : 1200000 : 0
+02-04-2016 : 1200000 : 0
 
 
-inputan room rate
-1. Validasi tglnya pake query yg between or yg < > jdnya?soalnya kurang kynya
-   kalau pake <> hrs pake >= sama <= ada = nya
-1. Daily Price Foreigner kalau edit mode isinya 0 terus padahal hrsnya ada isinya
-2. kalau all market di check daily price = daily price foreigner
-3. all market flag ma daily_price_wna ga keisi
+lu bandingin hrs liat roomnya jg klo ga bs nyasar ke room yg laen ntar, tu g liat nyasra ke hotel10_room1
