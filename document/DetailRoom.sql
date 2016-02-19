@@ -57,3 +57,17 @@ where  c.num_adults >= 0
   (
     select max(ac.end_date) from MST022 ac where ac.mst020_id = c.mst020_id
   ) and c.mst020_id = '0597bfb1-8f57-459d-af6e-d653775a0a73'
+
+
+
+--- cara pakai spnya
+1. generate temp table
+2. generate sp di db di file spSearchDetailHotel
+3. cara panggil contohnya
+   call search_detail_room('nita','216686a2-393d-4fa6-b2e8-fc0b9f9ad26b','03/31/2016','04/03/2016','indonesia',1)
+    nita = session id
+    03/31/2016 = start date
+04/03/2016 = end date
+	indonesia= market
+1 = jumlah kamar  
+  
