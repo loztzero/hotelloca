@@ -1,15 +1,31 @@
-@extends('layouts.layout-hotel')
+@extends('layouts.general-travel-layout')
+
+@section('titleContainer')
+	<div class="page-title-container">
+	    <div class="container">
+	        <div class="page-title pull-left">
+	            <h2 class="entry-title">Facilities</h2>
+	        </div>
+	        <ul class="breadcrumbs pull-right">
+	            <li><a href="#">Hotel</a></li>
+	            <li class="active">Facilities</li>
+	        </ul>
+	    </div>
+	</div>
+@endsection
+
 @section('content')
-<div class="row" ng-controller="MainCtrl">
+<div class="container" ng-controller="MainCtrl">
 	
-	<div class="large-12 columns">
+	<div class="travelo-box">
 
 		<h3>Facility</h3>
 		@include('layouts.message-helper')
 
-		<table>
+		<table class="table table-striped">
 			<caption style="text-align:left;">
-				<a data-reveal-id="myModal">Add New Facility</a>
+				<i class="soap-icon-roundtriangle-right"></i>&nbsp;&nbsp;
+				<a class="soap-popupbox" href="#modal">Add New Facility</a>
 			</caption>
 			<thead>
 				<tr>
@@ -24,7 +40,7 @@
 						<form action="{{ url('hotel/facility/delete')}}" method="post" class="right">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $facility->id }}" name="id">
-			            	<button type="submit" class="tiny alert rem-btm-margin confirm-delete" title="Delete Rate"><i class="fi-page-delete"></i></button>
+			            	<button type="submit" class="button red confirm-delete" title="Delete Facility"><i class="glyphicon glyphicon-remove"></i></button>
 						</form>
 					</td>
 					<td>{{ $facility->facility }}</td>
@@ -50,16 +66,18 @@
 @section('script')
 <script>
 
-$(".confirm-delete").on("click", function(e) {
+tjq(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
-	var form = $(this).parents('form');
+	var form = tjq(this).parents('form');
 	swal({   
 		title: "Are you sure?",   
 		text: "This picture will be deleted",   
 		type: "warning",   
 		showCancelButton: true,   
 		confirmButtonColor: "#f04124",   
-		confirmButtonText: "Yes, delete it!",   
+		confirmButtonText: "Yes, delete it!",  
+		confirmButtonClass: 'normal-lh',   
+		cancelButtonClass: 'normal-lh',  
 		closeOnConfirm: false }, 
 	function(confirmed){   
 		if (confirmed) form.submit();

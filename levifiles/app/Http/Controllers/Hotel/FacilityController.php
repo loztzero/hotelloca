@@ -24,24 +24,19 @@ class FacilityController extends ActivatedController {
 
 	public function postSave(Request $request){
 		
-		$facility = new HotelFacility();
-		$errorBag = $facility->rules($request);
-
 		DB::beginTransaction();
-
 		try {
 
-			if(count($errorBag) > 0){
-				DB::rollback();
-
-				Session::flash('error', $errorBag);
-	   			return Redirect::to('hotel/facility');
-			} 
-
 			$hotel = HotelDetail::where('mst001_id', '=', Auth::user()->id)->first();
-			$facility->mst020_id = $hotel->id;
-			$facility->facility = $request->facility;
-			$facility->save();
+			$facilities = $request->facility;
+			foreach($facilities as $record){
+				if(!empty($record)){
+					$facility = new HotelFacility();
+					$facility->mst020_id = $hotel->id;
+					$facility->facility = $record;
+					$facility->save();
+				}
+			}
 
 		} catch (Exception $e) {
 			

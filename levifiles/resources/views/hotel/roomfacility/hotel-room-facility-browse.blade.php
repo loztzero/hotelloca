@@ -40,7 +40,7 @@
 							<input type="hidden" value="{{ $room->id }}" name="room_id">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $facility->id }}" name="id">
-			            	<button type="submit" class="button red" title="Delete Rate"><i class="glyphicon glyphicon-remove"></i></button>
+			            	<button type="submit" class="button red confirm-delete" title="Delete Rate"><i class="glyphicon glyphicon-remove"></i></button>
 						</form>
 					</td>
 					<td>{{ $facility->facility }}</td>
@@ -66,16 +66,18 @@
 @section('script')
 <script>
 
-$(".confirm-delete").on("click", function(e) {
+tjq(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
-	var form = $(this).parents('form');
+	var form = tjq(this).parents('form');
 	swal({   
 		title: "Are you sure?",   
 		text: "This picture will be deleted",   
 		type: "warning",   
 		showCancelButton: true,   
 		confirmButtonColor: "#f04124",   
-		confirmButtonText: "Yes, delete it!",   
+		confirmButtonText: "Yes, delete it!", 
+		confirmButtonClass: 'normal-lh',   
+		cancelButtonClass: 'normal-lh', 
 		closeOnConfirm: false }, 
 	function(confirmed){   
 		if (confirmed) form.submit();

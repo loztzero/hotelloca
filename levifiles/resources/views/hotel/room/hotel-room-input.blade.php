@@ -105,7 +105,7 @@
 		    <div class="form-group">
 				<div class="col-xs-12">
 		          	<label>Internet Fee *</label>
-		          	<input type="text" class="input-text full-width" value="{{ old('net_fee') }}" id="netFee" name="net_fee" required>
+		          	<input type="text" class="input-text full-width" value="{{ old('net_fee', 0) }}" id="netFee" name="net_fee" required>
 		        </div>
 		    </div>
 

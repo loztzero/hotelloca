@@ -6,7 +6,23 @@
     <div class="row form-group">
       <div class="col-xs-12">
         <label>Facility *</label>
-        <input type="text" name="facility" class="input-text full-width">
+        <input type="text" name="facility[]" class="input-text full-width">
+      </div>
+      <div class="col-xs-12">
+        <label>&nbsp;</label>
+        <input type="text" name="facility[]" class="input-text full-width">
+      </div>
+      <div class="col-xs-12">
+        <label>&nbsp;</label>
+        <input type="text" name="facility[]" class="input-text full-width">
+      </div>
+      <div class="col-xs-12">
+        <label>&nbsp;</label>
+        <input type="text" name="facility[]" class="input-text full-width">
+      </div>
+      <div class="col-xs-12">
+        <label>&nbsp;</label>
+        <input type="text" name="facility[]" class="input-text full-width">
       </div>
     </div>
 
@@ -16,5 +32,5 @@
       </div>
     </div>
 
-      </form>
+  </form>
 </div>

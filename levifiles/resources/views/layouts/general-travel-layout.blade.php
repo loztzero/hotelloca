@@ -38,6 +38,8 @@
     
     <!-- Responsive Styles -->
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/responsive.css">
+
+    <link rel="stylesheet" href="{{ url('/') }}/assets/css/sweetalert2.css">    
     
     <!-- CSS for IE -->
     <!--[if lte IE 9]>
@@ -56,6 +58,10 @@
             display:none;
             width:300px;
             margin:0 auto;
+        }
+
+        .normal-lh {
+            line-height: 50%;
         }
     </style>
 
@@ -105,6 +111,12 @@
                                 <ul class="menu mini">
                                     <li {{ Request::segment('2') == 'profile' ? 'class=active' : '' }}>
                                         <a href="{{ url('hotel/profile') }}">Profile</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'facility' ? 'class=active' : '' }}>
+                                        <a href="{{ url('hotel/facility') }}">Facility</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'picture' ? 'class=active' : '' }}>
+                                        <a href="{{ url('hotel/picture') }}">Picture</a>
                                     </li>
                                     <li {{ Request::segment('2') == 'room' ? 'class=active' : '' }}>
                                         <a href="{{url('hotel/room')}}"><i class="fi-home"></i>&nbsp; Room</a></li>
@@ -212,6 +224,8 @@
     <script src="{{App::make('url')->to('/')}}/assets/js/angular.min.js"></script>
 
     <script src="{{App::make('url')->to('/')}}/assets/js/angular-sanitize.js"></script>
+
+    <script src="{{App::make('url')->to('/')}}/assets/js/sweetalert2.min.js"></script>
 
     <!-- load page Javascript -->
     <script type="text/javascript" src="{{ url('/') }}/assets/js/theme-scripts.js"></script>

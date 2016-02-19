@@ -24,7 +24,7 @@ class User extends Emodel implements AuthenticatableContract, CanResetPasswordCo
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['email', 'password'];
+	protected $fillable = ['role', 'email', 'password'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

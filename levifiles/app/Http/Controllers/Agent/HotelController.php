@@ -4,7 +4,7 @@ use Illuminate\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Input, Auth, Session, Redirect, Hash, DateTime;
+use Input, Auth, Session, Redirect, Hash, DateTime, StdClass;
 use App;
 use App\User;
 use App\Libraries\Helpers;
@@ -29,7 +29,11 @@ class HotelController extends Controller {
 
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
-		return view('agent.hotel.agent-hotel-browse')->with('countries', $countries)->with('indonesia', $indonesia);
+        $countries2 = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
+		return view('agent.hotel.agent-hotel-browse')
+				->with('countries', $countries)
+				->with('countries2', $countries2)
+				->with('indonesia', $indonesia);
 	}
 
 	public function getBasicSearchHotel(){
@@ -40,6 +44,7 @@ class HotelController extends Controller {
 
 	public function getSearch(Request $request){
 		$hotels = $this->querySearch($request);
+
 		return view('agent.hotel.agent-hotel-search')
 			->with('hotels', $hotels)
 			->with('request', $request);
@@ -48,6 +53,7 @@ class HotelController extends Controller {
 	//untuk query search hotel
 	private function querySearch(Request $request){
 		$city = $request->city;
+		$nationality = $request->nationality;
 		$country = $request->country;
 		$checkIn = $request->date_from;
 		$checkOut = $request->date_to;
@@ -60,28 +66,19 @@ class HotelController extends Controller {
 				 })->get();*/
 
 		$query = "
-			select a.*, j.pict, h.nett_value
+			select a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict,
+			case when ? = 'Indonesia' 
+				then min(h.nett_value) else min(h.nett_value_wna) 
+			end as nett_value
 			from MST020 a	
 			inner join 
 			(
-				select c.mst020_id, c.nett_value, c.rate_type, c.comm_type, 
+				select c.mst020_id, c.nett_value, c.nett_value_wna, c.rate_type, c.comm_type, 
 				c.comm_pct,c.comm_value,c.num_adults,c.allotment,
 				c.from_date, c.end_date
 				from MST022 c 
-				where c.id = 
-				( 
-					select min(f.id) 
-					from MST022 f 
-					where f.mst020_id = c.mst020_id
-					and f.nett_value = 
-					(
-						select min(g.nett_value) 
-						from MST022 g 
-						where g.mst020_id =f.mst020_id
-					)
-				)
-
-				and c.num_adults >= 0 
+				where 
+				 c.num_adults >= 0 
 				and c.allotment-c.used_allotment >= 0 
 				and (
 						c.from_date >= STR_TO_DATE(?, '%Y-%m-%d') 
@@ -118,28 +115,39 @@ class HotelController extends Controller {
 					where f.mst020_id = e.mst020_id
 				)
 			) as j on j.mst020_id = a.id
+
 			where a.mst002_id = ?
+			group by a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict
 		";
 
-		$params = array($checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $country);
+		$params = array($nationality, $checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $country);
 		if(!empty($cityId)){
 			$query .= 'and a.mst003_id = ? ';
 			array_push($params, $city);
 		}
 
 		//And b.line_number = 1
-		$query .= '
-				/*and a.num_adults >= 0
-				and a.allotment >= 0
-				and a.from_date >= ?
-				and a.end_date >= ?
-				group by a.id*/
+		// $query .= '
+		// 		/*and a.num_adults >= 0
+		// 		and a.allotment >= 0
+		// 		and a.from_date >= ?
+		// 		and a.end_date >= ?
+		// 		group by a.id*/
 
-				';
+		// 		';
 
 		// array_push($params, '$checkIn', '$checkOut');
 		// DB::connection()->enableQueryLog();
 		$result = DB::select($query, $params);
+
+		// print_r($query);
+		// echo '<pre>';
+		// print_r($params);
+		// print_r($result);
+		// DB::enableQueryLog();
+		// print_r(DB::getQueryLog());
+		// die();
+
 		return $result;
 	}
 
@@ -157,6 +165,13 @@ class HotelController extends Controller {
 
 
     //BAGIAN PERINCIAN HOTEL DETAIL DISINI
+    public function getHotelDetailTrial(Request $request){
+    	$hotel = HotelDetail::find('0597bfb1-8f57-459d-af6e-d653775a0a73');
+    	// print_r($hotel->toArray());
+    	// die();
+    	return view('agent.hotel.agent-hotel-detail')->with('hotel', $hotel);
+    }
+
     public function getHotelDetail(Request $request){
     	
 		//  cara mendapatkan relationship dengan filter query detail ya seperti ini.
@@ -175,45 +190,45 @@ class HotelController extends Controller {
 
     	$pictures = HotelPicture::where('mst020_id', '=', $hotel->id)->get();
     	
-    	$query = "
-    		select d.image, d.room_name, c.num_adults, c.num_child, c.num_breakfast, 
-    		  c.mst023_id,
-			  c.allotment - c.used_allotment,
-			  c.nett_value,c.from_date , c.end_date 
-			from MST022 c
-			inner join MST023 d on d.id = c.mst023_id
-			where  c.num_adults >= 0
-			  and c.allotment - c.used_allotment >= 0
-			  and
-			  (
-			    c.from_date >= STR_TO_DATE(?, '%Y-%m-%d')
-			    or
-			    c.end_date >= STR_TO_DATE(?, '%Y-%m-%d')
-			  )
-			 
-			  and
-			  (
-			    c.end_date <= STR_TO_DATE(?, '%Y-%m-%d')
-			    or
-			    c.from_date <= STR_TO_DATE(?, '%Y-%m-%d')
-			  )
-			 
-			  and STR_TO_DATE(?, '%Y-%m-%d') >=
-			  (
-			    select min(ab.from_date) from MST022 ab where ab.mst020_id = c.mst020_id
-			  )
-			 
-			  and STR_TO_DATE(?, '%Y-%m-%d') <=
-			  (
-			    select max(ac.end_date) from MST022 ac where ac.mst020_id = c.mst020_id
-			  ) 
-				
-			   and c.mst020_id = ?
+    	$query = "select d.id, d.room_name, d.room_desc, c.num_adults, c.num_child, c.num_breakfast,
+				  c.allotment - c.used_allotment, 
+				  c.nett_value, c.nett_value_wna, c.from_date, c.end_date 
+				from MST022 c
+				inner join MST023 d on d.id = c.mst023_id
+				where  c.num_adults >= 0
+				  and c.allotment - c.used_allotment >= 0
+				  and
+				  (
+				    c.from_date >= STR_TO_DATE(?, '%Y-%m-%d')
+				    or
+				    c.end_date >= STR_TO_DATE(?, '%Y-%m-%d')
+				  )
+				 
+				  and
+				  (
+				    c.end_date <= STR_TO_DATE(?, '%Y-%m-%d')
+				    or
+				    c.from_date <= STR_TO_DATE(?, '%Y-%m-%d')
+				  )
+				 
+				  and STR_TO_DATE(?, '%Y-%m-%d') >=
+				  (
+				    select min(ab.from_date) from MST022 ab where ab.mst020_id = c.mst020_id
+				  )
+				 
+				  and STR_TO_DATE(?, '%Y-%m-%d') <=
+				  (
+				    select max(ac.end_date) from MST022 ac where ac.mst020_id = c.mst020_id
+				  ) 
+
+				  and c.mst020_id = ? 
+				  order by d.room_name, c.from_date
     	";
 
 
     	$params = array($checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $hotel->id);
     	$result = DB::select($query, $params);
+
     	// $rooms = HotelRoom::join('MST022', 'MST023.id', '=', 'MST022.mst023_id')
 					// ->where('MST022.mst020_id', '=', $hotel->id)
 					// ->where('MST022.from_date', '>=', '2016-01-11')
@@ -224,16 +239,78 @@ class HotelController extends Controller {
     	// print_r($result);
     	// die();
 
+    	$date1 = new DateTime($checkIn);
+    	$date2 = new DateTime($checkOut);
     	$period = new DatePeriod(
-		     new DateTime($checkIn),
+		     $date1,
 		     new DateInterval('P1D'),
-		     new DateTime($checkOut)
+		     $date2
 		);
+
+    	$countDay = $date2->diff($date1)->format("%a");
+
+    	// echo '<pre>';
+    	// print_r($result);
+    	// die();
+
+    	foreach($period as $date){
+    		echo $date->format('d-m-Y').'<br>';
+    	}
+
+    	echo '<pre>';
+    	print_r($result);
+    	echo '</pre>';
+
+    	$newRooms = array();
+    	$pricing = array();
+    	$counter = 0;
+		foreach($result as $room){
+			
+			foreach($period as $date){
+
+				if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"), 
+                    Helpers::dateFormatter($room->from_date), 
+                    Helpers::dateFormatter($room->end_date))){
+
+					$counter++;
+                    // $newRoom->period_date = $date->format("d-m-Y");
+                    // array_push($newRooms, $newRoom);
+                    $priceDetail = new StdClass();
+                	$priceDetail->period_date = $date->format("d-m-Y");
+                	$priceDetail->nett_value = $room->nett_value;
+                	$priceDetail->nett_value_wna = $room->nett_value_wna;
+                	array_push($pricing, $priceDetail);
+
+                	echo '<pre>';
+                	print_r($pricing);
+                	echo '</pre>';
+                	echo '<br><br>';
+                }
+
+                if($counter == $countDay){
+					$newRoom = clone $room;
+					$newRoom->pricing = $pricing;
+					array_push($newRooms, $newRoom);
+					$pricing = array();
+					$counter = 0;
+				}
+
+			}
+
+		}
+
+		die();
+
+
+		// echo '<pre>';
+  //   	print_r($newRooms);
+  //   	echo '</pre>';
+		// die();
 
     	return view('agent.hotel.agent-hotel-detail')
     		->with('hotel', $hotel)
     		->with('pictures', $pictures)
-    		->with('rooms', $result)
+    		->with('newRooms', $newRooms)
     		->with('period', $period)
     		->with('helpers', new Helpers());
     	

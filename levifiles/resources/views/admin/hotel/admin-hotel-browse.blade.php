@@ -120,6 +120,24 @@
 	var app = angular.module("ui.hotelloca", []);
 	app.controller("MainCtrl", function ($scope, $http, $filter) {
 
+		$scope.field = {};
+		$scope.cities = [];
+		$scope.getCity = function(){
+			console.log($scope.field);
+			$http.post('{{url("admin/hotel/city-from-country")}}', $scope.field).success(function(response){
+				$scope.cities = response;
+				$scope.field.city = '{{ old("mst003_id", "") }}';
+
+				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
+				if(oldCity.length == 0){
+					$scope.field.city = '';
+					tjq('#citySelector span').html('Select A City');
+				} else {
+					tjq('#citySelector span').html(oldCity[0].city_name);
+				}
+			})
+		}
+
 	});
 </script>
 @endsection

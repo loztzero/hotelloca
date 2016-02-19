@@ -46,8 +46,6 @@ class RoomFacilityController extends ActivatedController {
 
 	public function postSave(Request $request){
 		
-		$facility = new HotelRoomFacility();
-		$errorBag = $facility->rules($request);
 
 		//jika data room nya tidak valid
 		if(empty($request->room_id)){
@@ -60,16 +58,22 @@ class RoomFacilityController extends ActivatedController {
 
 		try {
 
-			if(count($errorBag) > 0){
+			/*if(count($errorBag) > 0){
 				DB::rollback();
 
 				Session::flash('error', $errorBag);
 	   			return Redirect::to('hotel/room-facility')->with('room', $room);
-			} 
+			} */
 
-			$facility->mst023_id = $room->id;
-			$facility->facility = $request->facility;
-			$facility->save();
+			$facilities = $request->facility;
+			foreach($facilities as $record){
+				if(!empty($record)){
+					$facility = new HotelRoomFacility();
+					$facility->mst023_id = $room->id;
+					$facility->facility = $record;
+					$facility->save();
+				}
+			}
 
 		} catch (Exception $e) {
 			

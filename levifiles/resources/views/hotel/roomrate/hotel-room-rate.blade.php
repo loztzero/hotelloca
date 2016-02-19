@@ -15,6 +15,9 @@
 @endsection
 
 @section('content')
+<style>
+	
+</style>
 <div class="container" ng-controller="MainCtrl">
 	
 	<div class="travelo-box">
@@ -28,26 +31,26 @@
 			</caption>
 			<thead>
 				<tr>
-					<th width="120px">Action</th> 	
+					<th width="110px">Action</th> 	
 					<th>Room Name</th>
 					<th>Period</th>
-					<th>Daily Price</th>
+					<th style="text-align:right;">Daily Price</th>
 				</tr>
 			</thead>
 			<tbody>
 			@foreach($rates as $rate)
 				<tr>
 					<td>
-						<form action="{{ url('hotel/room-rate/load-data') }}" method="post" class="left">
+						<form action="{{ url('hotel/room-rate/load-data') }}" method="post" class="pull-left">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $rate->id }}" name="id">
 			            	<button type="submit" class="btn-primary" title="Edit Rate"><i class="glyphicon glyphicon-edit"></i></button>
 						</form>
 
-						<form action="{{ url('hotel/room-rate/delete')}}" method="post" class="right">
+						<form action="{{ url('hotel/room-rate/delete')}}" method="post" class="pull-right">
 							<input type="hidden" value="{{ csrf_token() }}" name="_token">
 			            	<input type="hidden" value="{{ $rate->id }}" name="id">
-			            	<button type="submit" class="button red" title="Delete Rate"><i class="glyphicon glyphicon-close"></i></button>
+			            	<button type="button" class="button red confirm-delete" title="Delete Rate"><i class="glyphicon glyphicon-remove"></i></button>
 						</form>
 					</td>
 					<td>{{ $rate->room->room_name }}</td>
@@ -71,18 +74,22 @@
 @endsection
 
 @section('script')
+
 <script>
 
-$(".confirm-delete").on("click", function(e) {
+tjq(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
-	var form = $(this).parents('form');
+	var form = tjq(this).parents('form');
 	swal({   
 		title: "Are you sure?",   
-		text: "This picture will be deleted",   
+		text: "This data will be deleted",   
 		type: "warning",   
 		showCancelButton: true,   
-		confirmButtonColor: "#f04124",   
-		confirmButtonText: "Yes, delete it!",   
+		confirmButtonColor: "#3085d6", 
+		cancelButtonColor: '#d33',
+		confirmButtonText: "Yes, delete it!",
+		confirmButtonClass: 'btn-primary normal-lh',   
+		cancelButtonClass: 'button red normal-lh',
 		closeOnConfirm: false }, 
 	function(confirmed){   
 		if (confirmed) form.submit();

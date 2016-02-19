@@ -30,6 +30,10 @@ class HotelDetail extends Emodel {
     	return $this->hasMany('App\Models\HotelRoom', 'mst020_id', 'id');
     }
 
+    public function facilities(){
+    	return $this->hasMany('App\Models\HotelFacility', 'mst020_id', 'id');
+    }
+
 	public function rules($data)
 	{
 		$error = array();

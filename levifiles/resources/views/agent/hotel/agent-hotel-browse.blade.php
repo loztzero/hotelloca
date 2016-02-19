@@ -26,6 +26,12 @@
                             <h4 class="title">Where</h4>
                             <div class="row">
                                 <div class="col-xs-6">
+                                    <label>Nationality</label>
+                                    <div class="selector">
+                                        {!! Form::select('nationality', $countries2, old('nationality', 'Indonesia'), array('required', 'class' => 'full-width')) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
                                     <label>Country</label>
                                     <div class="selector">
                                         {!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required', 'class' => 'full-width')) !!}
@@ -38,6 +44,12 @@
 											<option value=""></option>
 											<option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
 										</select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label>Hotel Name</label>
+                                    <div class="selector" id="citySelector">
+                                        <input type="text" name="hotel_name" class="input-text full-width">
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +91,7 @@
                                 <div class="col-xs-4">
                                     <label>Kids</label>
                                     <div class="selector">
-                                        {!! Form::select('room', array('0' => '00', '1' => '01', '2' => '02', '3' => '03', '4' => '04'), null, array('class' => 'full-width')) !!}
+                                        {!! Form::select('child', array('0' => '00', '1' => '01', '2' => '02', '3' => '03', '4' => '04'), null, array('class' => 'full-width')) !!}
                                     </div>
                                 </div>
                             </div>

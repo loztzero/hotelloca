@@ -1,7 +1,8 @@
 <?php namespace App\Http\Controllers\Register;
 
 use Illuminate\Routing\UrlGenerator;
-use Input, Auth, Request, Session, Redirect, Hash, Form;
+use Illuminate\Http\Request;
+use Input, Auth, Session, Redirect, Hash, Form;
 use App;
 use App\User;
 use App\Libraries\Helpers;
@@ -49,28 +50,36 @@ class HotelController extends Controller {
 	   			return Redirect::to('register/hotel')->withInput(Input::all());
 			} else {
 
-
-					$userAccount = array();
-					$userAccount['email'] = $data['email_login'];
-					$password = Hash::make(uniqid());
-					$userAccount['password'] = $password;
-					$userAccount['repassword'] = $password;
-					$user = new User();
-					$errorUser = $user->rules($userAccount);
-					if(count($errorUser) > 0){
-						DB::rollback();
-
-						Session::flash('error', $errorUser);
-						return Redirect::to('register/hotel/input')->withInput(Input::all());
-					} else {
-						$userAccount['role'] = 'Hotel';
-						$user = $user::create($userAccount);
+				if(isset($data['email_login'])){
+					$exists = User::where('email', '=', $data['email_login'])->first();
+					if($exists){
+						throw new \Exception($exists->email . ' on login area already registered, please choose another email');
 					}
+				}
 
-					//simpan data hotel detail
-					$hotelDetail = $hotelDetail->doParamsOwner($hotelDetail, $data);
-					$hotelDetail->mst001_id = $user->id;
-		        	$hotelDetail->save();
+				$userAccount = array();
+				$userAccount['email'] = $data['email_login'];
+				$password = Hash::make(uniqid());
+				$userAccount['password'] = $password;
+				$userAccount['repassword'] = $password;
+				$user = new User();
+				$errorUser = $user->rules($userAccount);
+				if(count($errorUser) > 0){
+					DB::rollback();
+
+					Session::flash('error', $errorUser);
+					return Redirect::to('register/hotel')->withInput(Input::all());
+				} else {
+					$userAccount['role'] = 'Hotel';
+					$userAccount['password'] = Hash::make($data['password']);
+					$userAccount['repassword'] = Hash::make($data['repassword']);
+					$user = $user::create($userAccount);
+				}
+
+				//simpan data hotel detail
+				$hotelDetail = $hotelDetail->doParams($hotelDetail, $data);
+				$hotelDetail->mst001_id = $user->id;
+	        	$hotelDetail->save();
 
 			}
 			

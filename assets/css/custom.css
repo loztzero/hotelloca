@@ -2,3 +2,11 @@
  * Title:   Custom Style File
  * Author:  http://themeforest.net/user/soaptheme 
  */
+#header .logo { margin-top: 17px !important; }
+#header.style5 .logo img { height: auto; }
+#header.style5 .logo a { background-size: 100px 40px; }
+#header.style5 .logo { margin-top: 40px; } // give proper value according to the height of logo
+
+.chaser .logo { margin-top: 11px; } // give proper value according to the height of logo
+.chaser .logo a { background-size: auto 40px; }
+.chaser .logo a img { height: 40px; }

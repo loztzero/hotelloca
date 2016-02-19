@@ -30,7 +30,7 @@ class HotelController extends Controller {
 					: $result;
 
 		$hotelList = $result->paginate(20);
-		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
+		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
 		return view('admin.hotel.admin-hotel-browse')
 				->with('hotelList', $hotelList)
 				->with('countries', $countries);
@@ -66,7 +66,7 @@ class HotelController extends Controller {
 	   			return Redirect::to('admin/hotel/input')->withInput(Input::all());
 			} else {
 
-				if(isset($request->id)){
+				if(isset($request->id) && !empty($request->id)){
 
 					//edit mode
 					$hotelDetail = HotelDetail::find($request->id);

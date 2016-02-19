@@ -1,188 +1,164 @@
-@extends('layouts.foundation-angular')
+@extends('layouts.general-travel-layout')
 @section('content')
-<div class="row" ng-controller="MainCtrl">
+<div class="container" ng-controller="MainCtrl">
 	
-	<h3>Register Your Hotel</h3>
 
-	@include('layouts.message-helper')
-	<div class="large-12 colums">
+	<div class="travelo-box">
+
+		<h3>Register as Hotel</h3>
+		@include('layouts.message-helper')
+
 		<form class="form-horizontal" role="form" method="POST" action="{{ url('register/hotel/save') }}" data-abide>
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 			@if(!empty(old('id')))
 				<input type="hidden" value="{{ old('id')}}" name="id">
 			@endif
-			<div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="hotelName" class="right inline show-for-medium-up">Hotel Name *</label>
-		          <label for="hotelName" class="show-for-small-only">Hotel Name *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{ old('hotel_name')}}" id="hotelName" name="hotel_name" required>
-		          <small class="error">Hotel Name Required</small>
+
+			<div class="form-group">
+				<div class="col-xs-12">
+		            <label>Hotel Name *</label>
+		          	<input type="text" class="input-text full-width" value="{{ old('hotel_name')}}" id="hotelName" name="hotel_name" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="address" class="right inline show-for-medium-up">Star *</label>
-		          <label for="address" class="show-for-small-only">Star *</label>
-		        </div>
-		        <div class="small-6 medium-2 large-1 columns left">
-		          {!! Form::select('star', array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5') , old('star'), array('required')) !!}
-		        </div>
-		    </div>
-
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="address" class="right inline show-for-medium-up">Address *</label>
-		          <label for="address" class="show-for-small-only">Address *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-7 columns left">
-		          <textarea id="address"style="height:5em;" required name="address">{{old('address')}}</textarea>
-		          <small class="error">Address Required</small>
+		    <div class="row form-group">
+		        <div class="col-xs-6">
+		            <label>Star *</label>
+		            <div class="selector">
+	             		{!! Form::select('star', array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5') , old('star'), array('required', 'class' => 'full-width')) !!}
+		            </div>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="country" class="right inline show-for-medium-up">Country *</label>
-		          <label for="country" class="show-for-small-only">Country *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          {!! Form::select('mst002_id', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required')) !!}
-		        </div>
-		    </div>
-		    
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="city" class="right inline show-for-medium-up">City *</label>
-		          <label for="city" class="show-for-small-only">City *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <select ng-model="field.city" name="mst003_id" required id="city">
-		          	<option value="">Select A City</option>
-		          	<option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
-		          </select>
-		          <small class="error">City must be selected</small>
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+	            	<label>Address *</label>
+	           		<textarea id="address" class="full-width" required name="address">{{old('address')}}</textarea>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="postCode" class="right inline show-for-medium-up">Postcode *</label>
-		          <label for="postCode" class="show-for-small-only">Postcode *</label>
+		    <div class="row form-group">
+		        <div class="col-xs-6">
+		            <label>Country *</label>
+		            <div class="selector">
+		            {!! Form::select('mst002_id', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required', 'class' => 'full-width')) !!}
+	            	</div>
 		        </div>
-		        <div class="small-12 medium-9 large-3 columns left">
-		          <input type="text" class="span2" value="{{old('postcode')}}" id="postCode" name="postcode" required>
-		          <small class="error">Postcode Required</small>
+
+		        <div class="col-xs-6">
+		            <label>City *</label>
+		            <div class="selector" id="citySelector">
+			            <select ng-model="field.city" name="mst003_id" required id="city" class="full-width">
+				          	<option value="">Select A City</option>
+				          	<option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
+			          	</select>
+			          </div>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="landmarkName" class="right inline show-for-medium-up">Landmark Name *</label>
-		          <label for="landmarkName" class="show-for-small-only">Landmark Name *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name" required>
-		          <small class="error">Landmark name required</small>
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Postcode *</label>
+		            <input type="text" class="input-text full-width" value="{{old('postcode')}}" id="postCode" name="postcode" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="phoneNumber" class="right inline show-for-medium-up">Phone Number *</label>
-		          <label for="phoneNumber" class="show-for-small-only">Phone Number *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('phone_number')}}" id="phoneNumber" name="phone_number" required>
-		          <small class="error">Phone number required</small>
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Landmark Name</label>
+		            <input type="text" class="input-text full-width" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="faxNumber" class="right inline show-for-medium-up">Fax No</label>
-		          <label for="faxNumber" class="show-for-small-only">Fax No</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('fax_number')}}" id="faxNumber" name="fax_number">
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Phone Number *</label>
+		            <input type="text" class="input-text full-width" value="{{old('phone_number')}}" id="phoneNumber" name="phone_number" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="email" class="right inline show-for-medium-up">Email Address *</label>
-		          <label for="email" class="show-for-small-only">Email Address *</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="email" class="span2" value="{{old('email')}}" id="email" name="email" required>
-		          <small class="error">Email required</small>
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Fax No</label>
+		            <input type="text" class="input-text full-width"  value="{{ old('hotel_name')}}" value="{{old('fax_number')}}" id="faxNumber" name="fax_number">
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="website" class="right inline show-for-medium-up">Website</label>
-		          <label for="website" class="show-for-small-only">Website</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('website')}}" name="website" id="website">
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Email *</label>
+		            <input type="text" class="input-text full-width" value="{{old('email')}}" id="email" name="email" required>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="website" class="right inline show-for-medium-up">Currency *</label>
-		          <label for="website" class="show-for-small-only">Currency *</label>
-		        </div>
-		        <div class="small-12 medium-5 large-2 columns left">
-		         {!! Form::select('mst004_id', $currencies, old('mst004_id'), array('required')) !!}
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Website</label>
+		            <input type="text" class="input-text full-width"  value="{{old('website')}}" name="website" id="website">
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="mealPrice" class="right inline show-for-medium-up">Meal Price</label>
-		          <label for="mealPrice" class="show-for-small-only">Meal Price</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          	<input type="text" class="span2" value="{{old('meal_price')}}" name="meal_price" id="mealPrice">
-	           		<small class="error">Email required</small>
+		    <div class="row form-group">
+		        <div class="col-xs-6">
+		            <label>Currency *</label>
+		            <div class="selector">
+		            	{!! Form::select('mst004_id', $currencies, old('mst004_id'), array('required', 'class' => 'selector full-width')) !!}
+	            	</div>
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="large-2 medium-3 columns">
-		          <label for="bedPrice" class="right inline show-for-medium-up">Bed Price</label>
-		          <label for="bedPrice" class="show-for-small-only">Bed Price</label>
-		        </div>
-		        <div class="small-12 medium-9 large-4 columns left">
-		          <input type="text" class="span2" value="{{old('bed_price')}}" name="bed_price" id="bedPrice">
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Meal Price *</label>
+		            <input type="text" class="input-text full-width" value="{{ old('meal_price', 0) }}" name="meal_price" id="mealPrice">
 		        </div>
 		    </div>
 
-		    <div class="row">
-				<div class="panel">
-					<b>Login</b>
-					<hr>
-					<div class="row">
-						<div class="large-2 medium-3 columns">
-				          <label for="emailLogin" class="right inline show-for-medium-up">Email</label>
-				          <label for="emailLogin" class="show-for-small-only">Email</label>
-				        </div>
-				        <div class="small-12 medium-9 large-4 columns left">
-				          <input type="email" class="span2" value="{{old('email_login')}}" name="email_login" id="emailLogin" required {{ !empty(old('id')) ? 'readonly' : '' }}>
-				          <small class="error">Email For Login Required</small>
-				        </div>
-					</div>
-				</div>
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Bed Price *</label>
+		            <input type="text" class="input-text full-width" value="{{ old('bed_price', 0)}}" name="bed_price" id="bedPrice">
+		        </div>
 		    </div>
-		
-	    	<div class="row">
-		        <div class="small-12 medium-9 large-4 large-offset-2 medium-offset-3 columns left">
-					<button type="submit" class="button small">{{ empty(old('id')) ? 'Register' : 'Update' }}</button>          
+
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+	            	<label>Description Hotel</label>
+	           		<textarea id="description" class="full-width" name="description">{{ old('description') }}</textarea>
+		        </div>
+		    </div>
+
+		    <hr />
+
+	    	<h3>Login</h3>
+
+	    	<div class="row form-group">
+		        <div class="col-xs-12">
+		            <label>Email *</label>
+		            <input type="email" class="input-text full-width" value="{{ old('email_login') }}" name="email_login" id="emailLogin" required {{ !empty(old('id')) ? 'readonly' : '' }} placeholder="Your Login Email">
+		        </div>
+		    </div>
+
+		    @if(empty(old('id')))
+			    <div class="row form-group">
+			        <div class="col-xs-12">
+			            <label>Password *</label>
+			            <input type="password" class="input-text full-width" id="passwordLogin" name="password" required placeholder="At least 6 Digit">
+			        </div>
+			    </div>
+
+			    <div class="row form-group">
+			        <div class="col-xs-12">
+			            <label>Confirm Password *</label>
+			            <input type="password" class="input-text full-width" id="rePasswordLogin" name="repassword" required placeholder="Must same with Password">
+			        </div>
+			    </div>
+		    @endif
+
+		    <div class="row form-group">
+		        <div class="col-xs-12">
+		            <button type="submit" class="button small">{{ empty(old('id')) ? 'Register' : 'Update' }}</button>
 		        </div>
 		    </div>
 	    	
@@ -204,13 +180,16 @@
 			console.log($scope.field);
 			$http.post('{{url("register/hotel/city-from-country")}}', $scope.field).success(function(response){
 				$scope.cities = response;
-				$scope.field.city = '{{ old("mst003_id", "")}}';
-				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city });
+				$scope.field.city = '{{ old("mst003_id", "") }}';
+
+				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
 				if(oldCity.length == 0){
 					$scope.field.city = '';
+					tjq('#citySelector span').html('Select A City');
+				} else {
+					tjq('#citySelector span').html(oldCity[0].city_name);
 				}
-				// console.log(response);
-
+				console.log(oldCity);
 			})
 		}
 

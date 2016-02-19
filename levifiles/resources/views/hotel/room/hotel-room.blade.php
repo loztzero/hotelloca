@@ -18,7 +18,7 @@
 <div class="container" ng-controller="MainCtrl">
 	
 	<div class="travelo-box">
-		<h3>Hotel Room Rates</h3>
+		<h3>Rooms List</h3>
 		@include('layouts.message-helper')
 
 		<table class="table table-striped">

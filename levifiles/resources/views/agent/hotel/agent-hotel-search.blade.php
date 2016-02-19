@@ -119,16 +119,27 @@
                                     </div>
                                     <div>
                                         <div class="five-stars-container">
-                                            <span class="five-stars" style="width: 80%;"></span>
+                                            @if($hotel->star == 2)
+                                                <span class="five-stars" style="width: 40%;"></span>
+                                            @elseif($hotel->star == 3)
+                                                <span class="five-stars" style="width: 60%;"></span>
+                                            @elseif($hotel->star == 4)
+                                                <span class="five-stars" style="width: 80%;"></span>
+                                            @elseif($hotel->star == 5)
+                                                <span class="five-stars" style="width: 100%;"></span>
+                                            @else
+                                                <span class="five-stars" style="width: 20%;"></span>
+                                            @endif
                                         </div>
-                                        <span class="review">270 reviews</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <p>Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
+                                    <p>
+                                        {{ $hotel->description }}
+                                    </p>
                                     <div>
                                         <span class="price"><small>RATE/NIGHT</small>Rp. {{ number_format($hotel->nett_value, 0, ',', '.') }}</span>
-                                        <a class="button btn-small full-width text-center" title="" href="hotel-detailed.html">SELECT</a>
+                                        <a class="button btn-small full-width text-center" title="" href="{{ url('agent/hotel/hotel-detail?hotel='.$hotel->id.'&checkIn='.$request->date_from.'&checkOut='.$request->date_to.'&room='.$request->room) }}">SELECT</a>
                                     </div>
                                 </div>
                             </div>

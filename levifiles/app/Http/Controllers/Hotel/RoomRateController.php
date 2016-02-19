@@ -55,6 +55,11 @@ class RoomRateController extends ActivatedController {
 
 	public function postSave(Request $request){
 		$data = $request->all();
+		// echo "<pre>";
+		// print_r($data);
+		// die();
+
+
 		$rate = new HotelRoomRate();
 		$errorBag = $rate->rules($request);
 
@@ -156,8 +161,8 @@ class RoomRateController extends ActivatedController {
 		// $passValue = $request->all();
 		if(isset($request->id)){
 			$rate = HotelRoomRate::find($request->id);
-			$rate->from_date = Helpers::dateFormatter($rate->from_date);
-			$rate->end_date = Helpers::dateFormatter($rate->end_date);
+			$rate->date_from = Helpers::dateFormatter($rate->from_date);
+			$rate->date_to = Helpers::dateFormatter($rate->end_date);
 			return Redirect::to('hotel/room-rate/input')->withInput($rate->toArray());
 		}
 	}

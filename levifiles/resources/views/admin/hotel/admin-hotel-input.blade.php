@@ -18,10 +18,14 @@
 @section('content')
 	<div class="container" ng-controller="MainCtrl">
 
-		<a href="{{ url('admin/hotel') }}" class="button tiny secondary"><< Back</a>
+		<a href="{{ url('admin/hotel') }}" class="button tiny secondary"><< Back</a><br>
 		<div class="travelo-box col-xs-12 col-md-8">
 			<form action="{{url('/admin/hotel/save')}}" method="post" >
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+				@if(!empty(old('id')))
+					<input type="hidden" name="id" value="{{ old('id') }}">
+				@endif
 
 				<h3>Hotel Input</h3>
 				@include('layouts.message-helper')
@@ -44,8 +48,8 @@
 
 			    <div class="row form-group">
 			        <div class="col-xs-12">
-			            <label>Hotel Name *</label>
-			           <textarea id="address" class="full-width" required name="address">{{old('address')}}</textarea>
+		            	<label>Address *</label>
+		           		<textarea id="address" class="full-width" required name="address">{{old('address')}}</textarea>
 			        </div>
 			    </div>
 
@@ -59,8 +63,8 @@
 
 			        <div class="col-xs-6">
 			            <label>City *</label>
-			            <div class="selector">
-				            <select ng-model="field.city" name="mst003_id" required id="city" class="selector full-width">
+			            <div class="selector" id="citySelector">
+				            <select ng-model="field.city" name="mst003_id" required id="city" class="full-width">
 					          	<option value="">Select A City</option>
 					          	<option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
 				          	</select>
@@ -122,14 +126,21 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Meal Price *</label>
-			            <input type="text" class="input-text full-width" value="{{old('meal_price')}}" name="meal_price" id="mealPrice">
+			            <input type="text" class="input-text full-width" value="{{old('meal_price', 0)}}" name="meal_price" id="mealPrice">
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Bed Price *</label>
-			            <input type="text" class="input-text full-width" value="{{old('bed_price')}}" name="bed_price" id="bedPrice">
+			            <input type="text" class="input-text full-width" value="{{old('bed_price', 0)}}" name="bed_price" id="bedPrice">
+			        </div>
+			    </div>
+
+			    <div class="row form-group">
+			        <div class="col-xs-12">
+		            	<label>Description Hotel</label>
+		           		<textarea id="description" class="full-width" name="description">{{ old('description') }}</textarea>
 			        </div>
 			    </div>
 
@@ -184,19 +195,22 @@
 			$http.post('{{url("admin/hotel/city-from-country")}}', $scope.field).success(function(response){
 				$scope.cities = response;
 				$scope.field.city = '{{ old("mst003_id", "") }}';
-				tjq('#citySelector span').html('{{ old("mst003_id", "") }}');
 
-				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city });
+				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
 				if(oldCity.length == 0){
 					$scope.field.city = '';
-					tjq('#citySelector span').html('');
+					tjq('#citySelector span').html('Select A City');
+				} else {
+					tjq('#citySelector span').html(oldCity[0].city_name);
 				}
-
+				console.log(oldCity);
 			})
 		}
 
 		$scope.getCity();
 
 	});
+
+	
 </script>
 @endsection
