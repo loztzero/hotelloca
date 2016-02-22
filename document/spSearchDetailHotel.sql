@@ -47,7 +47,7 @@ BEGIN
        GROUP BY mst023_id;
 
        -- query sesuai kebutuhan
-       SELECT B.mst020_id, C.room_name, B.num_adults, B.num_child, B.num_breakfast,
+       SELECT B.mst020_id, C.room_name, C.room_desc, B.num_adults, B.num_child, B.num_breakfast,
              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
              B.allotment-B.used_allotment AS allotment, B.comm_value, B.cut_off, B.bed_type,
              CASE WHEN UPPER(pMarket) = 'INDONESIA' 
