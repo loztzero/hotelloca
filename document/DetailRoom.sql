@@ -61,13 +61,15 @@ where  c.num_adults >= 0
 
 
 --- cara pakai spnya
-1. generate temp table
+1. generate temp table TEMP003
 2. generate sp di db di file spSearchDetailHotel
 3. cara panggil contohnya
-   call search_detail_room('nita','216686a2-393d-4fa6-b2e8-fc0b9f9ad26b','03/31/2016','04/03/2016','indonesia',1)
+   call search_detail_room('nita','216686a2-393d-4fa6-b2e8-fc0b9f9ad26b','03/31/2016','04/03/2016','indonesia',1,2,3)
     nita = session id
     03/31/2016 = start date
 04/03/2016 = end date
 	indonesia= market
 1 = jumlah kamar  
+2 = num adults
+3 = num children
   
