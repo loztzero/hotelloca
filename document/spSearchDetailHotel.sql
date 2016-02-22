@@ -50,7 +50,7 @@ BEGIN
        SELECT B.mst020_id, C.room_name, B.num_adults, B.num_child, B.num_breakfast,
              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
              B.allotment-B.used_allotment AS allotment, B.comm_value, B.cut_off, B.bed_type,
-             CASE WHEN UPPER(pMarket)='INDONESIA' 
+             CASE WHEN UPPER(pMarket) = 'INDONESIA' 
              THEN B.nett_value 
                 ELSE B.nett_value_wna 
              END as nett_value
@@ -61,7 +61,8 @@ BEGIN
                               WHERE B.record = (SELECT MAX(C.record) FROM TEMP004 C
                                                 WHERE C.session_id = B.session_id)
                               AND B.session_id = pSessionId)
-       AND A.session_id = pSessionId;
+       AND A.session_id = pSessionId
+       ORDER BY C.room_name, B.from_date;
 
        DELETE FROM TEMP003 WHERE session_id = pSessionId;
        DELETE FROM TEMP004 WHERE session_id = pSessionId;
