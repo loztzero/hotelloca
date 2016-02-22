@@ -1,9 +1,6 @@
 user admin:
 1 http://tester.hotelloca.com/admin/hotel
   combo country sama city ga sesuai dicek lagicity ga berubah
-2.http://tester.hotelloca.com/admin/hotel/input
-  meal price sama bed price diksh default 0
-
 
 detail hotel
 http://tester.hotelloca.com/agent/hotel/hotel-detail?hotel=216686a2-393d-4fa6-b2e8-fc0b9f9ad26b&checkIn=31-03-2016&checkOut=04-04-2016&room=1
@@ -24,6 +21,3 @@ Pricing :
 31-03-2016 : 575000 : 0
 01-04-2016 : 1200000 : 0
 02-04-2016 : 1200000 : 0
-
-
-lu bandingin hrs liat roomnya jg klo ga bs nyasar ke room yg laen ntar, tu g liat nyasra ke hotel10_room1
