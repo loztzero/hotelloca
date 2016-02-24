@@ -5,13 +5,36 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2016-02-23 21:45                                #
+# Created on:            2016-02-24 22:08                                #
 # ---------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #
 # ---------------------------------------------------------------------- #
+
+# ---------------------------------------------------------------------- #
+# Add table "TRX001"                                                     #
+# ---------------------------------------------------------------------- #
+
+CREATE TABLE `TRX001` (
+    `id` VARCHAR(100) NOT NULL,
+    `order_no` VARCHAR(40) NOT NULL COMMENT 'Nomor Order',
+    `order_date` DATE NOT NULL COMMENT 'Tangga Order',
+    `email` VARCHAR(40) NOT NULL COMMENT 'Email',
+    `transfer_to` VARCHAR(100) NOT NULL COMMENT 'Transfer ke bank',
+    `payment_val` DOUBLE(30,10) NOT NULL COMMENT 'nilai transfer',
+    `transfer_date` DATE NOT NULL COMMENT 'tgl transfer',
+    `bank_transfer` VARCHAR(100) NOT NULL COMMENT 'bank transfer',
+    `account_transfer` VARCHAR(40) NOT NULL COMMENT 'nomor rekening transfer',
+    `name` VARCHAR(100) NOT NULL COMMENT 'atas nama transferan',
+    `note` VARCHAR(1024) COMMENT 'keterangan',
+    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    CONSTRAINT `PK_TRX001` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_TRX001_1` UNIQUE (`order_no`)
+)
+ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 # ---------------------------------------------------------------------- #
 # Add table "TRX010"                                                     #
@@ -101,32 +124,6 @@ CREATE TABLE `BLNC003` (
 ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 # ---------------------------------------------------------------------- #
-# Add table "MST010"                                                     #
-# ---------------------------------------------------------------------- #
-
-CREATE TABLE `MST010` (
-    `id` VARCHAR(100) NOT NULL,
-    `mst001_id` VARCHAR(100) NOT NULL COMMENT 'user',
-    `comp_name` VARCHAR(100) NOT NULL COMMENT 'nama company',
-    `address` VARCHAR(1024) NOT NULL COMMENT 'alamat',
-    `postcode` VARCHAR(15) NOT NULL COMMENT 'kode pos',
-    `mst002_id` VARCHAR(100) NOT NULL COMMENT 'negara',
-    `mst003_id` VARCHAR(100) NOT NULL COMMENT 'kota',
-    `phone_number` VARCHAR(40) NOT NULL COMMENT 'no telepon',
-    `fax_number` VARCHAR(40) COMMENT 'nomor fax',
-    `email` VARCHAR(40) NOT NULL COMMENT 'email',
-    `website` VARCHAR(40) COMMENT 'website',
-    `active_flg` VARCHAR(100) NOT NULL COMMENT 'aktif = dah kirim email ke agent untuk passwordnya',
-    `news_letter_flg` VARCHAR(100) NOT NULL COMMENT 'yes/no',
-    `logo` VARCHAR(100),
-    `updated_at` TIMESTAMP NOT NULL,
-    `created_at` TIMESTAMP NOT NULL,
-    CONSTRAINT `PK_MST010` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_MST010_1` UNIQUE (`mst001_id`)
-)
-ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-# ---------------------------------------------------------------------- #
 # Add table "TRX013"                                                     #
 # ---------------------------------------------------------------------- #
 
@@ -168,6 +165,8 @@ CREATE TABLE `TRX011` (
     `room_name` VARCHAR(100) NOT NULL COMMENT 'tipe kamar',
     `room_id` VARCHAR(100) COMMENT 'terisi jika dari api',
     `room_num` INTEGER(5) NOT NULL COMMENT 'jumlah kamar',
+    `num_adults` INTEGER(5) NOT NULL,
+    `num_child` INTEGER(5) NOT NULL,
     `num_breakfast` INTEGER(5) NOT NULL COMMENT 'jumlah breakfast',
     `non_smoking_flag` VARCHAR(40) NOT NULL COMMENT 'yes/no',
     `interconnetion_flag` VARCHAR(40) NOT NULL COMMENT 'yes/no',
@@ -184,6 +183,8 @@ CREATE TABLE `TRX011` (
     `tot_tax_base_price` DOUBLE(30,2) NOT NULL COMMENT 'total dpp',
     `tot_tax_value` DOUBLE(30,2) NOT NULL COMMENT 'total nilai pajak',
     `tot_payment` DOUBLE(30,2) NOT NULL COMMENT 'total nilai pembayaran',
+    `cancel_fee_flg` VARCHAR(100) NOT NULL COMMENT 'Yes/No',
+    `cancel_fee_val` DOUBLE(30,2) NOT NULL COMMENT 'biaya batal',
     `title` VARCHAR(15) NOT NULL COMMENT 'mr/mrs',
     `first_name` VARCHAR(100) NOT NULL,
     `last_name` VARCHAR(100) NOT NULL,
@@ -211,6 +212,8 @@ CREATE TABLE `BLNC002` (
     `room_name` VARCHAR(100) NOT NULL COMMENT 'tipe kamar',
     `room_id` VARCHAR(100) COMMENT 'terisi jika dari api',
     `room_num` INTEGER(5) NOT NULL COMMENT 'jumlah kamar',
+    `num_adults` INTEGER(5) NOT NULL COMMENT 'jumlah dewasa',
+    `num_child` INTEGER(5) NOT NULL COMMENT 'jumlah anak',
     `num_breakfast` INTEGER(5) NOT NULL COMMENT 'jumlah breakfast',
     `non_smoking_flag` VARCHAR(40) NOT NULL COMMENT 'yes/no',
     `interconnetion_flag` VARCHAR(40) NOT NULL COMMENT 'yes/no',
@@ -227,6 +230,8 @@ CREATE TABLE `BLNC002` (
     `tot_tax_base_price` DOUBLE(30,2) NOT NULL COMMENT 'total dpp',
     `tot_tax_value` DOUBLE(30,2) NOT NULL COMMENT 'total nilai pajak',
     `tot_payment` DOUBLE(30,2) NOT NULL COMMENT 'total nilai pembayaran',
+    `cancel_fee_flg` VARCHAR(100) NOT NULL COMMENT 'yes no',
+    `cancel_fee_val` DOUBLE(30,2) NOT NULL COMMENT 'biaya batal',
     `title` VARCHAR(15) NOT NULL,
     `first_name` VARCHAR(15) NOT NULL,
     `last_name` VARCHAR(15) NOT NULL,
@@ -265,15 +270,6 @@ ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 # ---------------------------------------------------------------------- #
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
-
-ALTER TABLE `MST010` ADD CONSTRAINT `MST001_MST010` 
-    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
-
-ALTER TABLE `MST010` ADD CONSTRAINT `MST002_MST010` 
-    FOREIGN KEY (`mst002_id`) REFERENCES `MST002` (`id`);
-
-ALTER TABLE `MST010` ADD CONSTRAINT `MST003_MST010` 
-    FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
 
 ALTER TABLE `TRX010` ADD CONSTRAINT `MST001_TRX010` 
     FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);

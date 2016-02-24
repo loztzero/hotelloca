@@ -5,19 +5,13 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2016-02-23 21:45                                #
+# Created on:            2016-02-24 22:08                                #
 # ---------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------- #
 # Drop foreign key constraints                                           #
 # ---------------------------------------------------------------------- #
-
-ALTER TABLE `MST010` DROP FOREIGN KEY `MST001_MST010`;
-
-ALTER TABLE `MST010` DROP FOREIGN KEY `MST002_MST010`;
-
-ALTER TABLE `MST010` DROP FOREIGN KEY `MST003_MST010`;
 
 ALTER TABLE `TRX010` DROP FOREIGN KEY `MST001_TRX010`;
 
@@ -104,20 +98,6 @@ DROP INDEX `TUC_TRX013_1` ON `TRX013`;
 DROP TABLE `TRX013`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "MST010"                                                    #
-# ---------------------------------------------------------------------- #
-
-# Drop constraints #
-
-ALTER TABLE `MST010` DROP PRIMARY KEY;
-
-DROP INDEX `TUC_MST010_1` ON `MST010`;
-
-# Drop table #
-
-DROP TABLE `MST010`;
-
-# ---------------------------------------------------------------------- #
 # Drop table "BLNC003"                                                   #
 # ---------------------------------------------------------------------- #
 
@@ -172,3 +152,17 @@ DROP INDEX `TUC_TRX010_1` ON `TRX010`;
 # Drop table #
 
 DROP TABLE `TRX010`;
+
+# ---------------------------------------------------------------------- #
+# Drop table "TRX001"                                                    #
+# ---------------------------------------------------------------------- #
+
+# Drop constraints #
+
+ALTER TABLE `TRX001` DROP PRIMARY KEY;
+
+DROP INDEX `TUC_TRX001_1` ON `TRX001`;
+
+# Drop table #
+
+DROP TABLE `TRX001`;
