@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2016-02-24 22:08                                #
+# Created on:            2016-02-25 20:52                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -97,6 +97,7 @@ CREATE TABLE `BLNC001` (
     `tax_value` DOUBLE(30,2) NOT NULL COMMENT 'nilai PPN',
     `tot_payment` DOUBLE(30,2) NOT NULL COMMENT 'tot_tax_base_price+tax_value',
     `status_flg` VARCHAR(40) NOT NULL COMMENT 'done/cancel/pending',
+    `no_conf_order` VARCHAR(40) NOT NULL COMMENT 'didapat dr hotel',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_BLNC001` PRIMARY KEY (`id`),
