@@ -66,7 +66,7 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox"> I want to receive <span class="skin-color">Hotelloca</span> promotional offers in the future
+                                        <input type="checkbox"> I want to receive <span class="skin-color">Travelo</span> promotional offers in the future
                                     </label>
                                 </div>
                             </div>
@@ -252,62 +252,52 @@
                         <figure class="clearfix">
                             <a href="hotel-detailed.html" class="hover-effect middle-block"><img class="middle-item" width="270" height="160" alt="" src="http://placehold.it/270x160"></a>
                             <div class="travel-title">
-                                <h5 class="box-title">Hotel {{ $hotel->hotel_name }}<small>{{ $hotel->country->country_name }} {{ $hotel->city->city_name }}</small></h5>
+                                <h5 class="box-title">Hotel Hilton<small>Paris france</small></h5>
+                                <a href="hotel-detailed.html" class="button">EDIT</a>
                             </div>
                         </figure>
                         <div class="details">
                             <div class="feedback">
-                                <div data-placement="bottom" data-toggle="tooltip" class="five-stars-container" title="{{ $hotel->star }} stars">
-                                    @if($hotel->star == 2)
-                                        <span class="five-stars" style="width: 40%;"></span>
-                                    @elseif($hotel->star == 3)
-                                        <span class="five-stars" style="width: 60%;"></span>
-                                    @elseif($hotel->star == 4)
-                                        <span class="five-stars" style="width: 80%;"></span>
-                                    @elseif($hotel->star == 5)
-                                        <span class="five-stars" style="width: 100%;"></span>
-                                    @else
-                                        <span class="five-stars" style="width: 20%;"></span>
-                                    @endif
-                                </div>
+                                <div data-placement="bottom" data-toggle="tooltip" class="five-stars-container" title="4 stars"><span style="width: 80%;" class="five-stars"></span></div>
+                                <span class="review">270 reviews</span>
                             </div>
                             <div class="constant-column-3 timing clearfix">
                                 <div class="check-in">
                                     <label>Check in</label>
-                                    <span>{{ $checkIn }}</span>
+                                    <span>NOV 30, 2013<br />11 AM</span>
                                 </div>
                                 <div class="duration text-center">
                                     <i class="soap-icon-clock"></i>
-                                    <span>{{ $nights }} Nights</span>
+                                    <span>2 Nights</span>
                                 </div>
                                 <div class="check-out">
                                     <label>Check out</label>
-                                    <span>{{ $checkOut }}</span>
+                                    <span>DEC 02, 2013<br />2 PM</span>
                                 </div>
                             </div>
                             <div class="guest">
-                                <small class="uppercase">{{ $totalRooms }} {{ $room->room_name }} room for <span class="skin-color">{{ $adults }} ADULTS and {{ $child }} CHILDS</span></small>
+                                <small class="uppercase">1 Standard family room for <span class="skin-color">3 Persons</span></small>
                             </div>
                         </div>
                     </article>
                     
                     <h4>Other Details</h4>
                     <dl class="other-details">
-                        <dt class="feature">room Type:</dt><dd class="value">{{ $room->room_name }}</dd>
-                        <dt class="feature">avr Room price:</dt><dd class="value">Rp. {{ number_format($averagePrice, 0, ',', '.') }}</dd>
-                        <dt class="feature">{{ $nights }} night Stay:</dt><dd class="value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
-                        <dt class="feature">taxes and fees:</dt><dd class="value">Rp. {{ 0 }}</dd>
-                        <dt class="total-price">Total Price</dt><dd class="total-price-value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
+                        <dt class="feature">room Type:</dt><dd class="value">Standard Family</dd>
+                        <dt class="feature">per Room price:</dt><dd class="value">$121</dd>
+                        <dt class="feature">2 night Stay:</dt><dd class="value">$242</dd>
+                        <dt class="feature">taxes and fees:</dt><dd class="value">$10</dd>
+                        <dt class="total-price">Total Price</dt><dd class="total-price-value">$252</dd>
                     </dl>
                 </div>
                 
                 <div class="travelo-box contact-box">
-                    <h4>Need Hotelloca Help?</h4>
+                    <h4>Need Travelo Help?</h4>
                     <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>
                     <address class="contact-details">
                         <span class="contact-phone"><i class="soap-icon-phone"></i> 1-800-123-HELLO</span>
                         <br>
-                        <a class="contact-email" href="#">help@hotelloca.com</a>
+                        <a class="contact-email" href="#">help@travelo.com</a>
                     </address>
                 </div>
             </div>

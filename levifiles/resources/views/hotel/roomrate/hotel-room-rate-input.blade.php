@@ -134,6 +134,15 @@
 		    </div>
 
 		    <div class="form-group">
+				<div class="col-xs-6">
+					<label>Breakfast Type *</label>
+					<div class="selector" id="breakfastSelector">
+						{!! Form::select('zz', array('Room' => 'Room Only', 'IncBreakFast' => 'Include Breakfast'), old('num_breakfast'), array('required', 'id' => 'zz', 'class' => 'full-width')) !!}
+					</div>
+		        </div>
+		    </div>
+
+		    <div class="form-group">
 				<div class="col-xs-12">
 	          		<label>Description</label>
 					<textarea id="roomDesc" name="room_desc" class="input-text full-width">{{ old('room_desc') }}</textarea>

@@ -30,7 +30,7 @@ class HotelController extends Controller {
 					: $result;
 
 		$hotelList = $result->paginate(20);
-		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
+		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
 		return view('admin.hotel.admin-hotel-browse')
 				->with('hotelList', $hotelList)
 				->with('countries', $countries);
@@ -179,7 +179,7 @@ class HotelController extends Controller {
         // print_r(Input::all());
         if($request->country){
         	//$countryDetail = Country::where('country_code', '=', $request->country)->first();
-        	$countryDetail = Country::where('id', '=', $request->country)->first();
+        	$countryDetail = Country::where('country_name', '=', $request->country)->first();
             $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
             return $cities;
         } 

@@ -98,11 +98,11 @@
                                         <a href="{{ url('admin/profile') }}">Profile</a>
                                     </li>
                                     <li {{ Request::segment('2') == 'agent' ? 'class=active' : '' }}>
-                                        <a href="{{url('admin/agent')}}"><i class="fi-home"></i>&nbsp; Agent</a></li>
-                                    <li><a href="{{url('admin/hotel')}}"><i class="fi-home"></i>&nbsp; Hotel</a></li>
-                                    <li><a href="{{url('admin/booking')}}"><i class="fi-book"></i>&nbsp; Booking</a></li>
-                                    <li><a href="{{url('admin/rate')}}"><i class="fi-dollar"></i>&nbsp; Daily Rate</a></li>
-                                    <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
+                                        <a href="{{url('admin/agent')}}"><i class="fi-home"></i> Agent</a></li>
+                                    <li><a href="{{url('admin/hotel')}}"><i class="fi-home"></i> Hotel</a></li>
+                                    <li><a href="{{url('admin/booking')}}"><i class="fi-book"></i> Booking</a></li>
+                                    <li><a href="{{url('admin/rate')}}"><i class="fi-dollar"></i> Daily Rate</a></li>
+                                    <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i> Logout</a></li>
                                 </ul>
                             </li>
                         @elseif(Auth::check() && Auth::user()->role == 'Hotel')
@@ -119,9 +119,9 @@
                                         <a href="{{ url('hotel/picture') }}">Picture</a>
                                     </li>
                                     <li {{ Request::segment('2') == 'room' ? 'class=active' : '' }}>
-                                        <a href="{{url('hotel/room')}}"><i class="fi-home"></i>&nbsp; Room</a></li>
-                                    <li><a href="{{url('hotel/room-rate')}}"><i class="fi-home"></i>&nbsp; Room Rate</a></li>
-                                    <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i>&nbsp; Logout</a></li>
+                                        <a href="{{url('hotel/room')}}"><i class="fi-home"></i> Room</a></li>
+                                    <li><a href="{{url('hotel/room-rate')}}"><i class="fi-home"></i> Room Rate</a></li>
+                                    <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i> Logout</a></li>
                                 </ul>
                             </li>
                         @else

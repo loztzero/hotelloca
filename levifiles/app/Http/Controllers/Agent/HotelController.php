@@ -190,43 +190,17 @@ class HotelController extends Controller {
 
     	$pictures = HotelPicture::where('mst020_id', '=', $hotel->id)->get();
     	
-    	$query = "select d.id, d.room_name, d.room_desc, c.num_adults, c.num_child, c.num_breakfast,
-				  c.allotment - c.used_allotment, 
-				  c.nett_value, c.nett_value_wna, c.from_date, c.end_date 
-				from MST022 c
-				inner join MST023 d on d.id = c.mst023_id
-				where  c.num_adults >= 0
-				  and c.allotment - c.used_allotment >= 0
-				  and
-				  (
-				    c.from_date >= STR_TO_DATE(?, '%Y-%m-%d')
-				    or
-				    c.end_date >= STR_TO_DATE(?, '%Y-%m-%d')
-				  )
-				 
-				  and
-				  (
-				    c.end_date <= STR_TO_DATE(?, '%Y-%m-%d')
-				    or
-				    c.from_date <= STR_TO_DATE(?, '%Y-%m-%d')
-				  )
-				 
-				  and STR_TO_DATE(?, '%Y-%m-%d') >=
-				  (
-				    select min(ab.from_date) from MST022 ab where ab.mst020_id = c.mst020_id
-				  )
-				 
-				  and STR_TO_DATE(?, '%Y-%m-%d') <=
-				  (
-				    select max(ac.end_date) from MST022 ac where ac.mst020_id = c.mst020_id
-				  ) 
+    	$sessionId = Session::getId();
+    	$hotelId = $hotel->id;
+    	$fromDate = $request->checkIn;
+    	$endDate = $request->checkOut;
+    	$market = 'Indonesia';
+    	$allotment = $request->room;
+    	$adults = $request->adults;
+    	$child = $request->child;
 
-				  and c.mst020_id = ? 
-				  order by d.room_name, c.from_date
-    	";
-
-
-    	$params = array($checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $hotel->id);
+    	$query = 'call search_detail_room(?, ?, ?, ?, ?, ?, ?, ?)';
+    	$params = array($sessionId, $hotelId, $fromDate, $endDate, $market, $allotment, $adults, $child);
     	$result = DB::select($query, $params);
 
     	// $rooms = HotelRoom::join('MST022', 'MST023.id', '=', 'MST022.mst023_id')
@@ -253,13 +227,13 @@ class HotelController extends Controller {
     	// print_r($result);
     	// die();
 
-    	foreach($period as $date){
-    		echo $date->format('d-m-Y').'<br>';
-    	}
+    	// foreach($period as $date){
+    	// 	echo $date->format('d-m-Y').'<br>';
+    	// }
 
-    	echo '<pre>';
-    	print_r($result);
-    	echo '</pre>';
+    	// echo '<pre>';
+    	// print_r($result);
+    	// echo '</pre>';
 
     	$newRooms = array();
     	$pricing = array();
@@ -278,18 +252,22 @@ class HotelController extends Controller {
                     $priceDetail = new StdClass();
                 	$priceDetail->period_date = $date->format("d-m-Y");
                 	$priceDetail->nett_value = $room->nett_value;
-                	$priceDetail->nett_value_wna = $room->nett_value_wna;
+                	$priceDetail->from_date = $room->from_date;
+                	$priceDetail->end_date = $room->end_date;
+                	// $priceDetail->nett_value_wna = $room->nett_value_wna;
                 	array_push($pricing, $priceDetail);
 
-                	echo '<pre>';
-                	print_r($pricing);
-                	echo '</pre>';
-                	echo '<br><br>';
+                	// echo '<pre>';
+                	// print_r($pricing);
+                	// echo '</pre>';
+                	// echo '<br><br>';
                 }
 
                 if($counter == $countDay){
 					$newRoom = clone $room;
 					$newRoom->pricing = $pricing;
+					// echo '<pre>';
+					// print_r($pricing);
 					array_push($newRooms, $newRoom);
 					$pricing = array();
 					$counter = 0;
@@ -299,20 +277,21 @@ class HotelController extends Controller {
 
 		}
 
-		die();
+		// die();
 
 
 		// echo '<pre>';
   //   	print_r($newRooms);
   //   	echo '</pre>';
 		// die();
-
+		// echo $request->fullUrl();
     	return view('agent.hotel.agent-hotel-detail')
     		->with('hotel', $hotel)
     		->with('pictures', $pictures)
     		->with('newRooms', $newRooms)
     		->with('period', $period)
-    		->with('helpers', new Helpers());
+    		->with('helpers', new Helpers())
+    		->with('request', $request);;
     	
     }
 
@@ -350,6 +329,25 @@ class HotelController extends Controller {
 				$price = $price2;
 			}
 		}
+    }
+
+    public function getSp(){
+    	$sessionId = Session::getId();
+    	$hotelId = '216686a2-393d-4fa6-b2e8-fc0b9f9ad26b';
+    	$fromDate = '28-02-2016';
+    	$endDate = '04-03-2016';
+    	$market = 'Indonesia';
+    	$allotment = '1';
+    	$adults = '1';
+    	$child = '0';
+
+    	$query = 'call search_detail_room(?, ?, ?, ?, ?, ?, ?, ?)';
+    	$params = array($sessionId, $hotelId, $fromDate, $endDate, $market, $allotment, $adults, $child);
+    	$result = DB::select($query, $params);
+
+    	echo '<pre>';
+    	echo $sessionId;
+    	print_r($result);
     }
 
 }
