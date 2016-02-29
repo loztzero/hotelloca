@@ -16,7 +16,6 @@ BEGIN
      INNER JOIN MST023 D ON D.id = C.mst023_id
      WHERE  C.num_adults >= pNumsAdult
      AND C.num_child >= pNumsChild
-     AND C.allotment - C.USED_allotment >= pAllotment
      AND
       (
         C.from_date >= STR_TO_DATE(pFromDate, '%d-%m-%Y')
