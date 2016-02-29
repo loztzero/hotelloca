@@ -41,14 +41,20 @@ WHERE A.order_no = pOrderNo;
 
 --Invoice
 SELECT A.order_no,A.order_date,B.market,B.title || ',' ||B.first_name||' '||B.last_name AS guest,
-       D.country_name,B.check_in_date,B.check_out_date,
+       D.country_name,G.transfer_date As payment_date,
        C.hotel_name,B.room_name,B.num_adults,B.num_child,B.num_breakfast,
-       B.room_num,,B.note,B.cut_off,B.cancel_fee_flg,B.cancel_fee_value,
-       B.tot_payment,
+       B.room_num,B.cut_off, B.tot_payment,
 FROM BLNC001 A
 INNER JOIN BLNC002 B ON B.blnc001_id = A.id
 INNER JOIN MST020 C ON C.id = B.mst020_id
 INNER JOIN MST023 F ON F.id = B.mst023_id
 INNER JOIN TRX001 G ON G.order_no = A.order_no
 WHERE A.order_no = pOrderNo;
+
+-- detail Invoice
+SELECT A.check_in_date,A.tot_base_price as daily_price,A.tot_payment
+FROM BLNC004 A
+INNER JOIN BLNC002 B ON B.id = A.blnc002_id
+INNER JOIN BLNC001 C ON C.id = B.blnc001_id
+WHERE C.order_no = pOrderNo;
 

@@ -81,13 +81,13 @@
                                         <div class="col-xs-6">
                                             <label>CHECK IN</label>
                                             <div class="datepicker-wrap">
-                                                    <input type="text" name="date_from" placeholder="mm/dd/yy" class="input-text full-width" />
+                                                    <input type="text" name="date_from" value="{{ $request->checkIn }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <label>CHECK OUT</label>
                                             <div class="datepicker-wrap">
-                                                    <input type="text" name="date_to" placeholder="mm/dd/yy" class="input-text full-width" />
+                                                    <input type="text" name="date_to" value="{{ $request->checkOut }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
                                             </div>
                                         </div>
                                     </div>
@@ -99,12 +99,7 @@
                                         <div class="col-xs-4">
                                             <label>ROOMS</label>
                                             <div class="selector">
-                                                <select class="full-width">
-                                                    <option value="1">01</option>
-                                                    <option value="2">02</option>
-                                                    <option value="3">03</option>
-                                                    <option value="4">04</option>
-                                                </select>
+                                                {!! Form::select('room', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), $request->input('room', 1), array('class' => 'full-width')) !!}
                                             </div>
                                         </div>
                                         <div class="col-xs-4">
@@ -147,12 +142,39 @@
                             <div class="room-list listing-style3 hotel">
 
                                 @foreach($newRooms as $room)
+                                    
+                                    <div class="modal fade" tabindex="-1" id="{{ $room->room_name }}" role="dialog" aria-labelledby="modal">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <table class="table table-striped">
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Price</th>
+                                                            </tr>
+                                                            <?php $totalPrice = 0 ;?>
+                                                            @foreach($room->pricing as $price)
+                                                            <tr>
+                                                                <td>{{ $price->period_date }}</td>
+                                                                <td>{{ number_format($price->nett_value, 0, ',', '.') }}</td>
+                                                            </tr>
+                                                            <?php $totalPrice += $price->nett_value ;?>
+                                                            @endforeach
+                                                        </table>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <article class="box">
                                         <figure class="col-sm-4 col-md-3">
                                             <a class="hover-effect popup-gallery" href="ajax/slideshow-popup.html" title=""><img width="230" height="160" src="http://placehold.it/230x160" alt=""></a>
                                         </figure>
                                         <div class="details col-xs-12 col-sm-8 col-md-9">
                                             <div>
+
+
                                                 <div>
                                                     <div class="box-title">
                                                         <h4 class="title">{{ $room->room_name }}</h4>
@@ -169,33 +191,31 @@
                                                     </div> -->
                                                 </div>
                                                 <div class="price-section">
-                                                    <span class="price"><small>PER/NIGHT</small>Rp. {{ number_format($room->nett_value, 0, ',', '.') }}</span>
+                                                    <span class="price"><small>Total / Rp.</small> {{ number_format($totalPrice, 0, ',', '.') }}</span>
                                                 </div>
                                             </div>
                                             <div>
                                                 <p>
                                                     {{ $room->room_desc }}<br>
-                                                   {{--  @foreach($period as $date)
-                                                        {{ $date->format("d-m-Y") }}
-                                                        | {{ $helpers::dateFormatter($room->from_date) }}
-                                                        | {{ $helpers::dateFormatter($room->end_date) }}
-                                                        | {{ strtotime($date->format("Y-m-d")) <= strtotime($room->end_date) ? 'true' : 'false' }}
-                                                        | {{ $helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"), $helpers::dateFormatter($room->from_date), 
-                                                            $helpers::dateFormatter($room->end_date)) ? 'benar' : 'salah' }}
-                                                        | {{ $room->nett_value }}
-                                                        <br>
-                                                    @endforeach --}}
-
-                                                    Pricing : <br>
-                                                    @foreach($room->pricing as $price)
-                                                        {{ $price->period_date }} : {{ $price->nett_value }} : {{ $price->nett_value_wna }}<br>
-                                                    @endforeach
-
                                                 </p>
+
+
                                                 <div class="action-section">
-                                                    <a href="hotel-booking.html" title="" class="button btn-small full-width text-center">BOOK NOW</a>
+                                                    <a href="#detailPrice-{{$room->room_name}}" data-toggle="modal" data-target="#{{ $room->room_name }}" class="button btn-small full-width text-center">Detail Price</a>
+                                                    <form method="post" action="{{ url('agent/booking') }}">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                        <input type="hidden" name="room" value="{{ $room->id }}">
+                                                        <input type="hidden" name="allotment" value="{{ $request->room }}">
+                                                        <input type="hidden" name="check_in" value="{{ $request->checkIn }}">
+                                                        <input type="hidden" name="check_out" value="{{ $request->checkOut }}">
+                                                        <input type="hidden" name="adults" value="{{ $request->adults }}">
+                                                        <input type="hidden" name="child" value="{{ $request->child }}">
+                                                        <button type="submit" class="button btn-small full-width text-center">BOOK NOW</button>
+                                                    </form>
+                                                    <!-- <a href="hotel-booking.html" title="" class="button btn-small full-width text-center">BOOK NOW</a> -->
                                                 </div>
                                             </div>
+
                                         </div>
                                     </article>
                                 @endforeach
@@ -215,7 +235,7 @@
                             </ul>
                         </div>
                         <div class="tab-pane fade" id="hotel-faqs">
-                            <h2>Frquently Asked Questions</h2>
+                            <h2>Frequently Asked Questions</h2>
                             <div class="topics">
                                 <ul class="check-square clearfix">
                                     <li class="col-sm-6 col-md-4"><a href="#">address &amp; map</a></li>
@@ -312,10 +332,6 @@
                     </figure>
                     <div class="details">
                         <h2 class="box-title">{{ $hotel->hotel_name }}<small><i class="soap-icon-departure yellow-color"></i><span class="fourty-space">{{ $hotel->address }}</span></small></h2>
-                        <span class="price clearfix">
-                            <small class="pull-left">avg/night</small>
-                            <span class="pull-right">$620</span>
-                        </span>
                         <div class="feedback clearfix">
                             <div title="4 stars" class="five-stars-container" data-toggle="tooltip" data-placement="bottom">
                                 @if($hotel->star == 2)
@@ -332,8 +348,7 @@
                             </div>
                             <span class="review pull-right">{{ $hotel->star }} Stars</span>
                         </div>
-                        <p class="description">Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
-                        <a class="button yellow full-width uppercase btn-small">add to wishlist</a>
+                        <p class="description">{{ $hotel->description }}</p>
                     </div>
                 </article>
                 <div class="travelo-box contact-box">

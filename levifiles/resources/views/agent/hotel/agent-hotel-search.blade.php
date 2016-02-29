@@ -22,7 +22,7 @@
     <div id="main">
         <div class="row">
             <div class="col-sm-4 col-md-3">
-                <h4 class="search-results-title"><i class="soap-icon-search"></i><b>1,984</b> results found.</h4>
+                <h4 class="search-results-title"><i class="soap-icon-search"></i><b>{{ count($hotels) }}</b> results found.</h4>
                 <div class="toggle-container filters-container">
                     <div class="panel style1 arrow-right">
                         <h4 class="panel-title">
@@ -138,8 +138,8 @@
                                         {{ $hotel->description }}
                                     </p>
                                     <div>
-                                        <span class="price"><small>RATE/NIGHT</small>Rp. {{ number_format($hotel->nett_value, 0, ',', '.') }}</span>
-                                        <a class="button btn-small full-width text-center" title="" href="{{ url('agent/hotel/hotel-detail?hotel='.$hotel->id.'&checkIn='.$request->date_from.'&checkOut='.$request->date_to.'&room='.$request->room) }}">SELECT</a>
+                                        <span class="price"><small>RATE / Night / Rp</small>{{ number_format($hotel->nett_value, 0, ',', '.') }}</span>
+                                        <a class="button btn-small full-width text-center" title="" href="{{ url('agent/hotel/hotel-detail?hotel='.$hotel->id.'&checkIn='.$request->date_from.'&checkOut='.$request->date_to.'&room='.$request->room.'&adults='.$request->adults.'&child='.$request->child) }}">SELECT</a>
                                     </div>
                                 </div>
                             </div>
@@ -150,6 +150,12 @@
                     @endif
                 </div>
                 <a href="#" class="uppercase full-width button btn-large">load more listing</a>
+                <form  method="post" action="{{ url('agent/booking') }}">
+                    <div class="form-group">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-primary">TRIAL BOOKING DATA</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
