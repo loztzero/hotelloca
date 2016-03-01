@@ -212,6 +212,9 @@
                                                         <input type="hidden" name="child" value="{{ $request->child }}">
                                                         <button type="submit" class="button btn-small full-width text-center">BOOK NOW</button>
                                                     </form>
+                                                    <form method="post" action="{{ url('agent/request') }}">
+                                                        <button type="submit" class="button btn-small full-width text-center">REQUEST</button>
+                                                    </form>
                                                     <!-- <a href="hotel-booking.html" title="" class="button btn-small full-width text-center">BOOK NOW</a> -->
                                                 </div>
                                             </div>

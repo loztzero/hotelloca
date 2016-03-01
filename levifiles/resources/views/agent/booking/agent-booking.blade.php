@@ -39,6 +39,14 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6 col-md-5">
+                                    <label>first name</label>
+                                    <input type="text" class="input-text full-width" value="{{ $nationality }}" name="nationality" placeholder="" />
+                                </div>
+                            </div>
+
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
                                     <label>first name</label>
@@ -151,8 +159,26 @@
                                 <div class="radio col-sm-6 col-md-4">
                                     <label><input type="radio" name="payment_method" ng-model="payment" value="credit_card">Credit Card</label>
                                 </div>
+                                <div class="radio col-sm-6 col-md-4">
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="pending_payment">Pending Payment</label>
+                                </div>
                             </div>
                             <div style="clear:both;"></div>
+
+                            <!-- balance -->
+                            <div ng-show="payment == 'balance'">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 col-md-5">
+                                        <label>Deposit</label>
+                                        <input type="text" class="input-text full-width" value="" placeholder="" />
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-5">
+                                        <label>Remaning Deposit</label>
+                                        <input type="text" class="input-text full-width" value="" placeholder="" />
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- transfer -->
                             <div ng-show="payment == 'transfer'">
@@ -293,7 +319,8 @@
                     
                     <h4>Other Details</h4>
                     <dl class="other-details">
-                        <dt class="feature">room Type:</dt><dd class="value">{{ $room->room_name }}</dd>
+                        <dt class="feature">room Type:</dt><dd class="value">{{ $room->room_name }} </dd>
+                        <dt class="feature">&nbsp;</dt><dd class="value">{{ $room->num_breakfast > 0 ? 'Include '. $room->num_breakfast .' Breakfast' : 'Room Only' }}</dd>
                         <dt class="feature">avr Room price:</dt><dd class="value">Rp. {{ number_format($averagePrice, 0, ',', '.') }}</dd>
                         <dt class="feature">{{ $nights }} night Stay:</dt><dd class="value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
                         <dt class="feature">taxes and fees:</dt><dd class="value">Rp. {{ 0 }}</dd>

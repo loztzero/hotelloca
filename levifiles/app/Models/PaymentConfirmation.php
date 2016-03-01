@@ -6,7 +6,7 @@ use App\Emodel;
 use Validator;
 use App\User;
 use App\Config;
-class ConfirmationPayment extends Emodel {
+class PaymentConfirmation extends Emodel {
 	protected $table = 'TRX001';
 
 	public static function rules($data){

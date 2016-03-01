@@ -35,7 +35,7 @@ class BookingController extends Controller {
 		$allotment = $data['allotment'];
 		$adults = $data['adults'];
 		$child = $data['child'];
-		$market = 'IndOnesia';
+		$market = 'Indonesia';
 
 		$dateListObj = Helpers::getDateListBetweenTwoDates($checkIn, $checkOut);
 		$dateList = $dateListObj->periodList;
@@ -99,6 +99,7 @@ class BookingController extends Controller {
 
 		$averagePrice = $totalPrice / $countDay;
 		return view('agent.booking.agent-booking')
+		->with('nationality', $market)
 		->with('hotel', $hotelDetail)
 		->with('checkIn', $checkIn)
 		->with('checkOut', $checkOut)

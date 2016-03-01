@@ -122,6 +122,22 @@
 		        </div>
 		    </div>
 
+		    <div class="form-group">
+		    	<div class="col-xs-12">
+		    		<input type="hidden" value="@{{ field.group_flg }}" name="group_flg" >
+			    	<input type="checkbox" class="pull-left" ng-model="field.group_flg" ng-true-value="'Yes'" ng-false-value="'No'"> 
+			    	<label class="pull-left">&nbsp; Part Of Group</label>
+		    	</div>
+		    </div>
+
+		    <div class="form-group" ng-show="field.group_flg == 'Yes'">
+				<div class="col-xs-12">
+		          	<label>Group Name</label>
+		          	<input type="text" class="input-text full-width" value="{{ old('group_name') }}" id="groupName" name="group_name">
+		        </div>
+		    </div>
+
+
 		    <div class="row form-group">
 		        <div class="col-xs-12">
 	            	<label>Description Hotel</label>
@@ -175,6 +191,7 @@
 
 		$scope.field = {};
 		$scope.field.country = '{{ old("mst002_id", $indonesia) }}';
+		$scope.field.group_flg = '{{ old("group_flg", "No") }}';
 		$scope.cities = [];
 		$scope.getCity = function(){
 			console.log($scope.field);

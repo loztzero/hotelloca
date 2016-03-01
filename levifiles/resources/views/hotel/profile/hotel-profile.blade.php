@@ -41,6 +41,18 @@
 		    </div>
 
 		    <div class="row form-group">
+		        <div class="col-xs-6">
+		            <label>Country *</label>
+		            <input type="text" class="input-text full-width" value="{{ $profile->country->country_name }}" readonly>
+		        </div>
+
+		        <div class="col-xs-6">
+		            <label>City *</label>
+		            <input type="text" class="input-text full-width" value="{{ $profile->city->city_name }}" readonly>
+		        </div>
+		    </div>
+
+		    <div class="row form-group">
 		        <div class="col-xs-12">
 		            <label>Postcode *</label>
 		            <input type="text" class="input-text full-width" value="{{old('postcode', $profile->postcode)}}" id="postCode" name="postcode">
@@ -49,15 +61,8 @@
 
 		    <div class="row form-group">
 		        <div class="col-xs-12">
-		            <label>Country *</label>
-		            <input type="text" class="input-text full-width" value="{{ $profile->country->country_name }}" readonly>
-		        </div>
-		    </div>
-
-		    <div class="row form-group">
-		        <div class="col-xs-12">
-		            <label>City *</label>
-		            <input type="text" class="input-text full-width" value="{{ $profile->city->city_name }}" readonly>
+		            <label>Landmark Name</label>
+		            <input type="text" class="input-text full-width" value="{{old('landmark_name', $profile->postcode)}}" id="landmarkName" name="landmark_name" required>
 		        </div>
 		    </div>
 
@@ -86,6 +91,13 @@
 		        <div class="col-xs-12">
 		            <label>Website</label>
 		            <input type="text" class="input-text full-width" value="{{old('website', $profile->website)}}" id="website" name="website">
+		        </div>
+		    </div>
+
+		    <div class="row form-group">
+		        <div class="col-xs-6">
+		            <label>Currency *</label>
+		            <input type="text" class="input-text full-width" value="{{ $profile->currency->curr_code }}" id="currency" readonly>
 		        </div>
 		    </div>
 

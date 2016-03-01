@@ -34,6 +34,10 @@ class HotelDetail extends Emodel {
     	return $this->hasMany('App\Models\HotelFacility', 'mst020_id', 'id');
     }
 
+    public function currency(){
+    	return $this->hasOne('App\Models\Currency', 'id', 'mst004_id');	
+    }
+
 	public function rules($data)
 	{
 		$error = array();
@@ -58,6 +62,8 @@ class HotelDetail extends Emodel {
 			// 'active_flg'    => 'required',
 			// 'api_flg'      	=> 'required',
 			// 'mst001_id'     => 'required',
+			'group_flg'  	=> 'required|in:Yes,No',
+			'group_name'  	=> 'required_if:group_flg,Yes',
 		);
 
 		$messages = array(
@@ -70,6 +76,8 @@ class HotelDetail extends Emodel {
 			'meal_price.numeric' => 'Meal price must be number',
 			'bed_price.numeric' => 'Bed price must be number',
 			'mst004_id.required' => 'Currency must be selected',
+			'group_flg.required' => 'Group flag checked or unchecked value must be Yes or No',
+			'group_name.required_if' => 'Group name must be filled',
 		);
 
 		$v = Validator::make($data, $rules, $messages);
@@ -93,6 +101,8 @@ class HotelDetail extends Emodel {
 			'mst004_id'    	=> 'required',
 			'meal_price'    => 'numeric',
 			'bed_price'     => 'numeric',
+			'group_flg'  	=> 'required|in:Yes,No',
+			'group_name'  	=> 'required_if:group_flg,Yes',
 		);
 
 		$messages = array(
@@ -103,6 +113,8 @@ class HotelDetail extends Emodel {
 			'meal_price.numeric' => 'Meal price must be number',
 			'bed_price.numeric' => 'Bed price must be number',
 			'mst004_id.required' => 'Currency must be selected',
+			'group_flg.required' => 'Group flag checked or unchecked value must be Yes or No',
+			'group_name.required_if' => 'Group name must be filled',
 		);
 
 		$v = Validator::make($data, $rules, $messages);
@@ -138,6 +150,8 @@ class HotelDetail extends Emodel {
 		}
 		// $object->mst001_id = $data['mst001_id'];
 		$object->description = isset($data['description']) ? $data['description'] : null;
+		$object->group_flg = isset($data['group_flg']) ? $data['group_flg'] : 'No';
+		$object->group_name = isset($data['group_name']) ? $data['group_name'] : null;
 
 		return $object;
 	}
@@ -158,6 +172,8 @@ class HotelDetail extends Emodel {
 		$object->bed_price = isset($data['bed_price']) ? $data['meal_price'] : 0;
 		$object->market = isset($data['market']) ? $data['market'] : 'All';
 		$object->description = isset($data['description']) ? $data['description'] : null;
+		$object->group_flg = isset($data['group_flg']) ? $data['group_flg'] : 'No';
+		$object->group_name = isset($data['group_name']) ? $data['group_name'] : null;
 		return $object;
 	}
 

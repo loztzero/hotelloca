@@ -131,10 +131,8 @@
 						{!! Form::select('num_breakfast', array(0 => 0, 1 => 1, 2 => 2, 3 => 3, 4 => 4 ), old('num_breakfast'), array('required', 'id' => 'numBreakfast', 'class' => 'full-width')) !!}
 					</div>
 		        </div>
-		    </div>
 
-		    <div class="form-group">
-				<div class="col-xs-6">
+		        <div class="col-xs-6">
 					<label>Breakfast Type *</label>
 					<div class="selector" id="breakfastSelector">
 						{!! Form::select('zz', array('Room' => 'Room Only', 'IncBreakFast' => 'Include Breakfast'), old('num_breakfast'), array('required', 'id' => 'zz', 'class' => 'full-width')) !!}
@@ -142,6 +140,7 @@
 		        </div>
 		    </div>
 
+		    
 		    <div class="form-group">
 				<div class="col-xs-12">
 	          		<label>Description</label>
