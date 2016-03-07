@@ -1,20 +1,17 @@
-
-
-
-
-
-
-
 -- query untuk mendapatkan informasi lengkap 
 -- namun tidak terjadi summary lagi ... 
 
 select d.room_name, c.num_adults, c.num_child, c.num_breakfast,
-  c.allotment - c.used_allotment,
+  coalesce(b.allotment,c.allotment),
   c.nett_value,c.from_date , c.end_date 
 from MST022 c
 inner join MST023 d on d.id = c.mst023_id
+left join (select a.mst023_id,Min(a.allotment-a.used_allotment) as allotment
+            from LOG020 a 
+            inner join MST023 b on b.id = a.mst023_id
+            where b.mst020_id = '0597bfb1-8f57-459d-af6e-d653775a0a73') b
+           on b.mst023_id = d.id
 where  c.num_adults >= 0
-  and c.allotment - c.used_allotment >= 0
   and
   (
     c.from_date >= STR_TO_DATE('01/20/2016', '%m/%d/%Y')

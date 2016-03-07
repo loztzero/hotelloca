@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database drop script                            #
-# Created on:            2016-03-04 20:18                                #
+# Created on:            2016-03-07 22:15                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -13,18 +13,18 @@
 # Drop foreign key constraints                                           #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `LOG010` DROP FOREIGN KEY `MST001_LOG010`;
+ALTER TABLE `LOG020` DROP FOREIGN KEY `MST023_LOG020`;
 
 # ---------------------------------------------------------------------- #
-# Drop table "LOG010"                                                    #
+# Drop table "LOG020"                                                    #
 # ---------------------------------------------------------------------- #
 
 # Drop constraints #
 
-ALTER TABLE `LOG010` DROP PRIMARY KEY;
+ALTER TABLE `LOG020` DROP PRIMARY KEY;
 
-DROP INDEX `TUC_LOG010_1` ON `LOG010`;
+DROP INDEX `TUC_LOG020_1` ON `LOG020`;
 
 # Drop table #
 
-DROP TABLE `LOG010`;
+DROP TABLE `LOG020`;

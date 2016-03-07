@@ -46,7 +46,7 @@ BEGIN
        -- query sesuai kebutuhan
      SELECT B.mst020_id, D.id, D.room_name, B.room_desc, D.num_adults, B.num_child, B.num_breakfast,
              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
-             B.allotment-B.used_allotment AS allotment, B.comm_value, B.cut_off, B.bed_type,
+             COALESCE(E.allotment,B.allotment) AS allotment, B.comm_value, B.cut_off, B.bed_type,
              CASE WHEN UPPER(pMarket) = 'INDONESIA'
              THEN B.nett_value
                 ELSE B.nett_value_wna
@@ -54,6 +54,11 @@ BEGIN
      FROM TEMP003 C
      inner join MST022 B on B.id = C.mst022_id
      inner join MST023 D on D.id = C.mst023_id
+     left join (select A.mst023_id,Min(A.allotment-A.used_allotment) as allotment
+                from LOG020 A 
+                inner join MST023 F on F.id = A.mst023_id
+                where F.mst020_id = pHotelId) E
+                 on E.mst023_id = D.id
      WHERE
       (
         B.from_date >= STR_TO_DATE(pFromDate, '%d-%m-%Y')
