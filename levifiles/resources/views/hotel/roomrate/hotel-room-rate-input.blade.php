@@ -119,7 +119,7 @@
 		        </div>
 
 		        <div class="col-xs-6">
-		          	<label>Allotment</label>
+		          	<label>Daily Allotment</label>
 		          	<input type="text" class="input-text full-width" value="{{ old('allotment') }}" id="allotment" name="allotment" required>
 		        </div>
 		    </div>

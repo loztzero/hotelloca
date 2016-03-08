@@ -238,6 +238,9 @@ class HotelController extends Controller {
     	$newRooms = array();
     	$pricing = array();
     	$counter = 0;
+    	// echo '<pre>';
+    	// print_r($result);
+    	// die();
 		foreach($result as $room){
 			
 			foreach($period as $date){

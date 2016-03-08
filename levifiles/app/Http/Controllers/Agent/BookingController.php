@@ -30,6 +30,7 @@ use App\Models\BalanceOrderBooking;
 use App\Models\BalanceOrderBookingDetail;
 use App\Models\BalanceOrderBookingPayment;
 use App\Models\BalanceOrderBookingSummaryDetail;
+use App\Models\LogHotelRoomAllotment;
 use App\Http\Controllers\Controller;
 use DateInterval, DatePeriod;
 class BookingController extends Controller {
@@ -93,7 +94,20 @@ class BookingController extends Controller {
 			$countDay = $dateListObj->countDay;
 
 			$query = $this->requeryBookingRoom();
-			$result = DB::select($query, array($market, $checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $room->id));
+			$result = DB::select($query, array($market, $market,
+				$hotelDetail->id, $checkIn, $checkOut, 
+				$checkIn, $checkIn, $checkOut, 
+				$checkOut, $checkIn, $checkOut, 
+				$room->id, 
+				$checkIn, $checkIn, $checkOut, 
+				$checkOut, $checkIn, $checkOut, 
+				$room->id));
+
+			/* old filter 
+			DB::select($query, array($market, 
+				$checkIn, $checkIn, $checkOut, 
+				$checkOut, $checkIn, $checkOut, 
+				$room->id));*/
 
 			$counter = 0;
 			$pricing = array();
@@ -130,6 +144,9 @@ class BookingController extends Controller {
 	                	$priceDetail->end_date = $room->end_date;
 	                	$priceDetail->num_breakfast = $room->num_breakfast;
 	                	$priceDetail->cut_off = $room->cut_off;
+	                	$priceDetail->allotment = $room->rate_allotment;
+	                	$priceDetail->mst023_id = $room->mst023_id;
+	                	$priceDetail->daily_price = $room->daily_price;
 	                	$numBreakfast = $room->num_breakfast; //dan data numbreakfast ini global disini
 
 	                	$totalPrice += $room->nett_value;
@@ -220,6 +237,11 @@ class BookingController extends Controller {
 			Session::forget('bookingData');
 		}
 
+		// echo '<pre>';
+		// print_r($request->all());
+		// echo '</pre>';
+		// die();
+
 		return redirect('agent/booking')
 				->with('data', $request->all());
 
@@ -227,7 +249,7 @@ class BookingController extends Controller {
 
 	
 
-	public function postConfirm2(Request $request){
+	public function postConfirm(Request $request){
 
 		$bookingData = Session::get('bookingData');
 		// echo '<pre>';
@@ -236,21 +258,26 @@ class BookingController extends Controller {
 
 		DB::beginTransaction();
 		try {
-			
-			// echo 'gile itz stopped';
+
+			$logAllotment = new LogHotelRoomAllotment();
+			$allotment = $logAllotment->getMinAllotment($bookingData->room->mst023_id, Helpers::dateFormatter($bookingData->checkIn), Helpers::dateFormatter($bookingData->checkOut));
+			if(empty($allotment)){
+				$allotment = $bookingData->room->allotment;
+				if(empty($allotment)){
+					//antisipasi jika data allotment nya tidak di temukan di session
+					$allotment = 0;
+				}
+			}
+
 
 			//update allotment if the remaining is enought
-			$hotelRoomRate = HotelRoomRate::find($bookingData->rateId);
-			if(abs($bookingData->totalRooms) > ($hotelRoomRate->allotment - $hotelRoomRate->used_allotment)){
+			if($bookingData->totalRooms > $allotment){
 
 				// echo 'gile itz stopped here ?';
-				Session::flash('error', array('The room is fully booked'));
+				Session::flash('error', array('The room is fully booked from our sistem'));
 				return redirect('agent/booking');
 			} else {
 
-				// echo 'gile itz stopped impossible here ?';
-				$hotelRoomRate->used_allotment += 1;
-				//$hotelRoomRate->save();
 				$v = $this->validation($request);
 				// print_r($validation);
 				if($v->fails()){
@@ -261,7 +288,7 @@ class BookingController extends Controller {
 
 				//PANTEKSAN - KEDEPANNYA MUNGKIN MAU DI CABUT;
 				//ambil dari mst020_id milik room lalu ke mst004 START FROM HERE
-				// $defaultCurrencyId = Currency::where('curr_code', '=', 'IDR')->first()->id;
+				$defaultCurrencyId = $bookingData->hotel->mst004_id;
 
 				//save and do object mode on here...
 				//save order booking - TRX010
@@ -288,7 +315,7 @@ class BookingController extends Controller {
 				$orderSummaryDetail->trx010_id = $orderBooking->id;
 				$orderSummaryDetail->market = $bookingData->nationality;
 				$orderSummaryDetail->mst020_id = $bookingData->hotel->id;
-				$orderSummaryDetail->mst023_id = $bookingData->room->id;
+				$orderSummaryDetail->mst023_id = $bookingData->room->mst023_id;
 				$orderSummaryDetail->check_in_date = Helpers::dateFormatter($bookingData->checkIn);
 				$orderSummaryDetail->check_out_date = Helpers::dateFormatter($bookingData->checkOut);
 				$orderSummaryDetail->night = $bookingData->nights;
@@ -388,13 +415,16 @@ class BookingController extends Controller {
 				$orderSummaryDetail->tot_payment = 0;
 				//end beware 
 
+				// echo '<pre>';
+				// print_r($orderSummaryDetail->toArray());
+				// die();
 
 				//simpan detail order, looping dari pricing
-				foreach($bookingData->pricing as $pricing){
+				foreach($bookingData->room->pricing as $pricing){
 
 					//TRX013
 					$orderBookingDetail = new OrderBookingDetail();
-					$orderBookingDetail->trx011_id = $orderSummaryDetail->ID;
+					$orderBookingDetail->trx011_id = $orderSummaryDetail->id;
 					$orderBookingDetail->check_in_date = Helpers::dateFormatter($pricing->period_date);
 					$orderBookingDetail->cut_off = $pricing->cut_off;
 					$orderBookingDetail->daily_price = $pricing->daily_price;
@@ -420,7 +450,7 @@ class BookingController extends Controller {
 
 					//================SIMPAN SALDO DI BAWAH INI ===============================
 					$balanceOrderBookingDetail = new BalanceOrderBookingDetail();
-					$balanceOrderBookingDetail->blnc001_id = $balanceOrderBooking->id;
+					$balanceOrderBookingDetail->blnc002_id = $balanceOrderBookingSummaryDetail->id;
 					$balanceOrderBookingDetail->check_in_date = $orderBookingDetail->check_in_date;
 					$balanceOrderBookingDetail->cut_off = $orderBookingDetail->cut_off;
 					$balanceOrderBookingDetail->daily_price = $orderBookingDetail->daily_price;
@@ -433,7 +463,24 @@ class BookingController extends Controller {
 					$balanceOrderBookingDetail->tax_base_price = $orderBookingDetail->tax_base_price;
 					$balanceOrderBookingDetail->tax_value = $orderBookingDetail->tax_value;
 					$balanceOrderBookingDetail->cancel_fee_flag = $orderBookingDetail->cancel_fee_flag;
-					$balanceOrderBookingDetail->cancel_fee_value = $orderBookingDetail->cancel_fee_value;
+					$balanceOrderBookingDetail->cancel_fee_val = $orderBookingDetail->cancel_fee_value;
+					$balanceOrderBookingDetail->save();
+
+					//simpan data log disini
+					$logExists = LogHotelRoomAllotment::where('mst023_id', '=', $pricing->mst023_id)
+													->where('check_in_date', '=', $orderBookingDetail->check_in_date)
+													->first();
+					if($logExists){
+						$logExists->used_allotment += $bookingData->totalRooms;
+						$logExists->save();
+					} else {
+						$logHotelRoomAllotment = new LogHotelRoomAllotment();
+						$logHotelRoomAllotment->mst023_id = $pricing->mst023_id;
+						$logHotelRoomAllotment->check_in_date = $orderBookingDetail->check_in_date;
+						$logHotelRoomAllotment->allotment = $pricing->allotment;
+						$logHotelRoomAllotment->used_allotment = $bookingData->totalRooms;
+						$logHotelRoomAllotment->save();
+					}
 
 				}
 
@@ -474,11 +521,21 @@ class BookingController extends Controller {
 			print_r($e->getMessage());
 			echo '<br><br>';
 			print_r($e->getLine());
+			echo '<br>';
+			echo 'gagal simpan';
+			die();
 		}
 		DB::commit();
+
+		if(Session::has('bookingData')){
+			Session::forget('bookingData');
+		}
+
+		//return 
+		echo 'sudah berhasil di simpan';
 	}
 
-	public function postConfirm(Request $request){
+	public function postConfirm2(Request $request){
 		echo '<pre>';
 		print_r($request->all());
 
@@ -547,6 +604,84 @@ class BookingController extends Controller {
 	}
 
 	private function requeryBookingRoom(){
+		$query = " SELECT B.mst020_id, D.room_name, B.room_desc, G.num_adults, G.num_child, G.num_breakfast,
+                             B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
+                            COALESCE(E.allotment,B.allotment) AS allotment, B.allotment as rate_allotment, B.mst023_id, 
+                            B.comm_value, B.cut_off, B.bed_type,
+                             CASE WHEN UPPER(?) = 'INDONESIA'
+                                THEN B.nett_value
+                                ELSE B.nett_value_wna
+                             END as nett_value, 
+                             CASE WHEN UPPER(?) = 'INDONESIA'
+                                THEN B.daily_price
+                                ELSE B.daily_price_wna
+                             END as daily_price
+                     FROM MST022 B
+                     inner join MST023 D on D.id = B.mst023_id
+                     left join (select A.mst023_id,Min(A.allotment-A.used_allotment) as allotment
+                                from LOG020 A
+                                inner join MST023 F on F.id = A.mst023_id
+                                where F.mst020_id = ?
+                                AND A.check_in_date between STR_TO_DATE(?, '%d-%m-%Y') and STR_TO_DATE(?, '%d-%m-%Y')) E
+                                 on E.mst023_id = D.id
+                     inner join (select X.mst023_id,MIN(X.num_breakfast) as num_breakfast,MIN(X.num_adults) as num_adults,MIN(X.num_child) as num_child
+                                 from MST022 X 
+                                  WHERE 
+                                    (   X.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
+                                        OR
+                                        X.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
+                                      )
+
+                                     AND
+                                      (
+                                        X.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
+                                        OR
+                                        X.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
+                                      )
+
+                                     AND STR_TO_DATE(?, '%d-%m-%Y') >=
+                                      (
+                                        SELECT MIN(AD.from_date) FROM MST022 AD WHERE AD.mst023_id = X.mst023_id
+                                      )
+
+                                     AND STR_TO_DATE(?, '%d-%m-%Y') <=
+                                      (
+                                        SELECT MAX(AE.end_date) FROM MST022 AE WHERE AE.mst023_id = X.mst023_id
+                                      )
+                                     AND X.mst023_id = ?
+                                     group by X.mst023_id)G ON G.mst023_id = D.ID
+                     WHERE
+                      (
+                        B.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
+                        OR
+                        B.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
+                      )
+                 
+                     AND
+                      (
+                        B.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
+                        OR
+                        B.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
+                      )
+                 
+                     AND STR_TO_DATE(?, '%d-%m-%Y') >=
+                      (
+                        SELECT MIN(AB.from_date) FROM MST022 AB WHERE AB.mst023_id = B.mst023_id
+                      )
+                 
+                     AND STR_TO_DATE(?, '%d-%m-%Y') <=
+                      (
+                        SELECT MAX(AC.end_date) FROM MST022 AC WHERE AC.mst023_id = B.mst023_id
+                      )
+ 
+                      AND B.mst023_id = ?
+                      ORDER BY D.room_name, B.from_date;
+                  ";
+
+      return $query;
+	}
+
+	private function requeryBookingRoomOld(){
 		$query = " SELECT B.mst020_id, D.room_name, B.room_desc, D.num_adults, B.num_child, B.num_breakfast,
 				             B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
 				             B.allotment-B.used_allotment AS allotment, B.comm_value, B.cut_off, B.bed_type,

@@ -111,14 +111,30 @@ Route::get('/password', function()
 
 Route::controller('generator', 'Generator\GeneratorController');
 Route::controller('main', 'MainController');
-Route::controller('register-hotel', 'RegisterHotelController');
-Route::controller('hotel-grab', 'HotelGrabController');
+// Route::controller('register-hotel', 'RegisterHotelController');
+// Route::controller('hotel-grab', 'HotelGrabController');
 
 Route::get('/password', function()
 {
 	return Hash::make('enter123');
 });
 
+use App\Models\HotelRoomRate;
+Route::get('minimal', function(){
+
+	// $test = HotelRoomRate::where('id', '=', '006e3bd5-e163-4d76-a233-49834f675cb3')
+	// 		->select('(allotment - used_allotment) as allotment_only')
+	// 		->min('allotment_only');
+			// ->first();
+
+	$test = DB::select('select min(allotment - used_allotment) as allotment from mst022 where id = "006e3bd5-e163-4d76-a233-49834f675cb3" ');
+
+	echo '<pre>';
+	print_r(empty($test[0]->allotment));
+
+	
+
+});
 
 
 /*Pure Routes Start Here*/
