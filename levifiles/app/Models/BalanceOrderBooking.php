@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use App\Emodel;
-class OrderBooking extends Emodel {
-	protected $table = 'TRX010';
+class BalanceOrderBooking extends Emodel {
+	protected $table = 'BLNC001';
 
 }

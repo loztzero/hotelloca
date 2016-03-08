@@ -6,7 +6,7 @@ use Input, Auth, Session, Redirect, Hash, Form;
 use App;
 use App\User;
 use App\Libraries\Helpers;
-use DB;
+use DB, Config;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\ConfirmationPayment;
@@ -37,9 +37,10 @@ class HotelController extends Controller {
 	}
 
 	public function getInput(){
+		echo 'kambing';
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::lists('country_name', 'id');
-        $currencies = Currency::lists('curr_code', 'id');
+        $currencies = Currency::where('curr_code', Config::get('enums.rupiah'))->lists('curr_code', 'id');
 		return view('admin.hotel.admin-hotel-input')->with('countries', $countries)
 	        ->with('indonesia', $indonesia->id)
 	        ->with('currencies', $currencies);

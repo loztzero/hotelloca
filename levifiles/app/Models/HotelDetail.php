@@ -76,7 +76,8 @@ class HotelDetail extends Emodel {
 			'meal_price.numeric' => 'Meal price must be number',
 			'bed_price.numeric' => 'Bed price must be number',
 			'mst004_id.required' => 'Currency must be selected',
-			'group_flg.required' => 'Group flag checked or unchecked value must be Yes or No',
+			'group_flg.required' => 'Group flag is required',
+			'group_flg.in' => 'Group flag value must Yes or No',
 			'group_name.required_if' => 'Group name must be filled',
 		);
 

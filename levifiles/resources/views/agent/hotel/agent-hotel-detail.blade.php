@@ -196,25 +196,29 @@
                                             </div>
                                             <div>
                                                 <p>
-                                                    {{ $room->room_desc }}<br>
+                                                    {{ $room->room_desc }} | {{ $room->allotment }} | {{ $room->rate_id }}<br>
                                                 </p>
 
 
                                                 <div class="action-section">
                                                     <a href="#detailPrice-{{$room->room_name}}" data-toggle="modal" data-target="#{{ $room->room_name }}" class="button btn-small full-width text-center">Detail Price</a>
+                                                    @if($room->allotment >= $request->room)
                                                     <form method="post" action="{{ url('agent/booking') }}">
                                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                        <input type="hidden" name="rate_id" value="{{ $room->rate_id }}">
                                                         <input type="hidden" name="room" value="{{ $room->id }}">
-                                                        <input type="hidden" name="allotment" value="{{ $request->room }}">
+                                                        <input type="hidden" name="room_qty" value="{{ $request->room }}">
                                                         <input type="hidden" name="check_in" value="{{ $request->checkIn }}">
                                                         <input type="hidden" name="check_out" value="{{ $request->checkOut }}">
                                                         <input type="hidden" name="adults" value="{{ $request->adults }}">
                                                         <input type="hidden" name="child" value="{{ $request->child }}">
                                                         <button type="submit" class="button btn-small full-width text-center">BOOK NOW</button>
                                                     </form>
+                                                    @else
                                                     <form method="post" action="{{ url('agent/request') }}">
                                                         <button type="submit" class="button btn-small full-width text-center">REQUEST</button>
                                                     </form>
+                                                    @endif
                                                     <!-- <a href="hotel-booking.html" title="" class="button btn-small full-width text-center">BOOK NOW</a> -->
                                                 </div>
                                             </div>

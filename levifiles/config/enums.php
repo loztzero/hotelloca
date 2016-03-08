@@ -23,5 +23,7 @@ return [
         'Mrs' => "Mrs",
     ],
 
+    'rupiah' => 'IDR',
+
 
 ];

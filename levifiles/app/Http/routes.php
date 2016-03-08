@@ -10,10 +10,32 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+use App\Models\OrderBooking;
 Route::get('login-paksa', function(){
 	Auth::loginUsingId('86916908-a4fb-4041-8d2a-15c7f42bedzc');
 	return redirect('/');
+});
+
+Route::get('cutoff', function()
+{
+	// $date = "Mar 03, 2011";
+	// $date = date('Y-m-d');
+	// $date = DateTime::createFromFormat('Y-m-d', '2016-02-29');
+	$date = strtotime('2016-02-29');
+	$counter = 7;
+	$date = strtotime("-$counter day", $date);
+	echo date('M d, Y', $date);
+});
+
+Route::get('book', function()
+{
+	// $date = "Mar 03, 2011";
+	// $date = date('Y-m-d');
+	// $date = DateTime::createFromFormat('Y-m-d', '2016-02-29');
+	// $booking = BalanceOrderBooking::find('aaa');
+	$booking = new BalanceOrderBooking();
+	echo 'ndak jadi dech';
+
 });
 
 Route::get('/', function()

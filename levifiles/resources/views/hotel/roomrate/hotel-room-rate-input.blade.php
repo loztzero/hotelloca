@@ -132,12 +132,12 @@
 					</div>
 		        </div>
 
-		        <div class="col-xs-6">
+		        {{--<div class="col-xs-6">
 					<label>Breakfast Type *</label>
 					<div class="selector" id="breakfastSelector">
 						{!! Form::select('zz', array('Room' => 'Room Only', 'IncBreakFast' => 'Include Breakfast'), old('num_breakfast'), array('required', 'id' => 'zz', 'class' => 'full-width')) !!}
 					</div>
-		        </div>
+		        </div>--}}
 		    </div>
 
 		    
@@ -205,7 +205,7 @@
 		        </div>
 		    </div>
 
-		    <div class="form-group">
+		    <!-- <div class="form-group">
 		    	<div class="col-xs-12">
 			    	<input type="checkbox" class="pull-left" ng-model="field.cancel_fee_flag" ng-true-value="'Yes'" ng-false-value="'No'">
 			    	<input type="hidden" value="@{{ field.cancel_fee_flag }}" name="cancel_fee_flag" >
@@ -218,7 +218,7 @@
 		          	<label>Cancelation Fee Value</label>
 		          	<input type="text" class="input-text full-width" id="cancelFee" name="cancel_fee_val" value="{{ old('cancel_fee_val', 0) }}">
 		        </div>
-		    </div>
+		    </div> -->
 
 	    	<div class="form-group">
 		        <div class="col-xs-12">
@@ -263,7 +263,7 @@ tjq(".confirm-delete").on("click", function(e) {
 
 		$scope.field = {};
 		$scope.field.all_market_flg = "{{ old('all_market_flg', 'No') }}";
-		$scope.field.cancel_fee_flag = "{{ old('cancel_fee_flag', 'No') }}";
+		// $scope.field.cancel_fee_flag = "{{ old('cancel_fee_flag', 'No') }}";
 		$scope.field.mst023_id = "{{ old('mst023_id', '') }}";
 		$scope.field.comm_type = "{{ old('comm_type') }}";
 		$scope.field.rate_type = "{{ old('rate_type', 'Nett') }}";

@@ -27,39 +27,37 @@
                         <div class="person-information">
                             <h2>Guest Information</h2>
 
+                            @include('layouts.message-helper')
+
                             <div class="form-group row">
                                 <div class="col-sm-3 col-md-2">
                                     <label>Title</label>
                                     <div class="selector">
-                                        <select class="full-width" name="title">
-                                            <option value="Mr">Mr</option>
-                                            <option value="Mrs">Mrs</option>
-                                            <option value="Ms">Ms</option>
-                                        </select>
+                                        {!! Form::select('title', array('Mr' => 'Mr', 'Mrs' => 'Mrs', 'Ms' => 'Ms') , old('title'), array('required', 'class' => 'full-width')) !!}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
-                                    <label>first name</label>
-                                    <input type="text" class="input-text full-width" value="{{ $nationality }}" name="nationality" placeholder="" />
+                                    <label>Nationality</label>
+                                    <input type="text" class="input-text full-width" value="{{ $nationality }}" readonly />
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
-                                    <label>first name</label>
-                                    <input type="text" class="input-text full-width" value="" name="guest_first_name" placeholder="" />
+                                    <label>First Name</label>
+                                    <input type="text" class="input-text full-width" value="" name="first_name" placeholder="" value="{{ old('first_name') }}" />
                                 </div>
                                 <div class="col-sm-6 col-md-5">
-                                    <label>last name</label>
-                                    <input type="text" class="input-text full-width" value="" name="guest_last_name" placeholder="" />
+                                    <label>Last Name</label>
+                                    <input type="text" class="input-text full-width" value="" name="last_name" placeholder="" value="{{ old('last_name') }}" />
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
-                                    <label>Country code</label>
+                                    <label>Country Code</label>
                                     <div class="selector">
                                         <select class="full-width">
                                             <option value="62">Indonesia (+62)</option>
@@ -70,7 +68,7 @@
                                     <label>Phone number</label>
                                     <input type="text" class="input-text full-width" value="" placeholder="" />
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
@@ -89,7 +87,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="interconnetion_flag"> Interconnection Room
+                                                <input type="hidden" name="interconnetion_flag" value="No">
+                                                <input type="checkbox" name="interconnetion_flag" value="Yes"> Interconnection Room
                                             </label>
                                         </div>
                                     </div>
@@ -97,7 +96,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="high_floor_flag"> High Floor
+                                                <input type="hidden" name="high_floor_flag" value="No">
+                                                <input type="checkbox" name="high_floor_flag" value="Yes"> High Floor
                                             </label>
                                         </div>
                                     </div>
@@ -105,7 +105,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="non_smoking_flag"> Non Smoking
+                                                <input type="hidden" name="non_smoking_flag" value="No">
+                                                <input type="checkbox" name="non_smoking_flag" value="Yes"> Non Smoking
                                             </label>
                                         </div>
                                     </div>
@@ -113,7 +114,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="low_floor_flag"> Low Floor
+                                                <input type="hidden" name="low_floor_flag" value="No">
+                                                <input type="checkbox" name="low_floor_flag" value="Yes"> Low Floor
                                             </label>
                                         </div>
                                     </div>
@@ -122,7 +124,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="early_check_in_flag"> Early Check In
+                                                <input type="hidden" name="early_check_in_flag" value="No">
+                                                <input type="checkbox" name="early_check_in_flag" value="Yes"> Early Check In
                                             </label>
                                         </div>
                                     </div>
@@ -130,7 +133,8 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="twin_flag"> Twin / Double Bed
+                                                <input type="hidden" name="twin_flag" value="No">
+                                                <input type="checkbox" name="twin_flag" value="Yes"> Twin / Double Bed
                                             </label>
                                         </div>
                                     </div>
@@ -138,7 +142,17 @@
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox"> Late Check In
+                                                <input type="hidden" name="late_check_in_flag" value="No">
+                                                <input type="checkbox" name="late_check_in_flag" value="Yes"> Late Check In
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-5">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="hidden" name="honeymoon_flag" value="No">
+                                                <input type="checkbox" name="honeymoon_flag" value="Yes"> HoneyMooners
                                             </label>
                                         </div>
                                     </div>
@@ -151,26 +165,26 @@
                             <h2>Payment</h2>
                             <div class="form-group">
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="balance">Balance</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Balance">Balance</label>
                                 </div>
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="transfer">Transfer</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Transfer">Transfer</label>
                                 </div>
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="credit_card">Credit Card</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="CreditCard">Credit Card</label>
                                 </div>
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="pending_payment">Pending Payment</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="PendingPayment">Pending Payment</label>
                                 </div>
                             </div>
                             <div style="clear:both;"></div>
 
                             <!-- balance -->
-                            <div ng-show="payment == 'balance'">
+                            <div ng-show="payment == 'Balance'">
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-5">
-                                        <label>Deposit</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
+                                        <label>Payment</label>
+                                        <input type="text" class="input-text full-width" name="balance_payment" />
                                     </div>
 
                                     <div class="col-sm-6 col-md-5">
@@ -181,7 +195,7 @@
                             </div>
 
                             <!-- transfer -->
-                            <div ng-show="payment == 'transfer'">
+                            <div ng-show="payment == 'Transfer'">
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-5">
                                         <label>Account Name</label>
@@ -191,7 +205,7 @@
                             </div>
 
                             <!-- for credit card -->
-                            <div ng-show="payment == 'credit_card'">
+                            <div ng-show="payment == 'CreditCard'">
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-5">
                                         <label>Credit Card Type</label>
@@ -204,7 +218,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-5">
                                         <label>Card holder name</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
+                                        <input type="text" class="input-text full-width" value="" placeholder="" name="card_holder" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -214,7 +228,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-5">
                                         <label>Card identification number</label>
-                                        <input type="text" class="input-text full-width" value="" name="card_name" placeholder="" />
+                                        <input type="text" class="input-text full-width" value="" name="card_identification_number" placeholder="" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -256,6 +270,18 @@
                             </div>
                         </div>
                         <hr />
+
+                        <div class="form-group">
+                            <div class="form-group row">
+                                <div class="col-sm-6 col-md-12">
+                                    <b><u>WARNING</u></b><br>
+                                    <b>Cancellation</b> on date <b style="color:red">{{ $cutOffDateAgent }}</b> will be <b>charged 1 night room rate</b><br>
+                                    <b>Cancellation</b> from date <b style="color:red">{{ $cutOffDateHotel }}</b> will be <b>charged full payment</b><br>
+                                    <span>Cancellation before {{ $cutOffDateAgent }} is free of charge</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
@@ -350,7 +376,7 @@
 var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
-    $scope.payment = 'transfer';
+    $scope.payment = 'Transfer';
 
 });
 

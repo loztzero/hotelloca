@@ -85,6 +85,9 @@
                                     <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
                                         <a href="{{ url('agent/hotel') }}" title="Hotel">Hotel</a>
                                     </li>
+                                    <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
+                                        <a href="{{ url('agent/booking-history') }}" title="Booking">Booking</a>
+                                    </li>
                                     <li>
                                         <a href="{{ url('auth/logout') }}" title="Logout">Logout</a>
                                     </li>

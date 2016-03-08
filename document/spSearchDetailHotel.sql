@@ -44,7 +44,7 @@ BEGIN
 
 
        -- query sesuai kebutuhan
-     SELECT B.mst020_id, D.id, D.room_name, B.room_desc, D.num_adults, B.num_child, B.num_breakfast,
+     SELECT B.mst020_id, D.id, B.id AS rate_id, D.room_name, B.room_desc, D.num_adults, B.num_child, B.num_breakfast,
              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
              COALESCE(E.allotment,B.allotment) AS allotment, B.comm_value, B.cut_off, B.bed_type,
              CASE WHEN UPPER(pMarket) = 'INDONESIA'

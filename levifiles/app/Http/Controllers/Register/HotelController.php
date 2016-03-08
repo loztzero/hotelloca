@@ -6,7 +6,7 @@ use Input, Auth, Session, Redirect, Hash, Form;
 use App;
 use App\User;
 use App\Libraries\Helpers;
-use DB, StdClass;
+use DB, StdClass, Config;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\Currency;
@@ -18,7 +18,7 @@ class HotelController extends Controller {
 	{
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::lists('country_name', 'id');
-        $currencies = Currency::lists('curr_code', 'id');
+        $currencies = Currency::where('curr_code', Config::get('enums.rupiah'))->lists('curr_code', 'id');
 		return view('register.hotel.register-hotel')
 			->with('countries', $countries)
 	        ->with('indonesia', $indonesia->id)
