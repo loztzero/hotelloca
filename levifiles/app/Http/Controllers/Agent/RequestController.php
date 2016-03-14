@@ -33,7 +33,7 @@ use App\Models\BalanceOrderBookingSummaryDetail;
 use App\Models\LogHotelRoomAllotment;
 use App\Http\Controllers\Controller;
 use DateInterval, DatePeriod;
-class BookingController extends Controller {
+class RequestController extends Controller {
 
 	public function getIndex(){
 
@@ -58,7 +58,7 @@ class BookingController extends Controller {
 			$cutOffDateHotel = $bookingData->cutOffDateHotel;
 			$numBreakfast = $bookingData->numBreakfast;
 
-			return view('agent.booking.agent-booking')
+			return view('agent.request.agent-request')
 			->with('nationality', $market)
 			->with('hotel', $hotelDetail)
 			->with('checkIn', $checkIn)
@@ -201,7 +201,7 @@ class BookingController extends Controller {
 			$bookingData->numBreakfast = $numBreakfast;
 
 			Session::put('bookingData', $bookingData);
-			return view('agent.booking.agent-booking')
+			return view('agent.request.agent-request')
 			->with('nationality', $market)
 			->with('hotel', $hotelDetail)
 			->with('checkIn', $checkIn)
@@ -547,9 +547,9 @@ class BookingController extends Controller {
 		// if($request)
 	}
 
-	public function getSuccess(Request $request)
-	{
-		return view('agent.booking.agent-booking-success');
+	public function getSuccess(Request $request){
+		echo 'Booking Success, go back to your profile ?';
+		echo '<a href="'.url().'">Go Home</a>';
 	}
 
 	

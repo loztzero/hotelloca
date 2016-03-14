@@ -60,7 +60,8 @@ Route::get('/', function()
         Session::flash('error', Session::get('error'));
     }
     
-	return redirect('auth/login');
+	//return redirect('auth/login');
+	return redirect('main');
 });
 
 

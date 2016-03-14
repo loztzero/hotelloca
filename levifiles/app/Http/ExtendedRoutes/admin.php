@@ -11,6 +11,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin'], function() {
 	Route::controller('hotel', 'Admin\HotelController');
 	Route::controller('rate', 'Admin\RateController');
 	Route::controller('agent', 'Admin\AgentController');
+	Route::controller('agent-deposit', 'Admin\AgentDepositController');
+	Route::controller('agent-payment-statement', 'Admin\AgentPaymentStatementController');
+	Route::controller('report-booking', 'Admin\ReportBookingController');
+	Route::controller('agent-booking', 'Admin\AgentBookingController');
 });
 
 ?>

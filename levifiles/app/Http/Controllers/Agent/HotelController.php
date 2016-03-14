@@ -28,7 +28,7 @@ class HotelController extends Controller {
 	public function getIndex(){
 
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
-        $countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
+        $countries = Country::where('country_name', '=', 'Indonesia')->orderBy('country_name', 'asc')->lists('country_name', 'id');
         $countries2 = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
 		return view('agent.hotel.agent-hotel-browse')
 				->with('countries', $countries)
@@ -43,20 +43,29 @@ class HotelController extends Controller {
 	}
 
 	public function getSearch(Request $request){
+		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
+        $countries = Country::where('country_name', '=', 'Indonesia')->orderBy('country_name', 'asc')->lists('country_name', 'id');
+        $countries2 = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
 		$hotels = $this->querySearch($request);
 
 		return view('agent.hotel.agent-hotel-search')
 			->with('hotels', $hotels)
-			->with('request', $request);
+			->with('request', $request)
+			->with('countries', $countries)
+			->with('countries2', $countries2)
+			->with('indonesia', $indonesia);
 	}
 
 	//untuk query search hotel
 	private function querySearch(Request $request){
 		$city = $request->city;
 		$nationality = $request->nationality;
+		$adults = $request->adults;
+		$child = $request->child;
 		$country = $request->country;
 		$checkIn = $request->date_from;
 		$checkOut = $request->date_to;
+		$hotelName = $request->hotel_name;
 		
 		$checkIn = Helpers::dateFormatter($checkIn);
 		$checkOut = Helpers::dateFormatter($checkOut);
@@ -65,6 +74,7 @@ class HotelController extends Controller {
 					$q->where('hotel_name', 'like', '%');
 				 })->get();*/
 
+		
 		$query = "
 			select a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict,
 			case when ? = 'Indonesia' 
@@ -116,15 +126,27 @@ class HotelController extends Controller {
 				)
 			) as j on j.mst020_id = a.id
 
-			where a.mst002_id = ?
-			group by a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict
-		";
-
+			where a.mst002_id = ? ";
+		
 		$params = array($nationality, $checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $country);
-		if(!empty($cityId)){
-			$query .= 'and a.mst003_id = ? ';
+		if(!empty($city)){
+			$query .= ' and a.mst003_id = ? ';
 			array_push($params, $city);
 		}
+
+		if(!empty($adults)){
+			$query .= ' and h.num_adults > ? ';
+			array_push($params, $adults);
+		}
+
+		if(!empty($hotelName)){
+			$query .= 'and a.hotel_name like ?';
+			array_push($params, '%' . $hotelName . '%');	
+		}
+
+		$query .= " group by a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict
+		";
+
 
 		//And b.line_number = 1
 		// $query .= '

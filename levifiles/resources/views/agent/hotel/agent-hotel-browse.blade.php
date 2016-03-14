@@ -20,7 +20,7 @@
         <div class="search-tab-content">
             <div class="tab-pane fade active in" id="hotels-tab">
                 <form method="get" action="{{ url('agent/hotel/search') }}">
-                	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+                	<!-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> -->
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-3">
                             <h4 class="title">Where</h4>
@@ -117,7 +117,6 @@ var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
 	$scope.field = {};
-	$scope.field.passport = '{{ $indonesia->id }}';
 	$scope.field.country = '{{ $indonesia->id }}';
 	$scope.cities = [];
 	$scope.getCity = function(){

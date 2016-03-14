@@ -5,7 +5,7 @@ use App\Emodel;
 class OrderSummaryDetail extends Emodel {
 	protected $table = 'TRX011';
 
-	public function doParams($object, Request $request)
+public function doParams($object, Request $request)
 	{
 		$object->daily_price = $request->daily_price;
 		$object->num_breakfast = $request->num_breakfast;

@@ -37,13 +37,14 @@ class HotelController extends Controller {
 	}
 
 	public function getInput(){
-		echo 'kambing';
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::lists('country_name', 'id');
         $currencies = Currency::where('curr_code', Config::get('enums.rupiah'))->lists('curr_code', 'id');
+        $hotelTypes = Config::get('enums.hotelTypes');
 		return view('admin.hotel.admin-hotel-input')->with('countries', $countries)
 	        ->with('indonesia', $indonesia->id)
-	        ->with('currencies', $currencies);
+	        ->with('currencies', $currencies)
+	        ->with('hotelTypes', $hotelTypes);
 	}
 
 	public function postSave(Request $request){

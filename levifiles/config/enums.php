@@ -18,6 +18,13 @@ return [
         'MANDIRI' => "MANDIRI",
     ], 
 
+    'hotelTypes' => [
+        'Hotel' => "Hotel",
+        'Resort' => "Resort",
+        'Villa' => "Villa",
+        'Apartment' => "Apartment",
+    ],
+
     'title' => [
         'Mr' => "Mr",
         'Mrs' => "Mrs",

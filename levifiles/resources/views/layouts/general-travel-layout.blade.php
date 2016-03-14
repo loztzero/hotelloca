@@ -101,11 +101,27 @@
                                         <a href="{{ url('admin/profile') }}">Profile</a>
                                     </li>
                                     <li {{ Request::segment('2') == 'agent' ? 'class=active' : '' }}>
-                                        <a href="{{url('admin/agent')}}"><i class="fi-home"></i> Agent</a></li>
-                                    <li><a href="{{url('admin/hotel')}}"><i class="fi-home"></i> Hotel</a></li>
-                                    <li><a href="{{url('admin/booking')}}"><i class="fi-book"></i> Booking</a></li>
-                                    <li><a href="{{url('admin/rate')}}"><i class="fi-dollar"></i> Daily Rate</a></li>
-                                    <li><a href="{{url('auth/logout')}}"><i class="fi-power"></i> Logout</a></li>
+                                        <a href="{{url('admin/agent')}}"><i class="fi-home"></i> Agent</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'agent-payment-statement' ? 'class=active' : '' }} >
+                                        <a href="{{ url('admin/agent-payment-statement') }}" title="Agent Payment Statement">Agent Payment Statement</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'agent-deposit' ? 'class=active' : '' }} >
+                                        <a href="{{ url('admin/agent-deposit') }}" title="Agent Deposit">Agent Deposit</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'report' ? 'class=active' : '' }} >
+                                        <a href="{{ url('admin/report-booking') }}" title="Report Booking">Report Booking</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
+                                        <a href="{{url('admin/hotel')}}">Hotel</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'agent-booking' ? 'class=active' : '' }} >
+                                        <a href="{{url('admin/agent-booking')}}">Agent Booking</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'rate' ? 'class=active' : '' }} >
+                                        <a href="{{url('admin/rate')}}">Daily Rate</a>
+                                    </li>
+                                    <li><a href="{{url('auth/logout')}}">Logout</a></li>
                                 </ul>
                             </li>
                         @elseif(Auth::check() && Auth::user()->role == 'Hotel')

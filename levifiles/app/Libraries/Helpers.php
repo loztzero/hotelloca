@@ -29,6 +29,12 @@ class Helpers {
 		return $parseTgl[2].'-'.$parseTgl[1].'-'.$parseTgl[0];
 	}
 
+	//hanya menerima data dengan format date time dari mysql
+	public static function dateFormatterMysql($mysqlDate)
+	{
+		return date("d M Y", strtotime($mysqlDate));
+	}
+
 	public static function currencyFormat($rate){
 		return number_format($rate, 0 , '' , ',' );
 	}

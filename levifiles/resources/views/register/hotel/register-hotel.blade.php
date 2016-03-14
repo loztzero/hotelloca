@@ -24,6 +24,15 @@
 
 		    <div class="row form-group">
 		        <div class="col-xs-6">
+		            <label>Type *</label>
+		            <div class="selector">
+	             		{!! Form::select('types', $hotelTypes , old('types'), array('required', 'class' => 'full-width')) !!}
+		            </div>
+		        </div>
+		    </div>
+
+		    <div class="row form-group">
+		        <div class="col-xs-6">
 		            <label>Star *</label>
 		            <div class="selector">
 	             		{!! Form::select('star', array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5') , old('star'), array('required', 'class' => 'full-width')) !!}

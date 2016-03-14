@@ -58,22 +58,57 @@
                         </h4>
                         <div id="modify-search-panel" class="panel-collapse collapse">
                             <div class="panel-content">
-                                <form method="post">
+                                <form method="get" action="{{ url('agent/hotel/search') }}">
                                     <div class="form-group">
-                                        <label>destination</label>
-                                        <input type="text" class="input-text full-width" placeholder="" value="Paris" />
+                                        <label>nationality</label>
+                                        <div class="selector">
+                                            {!! Form::select('nationality', $countries2,Request::input('nationality', 'Indonesia'), array('required', 'class' => 'full-width')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>country</label>
+                                        <div class="selector">
+                                            {!! Form::select('country', $countries, null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'required', 'class' => 'full-width')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>city</label>
+                                        <div class="selector" id="citySelector">
+                                        <select ng-model="field.city" name="city" required id="city">
+                                            <option value="">Select A City</option>
+                                            <option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>hotel name</label>
+                                        <input type="text" class="input-text full-width" placeholder="" value="{{ Request::input('hotel_name') }}" />
                                     </div>
                                     <div class="form-group">
                                         <label>check in</label>
                                         <div class="datepicker-wrap">
-                                            <input type="text" name="date_from" class="input-text full-width" placeholder="mm/dd/yy" />
+                                            <input type="text" name="date_from" class="input-text full-width" placeholder="dd-mm-yy" value="{{ Request::input('date_from') }}" required />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>check out</label>
                                         <div class="datepicker-wrap">
-                                            <input type="text" name="date_to" class="input-text full-width" placeholder="mm/dd/yy" />
+                                            <input type="text" name="date_to" class="input-text full-width" placeholder="dd-mm-yy" value="{{ Request::input('date_to') }}" required />
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>room</label>
+                                        <div class="selector">
+                                            {!! Form::select('room', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), Request::input('room'), array('class' => 'full-width')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>adults</label>
+                                        {!! Form::select('adults', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), Request::input('adults'), array('class' => 'full-width')) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>childs</label>
+                                        {!! Form::select('child', array('0' => '00', '1' => '01', '2' => '02', '3' => '03', '4' => '04'), Request::input('child'), array('class' => 'full-width')) !!}
                                     </div>
                                     <br />
                                     <button class="btn-medium icon-check uppercase full-width">search again</button>
@@ -94,17 +129,6 @@
                         <li class="sort-by-popularity"><a class="sort-by-container" href="#"><span>popularity</span></a></li>
                     </ul>
                     
-                    <ul class="swap-tiles clearfix block-sm">
-                        <li class="swap-list active">
-                            <a href="hotel-list-view.html"><i class="soap-icon-list"></i></a>
-                        </li>
-                        <li class="swap-grid">
-                            <a href="hotel-grid-view.html"><i class="soap-icon-grid"></i></a>
-                        </li>
-                        <li class="swap-block">
-                            <a href="hotel-block-view.html"><i class="soap-icon-block"></i></a>
-                        </li>
-                    </ul>
                 </div>
                 <div class="hotel-list listing-style3 hotel">
                     @foreach($hotels as $hotel)
@@ -149,13 +173,6 @@
                         Data Hotels not found, please try again with another filter.
                     @endif
                 </div>
-                <a href="#" class="uppercase full-width button btn-large">load more listing</a>
-                <form  method="post" action="{{ url('agent/booking') }}">
-                    <div class="form-group">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button type="submit" class="btn btn-primary">TRIAL BOOKING DATA</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -168,29 +185,19 @@
 var app = angular.module("ui.hotelloca", ['ngSanitize']);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
-	$scope.cities = {};
-	$scope.loading = false;
-	// $scope.cities.test = 'zz';
-	// console.log($scope.cities);
-	$scope.getCity = function(){
-		$scope.loading = true;
-		$http.get("{{ url('/hotel/cities')}}/" + $scope.field.country).success(function(response) {
+    $scope.field = {};
+    $scope.field.country = '{{ Request::input("country") }}';
+    $scope.cities = [];
+    $scope.getCity = function(){
+        $http.post('{{ url("agent/hotel/city-from-country") }}', $scope.field).success(function(response){
+            $scope.cities = response;
+            $scope.field.city = '';
+            tjq('#citySelector span').html('Select A City');
+            // console.log(response);
+        })
+    }
 
-			// try {
-		 //        JSON.parse(response);
-		 //        var value = response.replace(/['"]+/g, '');
-		 //        $scope.cities = {value};
-		 //    } catch (e) {
-		 //    	console.log(e);
-		        $scope.cities = response;
-		 //    }
-
-			 $scope.cities = response;
-			 $scope.field.city = '';
-			 $scope.loading = false;
-
-		})
-	};
+    $scope.getCity();
 
 });
 </script>
