@@ -34,35 +34,34 @@
                     <hr />
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
-                        <dt>Booking number:</dt><dd>5784-BD245</dd>
-                        <dt>First name:</dt><dd>Jessica</dd>
-                        <dt>Last name:</dt><dd>Brown</dd>
-                        <dt>E-mail address:</dt><dd>Info@Jessica.com</dd>
-                        <dt>Street Address and number:</dt><dd>353 Third floor Avenue</dd>
-                        <dt>Town / City:</dt><dd>Paris,France</dd>
-                        <dt>ZIP code:</dt><dd>75800-875</dd>
-                        <dt>Country:</dt><dd>United States of america</dd>
+                        <dt>Booking number:</dt><dd>{{ $data->orderNumber }}</dd>
+                        <dt>Title:</dt><dd>{{ $data->title }}</dd>
+                        <dt>First name:</dt><dd>{{ $data->firstName }}</dd>
+                        <dt>Last name:</dt><dd>{{ $data->lastName }}</dd>
+                        <dt>City:</dt><dd>{{ $data->city }}</dd>
+                        <dt>Country:</dt><dd>{{ $data->country }}</dd>
                     </dl>
                     <hr />
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />
-                    <p class="red-color">Payment is made by Credit Card Via Paypal.</p>
+                    <p class="red-color">Payment is made by {{ $data->paymentMethod }} Paypal.</p>
                     <hr />
                     <h2>View Booking Details</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />
-                    <a href="#" class="red-color underline view-link">https://www.travelo.com/booking-details/?=f4acb19f-9542-4a5c-b8ee</a>
+                    <?php //<a href="#" class="red-color underline view-link">https://www.travelo.com/booking-details/?=f4acb19f-9542-4a5c-b8ee</a>
+                    ?>
                 </div>
             </div>
             <div class="sidebar col-sm-4 col-md-3">
                 <div class="travelo-box contact-box">
-                    <h4>Need Travelo Help?</h4>
+                    <h4>Need Hotelloca Help?</h4>
                     <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>
                     <address class="contact-details">
                         <span class="contact-phone"><i class="soap-icon-phone"></i> 1-800-123-HELLO</span>
                         <br>
-                        <a class="contact-email" href="#">help@travelo.com</a>
+                        <a class="contact-email" href="#">help@hotelloca.com</a>
                     </address>
                 </div>
                 <div class="travelo-box book-with-us-box">

@@ -257,6 +257,9 @@ class BookingController extends Controller {
 		// die();
 
 		DB::beginTransaction();
+		$successInfo = new StdClass();
+		
+
 		try {
 
 			$logAllotment = new LogHotelRoomAllotment();
@@ -299,7 +302,8 @@ class BookingController extends Controller {
 				$orderBooking->mst001_id = Auth::user()->id;
 				$orderBooking->mst004_id = $defaultCurrencyId;
 				$orderBooking->save();
-				
+
+				$successInfo->orderNumber = $orderBooking->order_no;
 
 				//save balance order booking - BLNC001
 				$balanceOrderBooking = new BalanceOrderBooking();
@@ -327,13 +331,16 @@ class BookingController extends Controller {
 				$orderSummaryDetail->num_child = $bookingData->child;
 				$orderSummaryDetail->num_breakfast = $bookingData->numBreakfast;
 				$orderSummaryDetail->non_smoking_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->interconnetion_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->early_check_in_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->late_check_in_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->high_floor_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->low_floor_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->twin_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->honeymoon_flg = $request->non_smoking_flag;
+				$orderSummaryDetail->interconnetion_flag = $request->interconnetion_flag;
+				$orderSummaryDetail->early_check_in_flag = $request->early_check_in_flag;
+				$orderSummaryDetail->late_check_in_flag = $request->late_check_in_flag;
+				$orderSummaryDetail->high_floor_flag = $request->high_floor_flag;
+				$orderSummaryDetail->low_floor_flag = $request->low_floor_flag;
+				$orderSummaryDetail->twin_flag = $request->twin_flag;
+				$orderSummaryDetail->honeymoon_flg = $request->honeymoon_flg;
+				$orderSummaryDetail->title = $request->title;
+				$orderSummaryDetail->first_name = $request->first_name;
+				$orderSummaryDetail->last_name = $request->last_name;
 				$orderSummaryDetail->save();
 
 				//save balance order booking summary detail 
@@ -360,7 +367,19 @@ class BookingController extends Controller {
 				$balanceOrderBookingSummaryDetail->low_floor_flag = $orderSummaryDetail->low_floor_flag;
 				$balanceOrderBookingSummaryDetail->twin_flag = $orderSummaryDetail->twin_flag;
 				$balanceOrderBookingSummaryDetail->honeymoon_flg = $orderSummaryDetail->honeymoon_flg;
+				$balanceOrderBookingSummaryDetail->title = $request->title;
+				$balanceOrderBookingSummaryDetail->first_name = $request->first_name;
+				$balanceOrderBookingSummaryDetail->last_name = $request->last_name;
 				$balanceOrderBookingSummaryDetail->save();
+
+				//params for success page
+				$successInfo->title = $balanceOrderBookingSummaryDetail->title;
+				$successInfo->firstName = $balanceOrderBookingSummaryDetail->first_name;
+				$successInfo->lastName = $balanceOrderBookingSummaryDetail->last_name;
+
+				$hotelDetail = HotelDetail::find($balanceOrderBookingSummaryDetail->mst020_id);
+				$successInfo->city = $hotelDetail->city->city_name;
+				$successInfo->country = $hotelDetail->country->country_name;
 
 				// $orderSummaryDetail->note = ;
 				// $orderSummaryDetail->tot_commision_price = ;
@@ -383,6 +402,9 @@ class BookingController extends Controller {
 					$orderBookingDetailPayment->card_name = $request->card_name;
 				}
 				$orderBookingDetailPayment->save();
+
+				//selipin data success info nya lagi dech disini
+				$successInfo->paymentMethod = $orderBookingDetailPayment->payment_method;
 
 				//simpan BalanceOrderBookingPayment - BLNC003
 				$balanceOrderBookingPayment = new BalanceOrderBookingPayment();
@@ -532,7 +554,9 @@ class BookingController extends Controller {
 		}
 
 		//return 
-		echo 'sudah berhasil di simpan';
+		// echo 'sudah berhasil di simpan';
+		return redirect('agent/booking/success')
+				->with('data', $successInfo);
 	}
 
 	public function postConfirm2(Request $request){

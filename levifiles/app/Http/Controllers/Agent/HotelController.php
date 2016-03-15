@@ -147,6 +147,23 @@ class HotelController extends Controller {
 		$query .= " group by a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict
 		";
 
+		if($request->has('order_by')){
+
+			if($request->order_by == 'name'){
+				$query .= " order by a.hotel_name desc ";
+			} elseif($request->order_by == 'price') {
+				$query .= " order by nett_value desc ";
+			} elseif($request->order_by == 'star') {
+				$query .= " order by a.star desc ";
+			} else {
+				$query .= " order by a.hotel_name desc ";
+			}
+
+		} else {
+			$query .= " order by a.hotel_name desc ";
+		}
+
+
 
 		//And b.line_number = 1
 		// $query .= '

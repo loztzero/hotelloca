@@ -120,13 +120,30 @@
             </div>
             <div class="col-sm-8 col-md-9">
                 <div class="sort-by-section clearfix">
-                    <h4 class="sort-by-title block-sm">Sort results by:</h4>
+                    <h4 class="sort-by-title block-sm">Sort results by:</h4><br>
+                    <h4 class="sort-by-title block-sm">
+                        <?php 
+                            $url = $request->url() . '?adults=' . $request->adults . '&child=' . $request->child . '/city=' . $request->city . '&country=' . $request->country . '&date_from=' . $request->date_from . '&date_to=' . $request->date_to . '&hotel_name=' . $request->hotel_name . '&nationality=' . $request->nationality . '&room=' . $request->room;
+                        ?>
+                        {{ $url . '&order_by=' }}
+                    </h4>
                     <ul class="sort-bar clearfix block-sm">
-                        <li class="sort-by-name"><a class="sort-by-container" href="#"><span>name</span></a></li>
-                        <li class="sort-by-price"><a class="sort-by-container" href="#"><span>price</span></a></li>
+                        <li class="sort-by-name {{ $request->input('order_by', 'name') == 'name' ? 'active' : '' }}">
+                            <a class="sort-by-container" href="{{ $url . '&order_by=name' }}">
+                                <span>name</span>
+                            </a>
+                        </li>
+                        <li class="sort-by-price {{ $request->input('order_by') == 'price' ? 'active' : '' }}">
+                            <a class="sort-by-container" href="{{ $url . '&order_by=price' }}">
+                                <span>price</span>
+                            </a>
+                        </li>
                         <li class="clearer visible-sms"></li>
-                        <li class="sort-by-rating active"><a class="sort-by-container" href="#"><span>rating</span></a></li>
-                        <li class="sort-by-popularity"><a class="sort-by-container" href="#"><span>popularity</span></a></li>
+                        <li class="sort-by-star {{ $request->input('order_by') == 'star' ? 'active' : '' }}">
+                            <a class="sort-by-container" href="{{ $url . '&order_by=star' }}">
+                                <span>star</span>
+                            </a>
+                        </li>
                     </ul>
                     
                 </div>
