@@ -5,7 +5,7 @@
 <PROJECTSETTINGS>
 <COMMONSETTINGS>
 <PROJECTFILENAME>I:\Document\BoardingPassku\table.dez</PROJECTFILENAME>
-<MODIFIED>2016-03-08</MODIFIED>
+<MODIFIED>2016-03-16</MODIFIED>
 <CREATED>2015-02-09</CREATED>
 <CREATED2></CREATED2>
 <PROJECTNAME></PROJECTNAME>
@@ -8686,7 +8686,7 @@ pending/done/cancel</DESC>
 </NNCON>
 </ATTR>
 <ATTR>
-<NAME>honeymoon_flg</NAME>
+<NAME>honeymoon_flag</NAME>
 <ID>67</ID>
 <POSNR>0</POSNR>
 <SCHEMA></SCHEMA>
@@ -9804,7 +9804,7 @@ pending/done/cancel</DESC>
 </NNCON>
 </ATTR>
 <ATTR>
-<NAME>honeymoon_flg</NAME>
+<NAME>honeymoon_flag</NAME>
 <ID>66</ID>
 <POSNR>0</POSNR>
 <SCHEMA></SCHEMA>
