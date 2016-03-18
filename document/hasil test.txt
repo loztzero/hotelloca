@@ -1,3 +1,24 @@
-user admin:
-1 http://tester.hotelloca.com/admin/hotel
-  combo country sama city ga sesuai dicek lagicity ga berubah
+-- master hotel
+1. validasi kalau mst001_id pernah didaftar diagent lain ,error
+
+--master hotel
+1. validasi kalau MST001_id pernah didaftar diagent lain maka error
+
+--order hotel
+1. newletter flag hrsnya liat dari mst020 kalau sudah pernah di centang , berarti kecentang
+   kalau blm pernah unchcek statusnya, update jg ke mst020 klo berubah
+2. cancel policy 
+    Cancellation on date 26-03-2016 will be charged 1 night room rate >> hrsnya bukan 1 nigth room rate tp dari cancel_fee_value terbesar di trx012
+    Cancellation from date 27-03-2016 will be charged full payment
+    Cancellation before 26-03-2016 is free of charge
+3. kalau pilihannya deposit, n depositnya ga ada ksh nilai 0 jgn kosong 
+    remaining depositnya dan payment hrsnya disabled, payment = total payment,
+4. kalau pilihannya transfer, account name itu buat apa ya?? ga perlu dibuang saja.
+5.TRX012
+   -- tot_payment = kenapa isinya 0, harusnya kan tot_tax_base_price + tax_value
+
+6.TRX011
+   -- tot_payment  =  harusnya total dari tot_payment di trx012, tetapi malah commision_value ditotal
+
+7. TRX010
+   -- tot_payment = tot_paymentnya harusnya total dari tot_payment di trx012 , ini = commision_value
