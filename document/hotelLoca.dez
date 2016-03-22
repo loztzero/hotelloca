@@ -5,7 +5,7 @@
 <PROJECTSETTINGS>
 <COMMONSETTINGS>
 <PROJECTFILENAME>I:\Document\BoardingPassku\table.dez</PROJECTFILENAME>
-<MODIFIED>2016-03-18</MODIFIED>
+<MODIFIED>2016-03-22</MODIFIED>
 <CREATED>2015-02-09</CREATED>
 <CREATED2></CREATED2>
 <PROJECTNAME></PROJECTNAME>
@@ -3153,7 +3153,7 @@ nilai perhari</DESC>
 </NNCON>
 </ATTR>
 <ATTR>
-<NAME>cancel_fee_value</NAME>
+<NAME>cancel_fee_val</NAME>
 <ID>52</ID>
 <POSNR>0</POSNR>
 <SCHEMA></SCHEMA>
@@ -8932,7 +8932,7 @@ pending/done/cancel</DESC>
 </NNCON>
 </ATTR>
 <ATTR>
-<NAME>cancel_fee_value</NAME>
+<NAME>cancel_fee_val</NAME>
 <ID>69</ID>
 <POSNR>0</POSNR>
 <SCHEMA></SCHEMA>
@@ -14037,7 +14037,7 @@ Order Detail - summary</TEXT>
 <ENTC>
 <ID>102</ID>
 <DIAGRAMID>1</DIAGRAMID>
-<W>114</W>
+<W>110</W>
 <H>303</H>
 <L>223</L>
 <T>53</T>
@@ -14466,7 +14466,7 @@ Order Detail - summary</TEXT>
 <ENTC>
 <ID>102</ID>
 <DIAGRAMID>3</DIAGRAMID>
-<W>114</W>
+<W>110</W>
 <H>303</H>
 <L>635</L>
 <T>50</T>
@@ -15973,7 +15973,7 @@ Order Detail - summary</TEXT>
 <Y>205</Y>
 </POINT>
 <POINT>
-<X>337</X>
+<X>333</X>
 <Y>205</Y>
 </POINT>
 </POINTS>
