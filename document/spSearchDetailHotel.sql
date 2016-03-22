@@ -57,7 +57,8 @@ BEGIN
      left join (select A.mst023_id,Min(A.allotment-A.used_allotment) as allotment
                 from LOG020 A
                 inner join MST023 F on F.id = A.mst023_id
-                where F.mst020_id = pHotelId) E
+                where F.mst020_id = pHotelId
+		and A.check_in_date between STR_TO_DATE(pFromDate, '%d-%m-%Y') and STR_TO_DATE(pEndDate, '%d-%m-%Y')) E
                  on E.mst023_id = D.id
     inner join (select X.mst023_id,MIN(X.num_breakfast) as num_breakfast,MIN(X.num_adults) as num_adults,MIN(X.num_child) as num_child
                  from MST022 X
