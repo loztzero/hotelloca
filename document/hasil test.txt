@@ -1,13 +1,9 @@
 -- master hotel
 1. validasi kalau mst001_id pernah didaftar diagent lain ,error
-
---master hotel
-1. validasi kalau MST001_id pernah didaftar diagent lain maka error
+2. group flag is rqueired , inputannya aja ga ada..
 
 --order hotel
-1. newletter flag hrsnya liat dari mst020 kalau sudah pernah di centang , berarti kecentang
-   kalau blm pernah unchcek statusnya, update jg ke mst020 klo berubah
 3. kalau pilihannya deposit, n depositnya ga ada ksh nilai 0 jgn kosong 
     remaining depositnya dan payment hrsnya disabled, payment = total payment,
-4. kalau pilihannya transfer, account name itu buat apa ya?? ga perlu dibuang saja.
-
+4. status_flg di BLNC001 minta diganti jd status_flag
+5. di BLNC001 status _paymentnya kosong harusnya keisi pending klo method paymentnya transfer
