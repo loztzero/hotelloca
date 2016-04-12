@@ -50,7 +50,7 @@ BEGIN
              CASE WHEN UPPER(pMarket) = 'INDONESIA'
              THEN B.nett_value
                 ELSE B.nett_value_wna
-             END as nett_value
+             END as nett_value,B.surcharge_value as surcharge
      FROM TEMP003 C
      inner join MST022 B on B.id = C.mst022_id
      inner join MST023 D on D.id = C.mst023_id
@@ -117,4 +117,4 @@ BEGIN
       ORDER BY D.room_name, B.from_date;
  
        DELETE FROM TEMP003 WHERE session_id = pSessionId;
-END;
+END
