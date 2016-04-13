@@ -10,3 +10,5 @@
 .chaser .logo { margin-top: 11px; } // give proper value according to the height of logo
 .chaser .logo a { background-size: auto 40px; }
 .chaser .logo a img { height: 40px; }
+
+.td-right { text-align:right; }

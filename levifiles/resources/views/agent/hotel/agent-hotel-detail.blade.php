@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="container" ng-controller="MainCtrl">
-	
+
 	<div class="row">
 		<div class="row">
             <div id="main" class="col-md-9">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="hotel-features" class="tab-container">
                     <ul class="tabs">
                         <li class="active"><a href="#hotel-description" data-toggle="tab">Description</a></li>
@@ -62,7 +62,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-sm-7 col-lg-8 table-cell">
-                                    
+
                                 </div>
                             </div>
                             <div class="long-description">
@@ -73,76 +73,68 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="hotel-availability">
-                            <form>
-                            <div class="update-search clearfix">
-                                <div class="col-md-5">
-                                    <h4 class="title">When</h4>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <label>CHECK IN</label>
-                                            <div class="datepicker-wrap">
-                                                    <input type="text" name="date_from" value="{{ $request->checkIn }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
+                            <form method="get" action="{{ url('agent/hotel/hotel-detail') }}">
+                                <div class="update-search clearfix">
+                                    <div class="col-md-5">
+                                        <h4 class="title">When</h4>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <label>CHECK IN</label>
+                                                <div class="datepicker-wrap">
+                                                        <input type="text" name="checkIn" value="{{ $request->checkIn }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <label>CHECK OUT</label>
+                                                <div class="datepicker-wrap">
+                                                        <input type="text" name="checkOut" value="{{ $request->checkOut }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-6">
-                                            <label>CHECK OUT</label>
-                                            <div class="datepicker-wrap">
-                                                    <input type="text" name="date_to" value="{{ $request->checkOut }}" placeholder="dd-mm-yyyy" class="input-text full-width" />
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h4 class="title">Who</h4>
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <label>ROOMS</label>
+                                                <div class="selector">
+                                                    {!! Form::select('room', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), $request->input('room', 1), array('class' => 'full-width')) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <label>ADULTS</label>
+                                                <div class="selector">
+                                                    {!! Form::select('adults', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), $request->input('adults', 1), array('class' => 'full-width')) !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <label>KIDS</label>
+                                                <div class="selector">
+                                                    {!! Form::select('child', array('0' => '00', '1' => '01', '2' => '02', '3' => '03', '4' => '04'), $request->input('child', 0), array('class' => 'full-width')) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <h4 class="visible-md visible-lg">&nbsp;</h4>
+                                        <label class="visible-md visible-lg">&nbsp;</label>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <input type="hidden" value="{{ $request->hotel }}" name="hotel">
+                                                <button data-animation-duration="1" data-animation-type="bounce" class="full-width icon-check animated" type="submit"
+                                                >SEARCH NOW</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="col-md-4">
-                                    <h4 class="title">Who</h4>
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            <label>ROOMS</label>
-                                            <div class="selector">
-                                                {!! Form::select('room', array('1' => '01', '2' => '02', '3' => '03', '4' => '04'), $request->input('room', 1), array('class' => 'full-width')) !!}
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <label>ADULTS</label>
-                                            <div class="selector">
-                                                <select class="full-width">
-                                                    <option value="1">01</option>
-                                                    <option value="2">02</option>
-                                                    <option value="3">03</option>
-                                                    <option value="4">04</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <label>KIDS</label>
-                                            <div class="selector">
-                                                <select class="full-width">
-                                                    <option value="1">01</option>
-                                                    <option value="2">02</option>
-                                                    <option value="3">03</option>
-                                                    <option value="4">04</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-3">
-                                    <h4 class="visible-md visible-lg">&nbsp;</h4>
-                                    <label class="visible-md visible-lg">&nbsp;</label>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <button data-animation-duration="1" data-animation-type="bounce" class="full-width icon-check animated" type="submit">SEARCH NOW</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             </form>
                             <h2>Available Rooms</h2>
                             <div class="room-list listing-style3 hotel">
 
                                 @foreach($newRooms as $room)
-                                    
+
                                     <div class="modal fade" tabindex="-1" id="{{ $room->room_name }}" role="dialog" aria-labelledby="modal">
                                         <div class="modal-dialog modal-sm">
                                             <div class="modal-content">
@@ -216,6 +208,14 @@
                                                     </form>
                                                     @else
                                                     <form method="post" action="{{ url('agent/request') }}">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                        <input type="hidden" name="rate_id" value="{{ $room->rate_id }}">
+                                                        <input type="hidden" name="room" value="{{ $room->id }}">
+                                                        <input type="hidden" name="room_qty" value="{{ $request->room }}">
+                                                        <input type="hidden" name="check_in" value="{{ $request->checkIn }}">
+                                                        <input type="hidden" name="check_out" value="{{ $request->checkOut }}">
+                                                        <input type="hidden" name="adults" value="{{ $request->adults }}">
+                                                        <input type="hidden" name="child" value="{{ $request->child }}">
                                                         <button type="submit" class="button btn-small full-width text-center">REQUEST</button>
                                                     </form>
                                                     @endif
@@ -227,11 +227,11 @@
                                     </article>
                                 @endforeach
                             </div>
-                            
+
                         </div>
                         <div class="tab-pane fade" id="hotel-amenities">
                             <h2>Amenities Style 01</h2>
-                            
+
                             <p>Maecenas vitae turpis condimentum metus tincidunt semper bibendum ut orci. Donec eget accumsan est. Duis laoreet sagittis elit et vehicula. Cras viverra posuere condimentum. Donec urna arcu, venenatis quis augue sit amet, mattis gravida nunc. Integer faucibus, tortor a tristique adipiscing, arcu metus luctus libero, nec vulputate risus elit id nibh.</p>
                             <ul class="amenities clearfix style1">
                                 @foreach($hotel->facilities as $facility)
@@ -261,7 +261,7 @@
                                     </h4>
                                     <div class="panel-collapse collapse" id="question1">
                                         <div class="panel-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                                     </h4>
                                     <div class="panel-collapse collapse" id="question4">
                                         <div class="panel-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -301,7 +301,7 @@
                                     </h4>
                                     <div class="panel-collapse collapse" id="question5">
                                         <div class="panel-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@
                                     </h4>
                                     <div class="panel-collapse collapse" id="question6">
                                         <div class="panel-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -321,15 +321,15 @@
                                     </h4>
                                     <div class="panel-collapse collapse" id="question7">
                                         <div class="panel-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
-                
+
                 </div>
             </div>
             <div class="sidebar col-md-3">
@@ -383,7 +383,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
             </div>
         </div>
 	</div>

@@ -16,6 +16,16 @@ Route::get('login-paksa', function(){
 	return redirect('/');
 });
 
+Route::get('react', function(){
+	//menambahkan ini tujuannya untuk mengijinkan web dari url yang berbeda untuk menagkases situs ini
+	header("Access-Control-Allow-Origin: http://localhost:8090");
+	$panah[0] = array('nama' => 'test');
+	$panah[1] = array('nama' => 'yuhuu');
+	// throw new Exception("Error Processing Request", 1);
+
+	return json_encode($panah);
+});
+
 Route::get('cutoff', function()
 {
 	// $date = "Mar 03, 2011";
@@ -44,28 +54,26 @@ Route::get('/', function()
 
 	if(Auth::check()){
 		if(Auth::user()->role == 'Agent'){
-			return redirect('agent/profile');
+			// return redirect('agent/profile');
+			return redirect('main');
 		} else if(Auth::user()->role == 'Admin'){
-			return redirect('admin/hotel');
+			// return redirect('admin/hotel');
+			return redirect('main');
 		} else if(Auth::user()->role == 'Hotel'){
-			return redirect('hotel/profile');
+			// return redirect('hotel/profile');
+			return redirect('main');
 		}
 	}
 
 	//if from activated controller pass the error, the pass again from here
 	//go AuthenticatesUsers->getLogout
-    if(Session::has('error')){
-        // print_r(Session::get('error'));
-        // die();
-        Session::flash('error', Session::get('error'));
-    }
-    
+
 	//return redirect('auth/login');
 	return redirect('main');
 });
 
 
-//khusus untuk register saja.. 
+//khusus untuk register saja..
 Route::group(['prefix' => 'register'], function() {
 	Route::get('/', function()
 	{
@@ -83,9 +91,9 @@ $router->group(['middleware' => 'auth'], function() {
 
 	require app_path('Http/ExtendedRoutes/admin.php');
 	require app_path('Http/ExtendedRoutes/agent.php');
-	require app_path('Http/ExtendedRoutes/hotel.php');	
+	require app_path('Http/ExtendedRoutes/hotel.php');
 });
-	
+
 
 //OTHER SCRIPT HERE THE MAIN SCRIPT REVISION IS UPPER
 
@@ -133,7 +141,7 @@ Route::get('minimal', function(){
 	echo '<pre>';
 	print_r(empty($test[0]->allotment));
 
-	
+
 
 });
 
@@ -178,7 +186,7 @@ Route::get('/bebek', function()
 Route::get('duck', function()
 {
 	echo Uuid::generate();
-	
+
 	$pdf = App::make('dompdf');
 	$pdf->loadHTML('<h1>Test</h1>');
 	return $pdf->stream();
@@ -194,5 +202,5 @@ Route::get('excel', function()
 
 	});
 
-})->export('xls'); 
+})->export('xls');
 });

@@ -9,6 +9,7 @@ Route::group(['prefix' => 'hotel', 'middleware' => 'role:Hotel'], function() {
 	Route::controller('room-rate', 'Hotel\RoomRateController');
 	Route::controller('facility', 'Hotel\FacilityController');
 	Route::controller('room-facility', 'Hotel\RoomFacilityController');
+	Route::controller('report-booking', 'Hotel\ReportBookingController');
 });
 
 ?>

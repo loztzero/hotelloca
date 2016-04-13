@@ -16,7 +16,7 @@
                 <li class="active"><a href="#hotels-tab">HOTELS</a></li>
             </ul>
         </div>
-        
+
         <div class="search-tab-content">
             <div class="tab-pane fade active in" id="hotels-tab">
                 <form method="get" action="{{ url('agent/hotel/search') }}">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-sm-6 col-md-4">
                             <h4 class="title">When</h4>
                             <div class="row">
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-sm-6 col-md-3">
                             <h4 class="title">Who</h4>
                             <div class="row">
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-sm-6 col-md-2 fixheight">
                             <label class="hidden-xs">&nbsp;</label>
                             <button type="submit" class="full-width icon-check animated" data-animation-type="bounce" data-animation-duration="1">SEARCH NOW</button>

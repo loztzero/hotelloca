@@ -1,6 +1,6 @@
 @extends('layouts.foundation-login')
 @section('content')
-	
+
 <div class="row" ng-controller="MainCtrl">
 	<div class="large-12 columns">
 		<ul class="breadcrumbs">
@@ -117,7 +117,7 @@
 			        </div>
 			    </div>
 			</fieldset>
-	    	
+
 			<b>Special Request</b><br><br>
 			<div class="row">
 				<div class="large-3 medium-6 columns large-offset-1">
@@ -133,7 +133,7 @@
   					<input id="checkbox2" type="checkbox"><label for="checkbox2">Double Bed</label>
 				</div>
 			</div>
-			
+
 			<div class="row">
 				<div class="large-10 columns">
 			      <label><b>Note</b>

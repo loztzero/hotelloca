@@ -74,10 +74,15 @@ class BookingController extends Controller {
 			->with('rateId', $rateId)
 			->with('cutOffDateAgent', $cutOffDateAgent)
 			->with('cutOffDateHotel', $cutOffDateHotel)
-			->with('numBreakfast', $numBreakfast);
+			->with('numBreakfast', $numBreakfast)
+			->with('newsletterFlag', $bookingData->newsletterFlag)
+			->with('cutOffAgentCharge', $bookingData->cutOffAgentCharge)
+			->with('globalCancelFeeFlag', $bookingData->globalCancelFeeFlag)
+			->with('remainingDeposit', $bookingData->remainingDeposit)
+			->with('enablePendingPayment', $bookingData->enablePendingPayment);
 
 		} else {
-			
+
 			$data = Session::get('data');
 			$room = HotelRoom::find($data['room']);
 			$hotelDetail = HotelDetail::find($room->mst020_id);
@@ -95,18 +100,18 @@ class BookingController extends Controller {
 
 			$query = $this->requeryBookingRoom();
 			$result = DB::select($query, array($market, $market,
-				$hotelDetail->id, $checkIn, $checkOut, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
-				$room->id, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
+				$hotelDetail->id, $checkIn, $checkOut,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
+				$room->id,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
 				$room->id));
 
-			/* old filter 
-			DB::select($query, array($market, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
+			/* old filter
+			DB::select($query, array($market,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
 				$room->id));*/
 
 			$counter = 0;
@@ -114,26 +119,43 @@ class BookingController extends Controller {
 			$newRoom = null;
 			$totalPrice = 0;
 			$longestCutOff = 0;
+			$cutOffChargeDay = 0;
 			$firstCheckInDate = null;
 			$firstCheckInFlag = false;
 			$numBreakfast = 0;// num breakfast ini berbeda karena diambil berdasarkan table room rate nya, breakfast dari room tidak bisa di jadikan acuan 100%;
+			$globalCancelFeeFlag = 'Yes';
+
+			//hanya buat ngecek cancellation flag wew ...
+			//terpaksa dech
 			foreach($result as $room){
+				if($room->cancel_fee_flag == 'No'){
+					$globalCancelFeeFlag = 'No';
+				}
+			}
+
+			foreach($result as $room){
+
+
 
 				if($longestCutOff < $room->cut_off){
 					$longestCutOff = $room->cut_off;
 				}
 
+				if($cutOffChargeDay < $room->nett_value){
+					$cutOffAgentCharge = $room->nett_value;
+				}
+
 				foreach($dateList as $date){
 
 					if(!$firstCheckInFlag){
-						//tanggal pertama ini buat digunakan untuk menentukan boleh cancel atau tidak berdasarkan 
+						//tanggal pertama ini buat digunakan untuk menentukan boleh cancel atau tidak berdasarkan
 						//data cut off nya
 						$firstCheckInFlag = true;
 						$firstCheckInDate = $date;
 					}
 
-					if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"), 
-	                    Helpers::dateFormatter($room->from_date), 
+					if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"),
+	                    Helpers::dateFormatter($room->from_date),
 	                    Helpers::dateFormatter($room->end_date))){
 
 						$counter++;
@@ -147,6 +169,7 @@ class BookingController extends Controller {
 	                	$priceDetail->allotment = $room->rate_allotment;
 	                	$priceDetail->mst023_id = $room->mst023_id;
 	                	$priceDetail->daily_price = $room->daily_price;
+	                	$priceDetail->cancel_fee_flag = $globalCancelFeeFlag;
 	                	$numBreakfast = $room->num_breakfast; //dan data numbreakfast ini global disini
 
 	                	$totalPrice += $room->nett_value;
@@ -182,6 +205,9 @@ class BookingController extends Controller {
 			$cutOffDateAgent = strtotime("-$longestCutOff day", strtotime($firstCheckInDate->format("Y-m-d")));
 			$cutOffDateAgent = date('d-m-Y', $cutOffDateAgent);
 
+			//untuk mengambil nilai sisa deposit agent, jika tidak ditemukan ya di session akan menlempar nilai 0
+			$balanceAgentDeposit = BalanceAgentDeposit::where('mst001_id')->first();
+
 			$bookingData = new StdClass();
 			$bookingData->nationality = $market;
 			$bookingData->hotel = $hotelDetail;
@@ -198,7 +224,29 @@ class BookingController extends Controller {
 			$bookingData->rateId = $rateId;
 			$bookingData->cutOffDateAgent = $cutOffDateAgent;
 			$bookingData->cutOffDateHotel = $cutOffDateHotel;
+			$bookingData->cutOffAgentCharge = $cutOffAgentCharge;
+			$bookingData->longestCutOff = $longestCutOff;
 			$bookingData->numBreakfast = $numBreakfast;
+			$bookingData->globalCancelFeeFlag = $globalCancelFeeFlag;
+			$bookingData->remainingDeposit = $balanceAgentDeposit ? $balanceAgentDeposit->deposit_value - $balanceAgentDeposit->used_value : 0;
+
+			//check news letter flag milik si agent, jika Yes maka centang, jika tidak maka No
+			$agent = Agent::where('mst001_id', '=', Auth::user()->id)->first();
+			if($agent){
+				$bookingData->newsletterFlag = $agent->news_letter_flg;
+			} else {
+				$bookingData->newsletterFlag = 'No';
+			}
+
+			//untuk handle Pending Payment method nya harus di munculin atau tidak.
+			if(strtotime("now") >= strtotime(Helpers::dateFormatter($cutOffDateAgent)))
+			{
+				$bookingData->enablePendingPayment = false;
+			}
+			else
+			{
+				$bookingData->enablePendingPayment = true;
+			}
 
 			Session::put('bookingData', $bookingData);
 			return view('agent.booking.agent-booking')
@@ -217,7 +265,12 @@ class BookingController extends Controller {
 			->with('rateId', $rateId)
 			->with('cutOffDateAgent', $cutOffDateAgent)
 			->with('cutOffDateHotel', $cutOffDateHotel)
-			->with('numBreakfast', $numBreakfast);
+			->with('numBreakfast', $numBreakfast)
+			->with('newsletterFlag', $bookingData->newsletterFlag)
+			->with('cutOffAgentCharge', $bookingData->cutOffAgentCharge)
+			->with('globalCancelFeeFlag', $globalCancelFeeFlag)
+			->with('remainingDeposit', $bookingData->remainingDeposit)
+			->with('enablePendingPayment', $bookingData->enablePendingPayment);
 		}
 
 
@@ -226,7 +279,7 @@ class BookingController extends Controller {
 	public function postIndex(Request $request){
 		$hotelId = $request->hotel_id;
 		$roomId = $request->room_id;
-		$checkIn = $request->checkIn; 
+		$checkIn = $request->checkIn;
 		$checkOut = $request->checkOut;
 		$adults = $request->adults;
 		$child = $request->child;
@@ -247,7 +300,7 @@ class BookingController extends Controller {
 
 	}
 
-	
+
 
 	public function postConfirm(Request $request){
 
@@ -258,7 +311,7 @@ class BookingController extends Controller {
 
 		DB::beginTransaction();
 		$successInfo = new StdClass();
-		
+
 
 		try {
 
@@ -287,6 +340,26 @@ class BookingController extends Controller {
 					$error = $v->errors()->all();
 					Session::flash('error', $error);
 					return redirect('agent/booking')->withInput($request->all());
+				} else {
+					if($request->payment_method == 'Balance'){
+						if($bookingData->remainingDeposit < ($bookingData->totalPrice * $bookingData->totalRooms)){
+							$error = array('balance' => 'Sorry your Deposit is not enough, please Top Up or select the other payment method');
+							Session::flash('error', $error);
+							return redirect('agent/booking')->withInput($request->all());
+						}
+					} elseif ($request->payment_method == 'PendingPayment') {
+						if(!$bookingData->enablePendingPayment){
+							$error = array('invalidPaymentMethod' => 'Sorry this payment method is not avaiable.');
+							Session::flash('error', $error);
+							return redirect('agent/booking')->withInput($request->all());
+						}
+					}
+
+					if(!$request->has('agreement')){
+						$error = array('agreement' => 'Please tick agree for do the confirmation booking');
+						Session::flash('error', $error);
+						return redirect('agent/booking')->withInput($request->all());
+					}
 				}
 
 				//PANTEKSAN - KEDEPANNYA MUNGKIN MAU DI CABUT;
@@ -302,6 +375,11 @@ class BookingController extends Controller {
 				$orderBooking->mst001_id = Auth::user()->id;
 				$orderBooking->mst004_id = $defaultCurrencyId;
 				$orderBooking->save();
+
+				//newsletter flag
+				$agent = Agent::where('mst001_id', '=', $orderBooking->mst001_id)->first();
+				$agent->news_letter_flg = $request->news_letter_flg;
+				$agent->save();
 
 				$successInfo->orderNumber = $orderBooking->order_no;
 
@@ -337,13 +415,16 @@ class BookingController extends Controller {
 				$orderSummaryDetail->high_floor_flag = $request->high_floor_flag;
 				$orderSummaryDetail->low_floor_flag = $request->low_floor_flag;
 				$orderSummaryDetail->twin_flag = $request->twin_flag;
-				$orderSummaryDetail->honeymoon_flg = $request->honeymoon_flg;
+				$orderSummaryDetail->honeymoon_flag = $request->honeymoon_flag;
+				$orderSummaryDetail->cancel_fee_value = $bookingData->cutOffAgentCharge;
+				$orderSummaryDetail->cut_off = $bookingData->longestCutOff;
+				$orderSummaryDetail->cancel_fee_flag = $bookingData->globalCancelFeeFlag;
 				$orderSummaryDetail->title = $request->title;
 				$orderSummaryDetail->first_name = $request->first_name;
 				$orderSummaryDetail->last_name = $request->last_name;
 				$orderSummaryDetail->save();
 
-				//save balance order booking summary detail 
+				//save balance order booking summary detail
 				$balanceOrderBookingSummaryDetail = new BalanceOrderBookingSummaryDetail();
 				$balanceOrderBookingSummaryDetail->blnc001_id = $balanceOrderBooking->id;
 				$balanceOrderBookingSummaryDetail->market = $orderSummaryDetail->market;
@@ -366,7 +447,10 @@ class BookingController extends Controller {
 				$balanceOrderBookingSummaryDetail->high_floor_flag = $orderSummaryDetail->high_floor_flag;
 				$balanceOrderBookingSummaryDetail->low_floor_flag = $orderSummaryDetail->low_floor_flag;
 				$balanceOrderBookingSummaryDetail->twin_flag = $orderSummaryDetail->twin_flag;
-				$balanceOrderBookingSummaryDetail->honeymoon_flg = $orderSummaryDetail->honeymoon_flg;
+				$balanceOrderBookingSummaryDetail->honeymoon_flag = $orderSummaryDetail->honeymoon_flag;
+				$balanceOrderBookingSummaryDetail->cancel_fee_value = $orderSummaryDetail->cancel_fee_value;
+				$balanceOrderBookingSummaryDetail->cut_off = $orderSummaryDetail->cut_off;
+				$balanceOrderBookingSummaryDetail->cancel_fee_flag = $orderSummaryDetail->cancel_fee_flag;
 				$balanceOrderBookingSummaryDetail->title = $request->title;
 				$balanceOrderBookingSummaryDetail->first_name = $request->first_name;
 				$balanceOrderBookingSummaryDetail->last_name = $request->last_name;
@@ -392,40 +476,66 @@ class BookingController extends Controller {
 				// $orderSummaryDetail->first_name = $request->first_name;
 				// $orderSummaryDetail->last_name = ;
 
-				//simpan OrderBookingDetailPayment - TRX012
-				$orderBookingDetailPayment = new OrderBookingDetailPayment();
-				$orderBookingDetailPayment->trx010_id = $orderBooking->id;
-				$orderBookingDetailPayment->payment_method = $request->payment_method;
-				if($orderBookingDetailPayment->payment_method == 'CreditCard'){
-					$orderBookingDetailPayment->card_type = $request->card_type;
-					$orderBookingDetailPayment->card_number = $request->card_number;
-					$orderBookingDetailPayment->card_name = $request->card_name;
-				}
-				$orderBookingDetailPayment->save();
+				//jika metode pembayaran = PENDING PAYMENT maka tidak akan menyimpan data ke trx012 dengan blnc003
+				if($request->payment_method != 'PendingPayment')
+				{
 
-				//selipin data success info nya lagi dech disini
-				$successInfo->paymentMethod = $orderBookingDetailPayment->payment_method;
+					//simpan OrderBookingDetailPayment - TRX012
+					$orderBookingDetailPayment = new OrderBookingDetailPayment();
+					$orderBookingDetailPayment->trx010_id = $orderBooking->id;
+					$orderBookingDetailPayment->payment_method = $request->payment_method;
+					if($orderBookingDetailPayment->payment_method == 'CreditCard'){
+						$orderBookingDetailPayment->card_type = $request->card_type;
+						$orderBookingDetailPayment->card_number = $request->card_number;
+						$orderBookingDetailPayment->card_name = $request->card_name;
+					}
+					$orderBookingDetailPayment->save();
 
-				//simpan BalanceOrderBookingPayment - BLNC003
-				$balanceOrderBookingPayment = new BalanceOrderBookingPayment();
-				$balanceOrderBookingPayment->blnc001_id = $balanceOrderBooking->id;
-				$balanceOrderBookingPayment->payment_method = $orderBookingDetailPayment->payment_method;
-				if($balanceOrderBookingPayment->payment_method == 'CreditCard'){
-					$balanceOrderBookingPayment->card_type = $orderBookingDetailPayment->card_type;
-					$balanceOrderBookingPayment->card_number = $orderBookingDetailPayment->card_number;
-					$balanceOrderBookingPayment->card_name = $orderBookingDetailPayment->card_name;
-				}
-				$balanceOrderBookingPayment->save();
+					//selipin data success info nya lagi dech disini
+					$successInfo->paymentMethod = $orderBookingDetailPayment->payment_method;
 
-				//jika payment method = transfer maka status nya pending
-				if($balanceOrderBookingPayment->payment_method == 'CreditCard' || $balanceOrderBookingPayment->payment_method == 'Transfer'){
-					$balanceOrderBooking->status_flg = 'Pending';
-				} else if($balanceOrderBookingPayment->payment_method == 'Balance'){
-					$balanceOrderBooking->status_flg = 'Done';
+					//simpan BalanceOrderBookingPayment - BLNC003
+					$balanceOrderBookingPayment = new BalanceOrderBookingPayment();
+					$balanceOrderBookingPayment->blnc001_id = $balanceOrderBooking->id;
+					$balanceOrderBookingPayment->payment_method = $orderBookingDetailPayment->payment_method;
+					if($balanceOrderBookingPayment->payment_method == 'CreditCard'){
+						$balanceOrderBookingPayment->card_type = $orderBookingDetailPayment->card_type;
+						$balanceOrderBookingPayment->card_number = $orderBookingDetailPayment->card_number;
+						$balanceOrderBookingPayment->card_name = $orderBookingDetailPayment->card_name;
+					}
+					$balanceOrderBookingPayment->save();
+
+					//jika payment method = transfer maka status nya pending
+					if($balanceOrderBookingPayment->payment_method == 'CreditCard')
+					{
+						// update nilai pembayaran ke done jika pembayaran dari kartu kredit berhasil
+						// $balanceOrderBooking->status_flag = 'Done';
+						// $balanceOrderBooking->status_pymnt = 'Done';
+
+						//this is for temporary value only
+						$balanceOrderBooking->status_flag = 'Cancel';
+						$balanceOrderBooking->status_pymnt = 'Failed';
+					}
+					else if($balanceOrderBookingPayment->payment_method == 'Transfer')
+					{
+						$balanceOrderBooking->status_flag = 'Pending';
+						$balanceOrderBooking->status_pymnt = 'Pending';
+					}
+					else if($balanceOrderBookingPayment->payment_method == 'Balance')
+					{
+						$balanceOrderBooking->status_flag = 'Done';
+						$balanceOrderBooking->status_pymnt = 'Done';
+					}
+					else
+					{
+						$balanceOrderBooking->status_flag = 'Pending';
+						$balanceOrderBooking->status_pymnt = 'Pending';
+					}
+					$balanceOrderBooking->save();
+
 				} else {
-					$balanceOrderBooking->status_flg = 'Pending';
+					$successInfo->paymentMethod = $request->payment_method;
 				}
-				$balanceOrderBooking->save();
 
 				//beware angka2 field untuk table TRX011 dibawah ini diupdate oleh detail nya
 				// $orderSummaryDetail->note = ;
@@ -435,7 +545,7 @@ class BookingController extends Controller {
 				$orderSummaryDetail->tot_tax_base_price = 0;
 				$orderSummaryDetail->tot_tax_value = 0;
 				$orderSummaryDetail->tot_payment = 0;
-				//end beware 
+				//end beware
 
 				// echo '<pre>';
 				// print_r($orderSummaryDetail->toArray());
@@ -458,8 +568,8 @@ class BookingController extends Controller {
 					$orderBookingDetail->disc = 0;
 					$orderBookingDetail->tax_base_price = $orderBookingDetail->tot_base_price - $orderBookingDetail->disc;
 					$orderBookingDetail->tax_value = 0;
-					$orderBookingDetail->cancel_fee_flag = 'No';
-					$orderBookingDetail->cancel_fee_value = 0;
+					$orderBookingDetail->cancel_fee_flag = $bookingData->globalCancelFeeFlag;
+					$orderBookingDetail->cancel_fee_value = $pricing->nett_value;
 					$orderBookingDetail->save();
 
 					//update table trx011 disini - TRX011
@@ -468,7 +578,7 @@ class BookingController extends Controller {
 					$orderSummaryDetail->tot_disc += $orderBookingDetail->disc;
 					$orderSummaryDetail->tot_tax_base_price += $orderBookingDetail->tax_base_price;
 					$orderSummaryDetail->tot_tax_value += $orderBookingDetail->tax_value;
-					$orderSummaryDetail->tot_payment += $orderBookingDetail->commision_value;
+					$orderSummaryDetail->tot_payment += $orderBookingDetail->tax_base_price + $orderBookingDetail->tax_value;
 
 					//================SIMPAN SALDO DI BAWAH INI ===============================
 					$balanceOrderBookingDetail = new BalanceOrderBookingDetail();
@@ -516,7 +626,7 @@ class BookingController extends Controller {
 				$balanceOrderBookingSummaryDetail->tot_payment = $orderSummaryDetail->tot_payment;
 				$balanceOrderBookingSummaryDetail->save();
 
-				//simpan order booking nya 
+				//simpan order booking nya
 				//karena untuk sementara ini orderSummaryDetail tidak bersifat multi data untuk 1 cart
 				$orderBooking->tot_commision_val = $orderSummaryDetail->tot_commision_price;
 				$orderBooking->tot_gross_price = $orderSummaryDetail->tot_gross_price;
@@ -553,7 +663,7 @@ class BookingController extends Controller {
 			Session::forget('bookingData');
 		}
 
-		//return 
+		//return
 		// echo 'sudah berhasil di simpan';
 		return redirect('agent/booking/success')
 				->with('data', $successInfo);
@@ -573,10 +683,11 @@ class BookingController extends Controller {
 
 	public function getSuccess(Request $request)
 	{
-		return view('agent.booking.agent-booking-success');
+		$data = Session::get('data');
+		return view('agent.booking.agent-booking-success')->with('data', $data);
 	}
 
-	
+
 
 	private function validation(Request $request){
 
@@ -630,12 +741,12 @@ class BookingController extends Controller {
 	private function requeryBookingRoom(){
 		$query = " SELECT B.mst020_id, D.room_name, B.room_desc, G.num_adults, G.num_child, G.num_breakfast,
                              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
-                            COALESCE(E.allotment,B.allotment) AS allotment, B.allotment as rate_allotment, B.mst023_id, 
+                            COALESCE(E.allotment,B.allotment) AS allotment, B.allotment as rate_allotment, B.mst023_id,
                             B.comm_value, B.cut_off, B.bed_type,
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.nett_value
                                 ELSE B.nett_value_wna
-                             END as nett_value, 
+                             END as nett_value,
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.daily_price
                                 ELSE B.daily_price_wna
@@ -649,8 +760,8 @@ class BookingController extends Controller {
                                 AND A.check_in_date between STR_TO_DATE(?, '%d-%m-%Y') and STR_TO_DATE(?, '%d-%m-%Y')) E
                                  on E.mst023_id = D.id
                      inner join (select X.mst023_id,MIN(X.num_breakfast) as num_breakfast,MIN(X.num_adults) as num_adults,MIN(X.num_child) as num_child
-                                 from MST022 X 
-                                  WHERE 
+                                 from MST022 X
+                                  WHERE
                                     (   X.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
                                         OR
                                         X.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
@@ -673,31 +784,31 @@ class BookingController extends Controller {
                                         SELECT MAX(AE.end_date) FROM MST022 AE WHERE AE.mst023_id = X.mst023_id
                                       )
                                      AND X.mst023_id = ?
-                                     group by X.mst023_id)G ON G.mst023_id = D.ID
+                                     group by X.mst023_id)G ON G.mst023_id = D.id
                      WHERE
                       (
                         B.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
                         OR
                         B.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
                       )
-                 
+
                      AND
                       (
                         B.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
                         OR
                         B.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
                       )
-                 
+
                      AND STR_TO_DATE(?, '%d-%m-%Y') >=
                       (
                         SELECT MIN(AB.from_date) FROM MST022 AB WHERE AB.mst023_id = B.mst023_id
                       )
-                 
+
                      AND STR_TO_DATE(?, '%d-%m-%Y') <=
                       (
                         SELECT MAX(AC.end_date) FROM MST022 AC WHERE AC.mst023_id = B.mst023_id
                       )
- 
+
                       AND B.mst023_id = ?
                       ORDER BY D.room_name, B.from_date;
                   ";
@@ -713,7 +824,7 @@ class BookingController extends Controller {
 				             	THEN B.nett_value
 				                ELSE B.nett_value_wna
 				             END as nett_value
-				     FROM MST022 B 
+				     FROM MST022 B
 				     inner join MST023 D on D.id = B.mst023_id
 				     WHERE
 				      (
@@ -721,19 +832,19 @@ class BookingController extends Controller {
 				        OR
 				        B.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
 				      )
-				 
+
 				     AND
 				      (
 				        B.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
 				        OR
 				        B.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
 				      )
-				 
+
 				     AND STR_TO_DATE(?, '%d-%m-%Y') >=
 				      (
 				        SELECT MIN(AB.from_date) FROM MST022 AB WHERE AB.mst023_id = B.mst023_id
 				      )
-				 
+
 				     AND STR_TO_DATE(?, '%d-%m-%Y') <=
 				      (
 				        SELECT MAX(AC.end_date) FROM MST022 AC WHERE AC.mst023_id = B.mst023_id

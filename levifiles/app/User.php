@@ -55,6 +55,11 @@ class User extends Emodel implements AuthenticatableContract, CanResetPasswordCo
         $v = Validator::make($data, $rules, $messages);
         if($v->fails()){
     		$error = $v->errors()->all();
+        } else {
+        	$exists = User::where('email', '=', $data['email'])->first();
+        	if($exists){
+        		array_push($error, $data['email'] . ' already registered in our system');
+        	}
         }
 
 		return $error;

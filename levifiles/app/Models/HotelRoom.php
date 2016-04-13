@@ -30,7 +30,7 @@ class HotelRoom extends Emodel {
 			'net_fee'			=> 'required|numeric',
 			'num_breakfast'     => 'required|numeric',
 			'room_desc'      	=> 'required',
-			'image'    			=> 'image|max:250|mimes:jpeg',
+			'image'    			=> 'image|max:1000|mimes:jpeg',
 		);
 
 		$messages = array(
@@ -43,7 +43,7 @@ class HotelRoom extends Emodel {
 			'net.required' => 'Is room get internet connection must be informed',
 			'net_fee.required' => 'Room with net fee should be filled',
 			'net_fee.numeric' => 'Net fee must be numeric',
-			'num_breakfast.required' => 'Number of breakfast required',	
+			'num_breakfast.required' => 'Number of breakfast required',
 			'room_desc.required' => 'Please fill few words about your room',
 			'image.image' => 'Picture must be image',
 			'image.mimes' => 'Picture must be jpg file',

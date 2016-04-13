@@ -13,6 +13,10 @@ class MainController extends Controller {
 	{
 		//return view('auth.login');
 		//return redirect('/auth/login');
+		if(Session::has('errors')){
+	        Session::flash('error', Session::get('errors'));
+	        return redirect('auth/login')->with('errors', Session::get('error'));
+	    }
 		return view('main.main-page');
 	}
 

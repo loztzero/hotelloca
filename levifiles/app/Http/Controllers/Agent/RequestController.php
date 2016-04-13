@@ -23,12 +23,10 @@ use App\Models\HotelRoom;
 use App\Models\HotelRoomRate;
 use App\Models\OrderBooking;
 use App\Models\OrderSummaryDetail;
-use App\Models\OrderBookingDetailPayment;
 use App\Models\OrderBookingDetail;
 use App\Models\BalanceAgentDeposit;
 use App\Models\BalanceOrderBooking;
 use App\Models\BalanceOrderBookingDetail;
-use App\Models\BalanceOrderBookingPayment;
 use App\Models\BalanceOrderBookingSummaryDetail;
 use App\Models\LogHotelRoomAllotment;
 use App\Http\Controllers\Controller;
@@ -38,25 +36,25 @@ class RequestController extends Controller {
 	public function getIndex(){
 
 		//jika session booking datanya terdaftar maka kemungkinan ada error nie..
-		if(Session::has('bookingData')){
+		if(Session::has('requestData')){
 
-			$bookingData = Session::get('bookingData');
-			$market = $bookingData->nationality;
-			$hotelDetail = $bookingData->hotel;
-			$checkIn = $bookingData->checkIn;
-			$checkOut = $bookingData->checkOut;
-			$adults = $bookingData->adults;
-			$child = $bookingData->child;
-			$dateList = $bookingData->periods;
-			$countDay = $bookingData->nights;
-			$roomQty = $bookingData->totalRooms;
-			$newRoom = $bookingData->room;
-			$totalPrice = $bookingData->totalPrice;
-			$averagePrice = $bookingData->averagePrice;
-			$rateId = $bookingData->rateId;
-			$cutOffDateAgent = $bookingData->cutOffDateAgent;
-			$cutOffDateHotel = $bookingData->cutOffDateHotel;
-			$numBreakfast = $bookingData->numBreakfast;
+			$requestData = Session::get('requestData');
+			$market = $requestData->nationality;
+			$hotelDetail = $requestData->hotel;
+			$checkIn = $requestData->checkIn;
+			$checkOut = $requestData->checkOut;
+			$adults = $requestData->adults;
+			$child = $requestData->child;
+			$dateList = $requestData->periods;
+			$countDay = $requestData->nights;
+			$roomQty = $requestData->totalRooms;
+			$newRoom = $requestData->room;
+			$totalPrice = $requestData->totalPrice;
+			$averagePrice = $requestData->averagePrice;
+			$rateId = $requestData->rateId;
+			$cutOffDateAgent = $requestData->cutOffDateAgent;
+			$cutOffDateHotel = $requestData->cutOffDateHotel;
+			$numBreakfast = $requestData->numBreakfast;
 
 			return view('agent.request.agent-request')
 			->with('nationality', $market)
@@ -74,10 +72,15 @@ class RequestController extends Controller {
 			->with('rateId', $rateId)
 			->with('cutOffDateAgent', $cutOffDateAgent)
 			->with('cutOffDateHotel', $cutOffDateHotel)
-			->with('numBreakfast', $numBreakfast);
+			->with('numBreakfast', $numBreakfast)
+			->with('newsletterFlag', $requestData->newsletterFlag)
+			->with('cutOffAgentCharge', $requestData->cutOffAgentCharge)
+			->with('globalCancelFeeFlag', $requestData->globalCancelFeeFlag)
+			->with('remainingDeposit', $requestData->remainingDeposit)
+			->with('enablePendingPayment', $requestData->enablePendingPayment);
 
 		} else {
-			
+
 			$data = Session::get('data');
 			$room = HotelRoom::find($data['room']);
 			$hotelDetail = HotelDetail::find($room->mst020_id);
@@ -95,18 +98,18 @@ class RequestController extends Controller {
 
 			$query = $this->requeryBookingRoom();
 			$result = DB::select($query, array($market, $market,
-				$hotelDetail->id, $checkIn, $checkOut, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
-				$room->id, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
+				$hotelDetail->id, $checkIn, $checkOut,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
+				$room->id,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
 				$room->id));
 
-			/* old filter 
-			DB::select($query, array($market, 
-				$checkIn, $checkIn, $checkOut, 
-				$checkOut, $checkIn, $checkOut, 
+			/* old filter
+			DB::select($query, array($market,
+				$checkIn, $checkIn, $checkOut,
+				$checkOut, $checkIn, $checkOut,
 				$room->id));*/
 
 			$counter = 0;
@@ -114,26 +117,43 @@ class RequestController extends Controller {
 			$newRoom = null;
 			$totalPrice = 0;
 			$longestCutOff = 0;
+			$cutOffChargeDay = 0;
 			$firstCheckInDate = null;
 			$firstCheckInFlag = false;
 			$numBreakfast = 0;// num breakfast ini berbeda karena diambil berdasarkan table room rate nya, breakfast dari room tidak bisa di jadikan acuan 100%;
+			$globalCancelFeeFlag = 'Yes';
+
+			//hanya buat ngecek cancellation flag wew ...
+			//terpaksa dech
 			foreach($result as $room){
+				if($room->cancel_fee_flag == 'No'){
+					$globalCancelFeeFlag = 'No';
+				}
+			}
+
+			foreach($result as $room){
+
+
 
 				if($longestCutOff < $room->cut_off){
 					$longestCutOff = $room->cut_off;
 				}
 
+				if($cutOffChargeDay < $room->nett_value){
+					$cutOffAgentCharge = $room->nett_value;
+				}
+
 				foreach($dateList as $date){
 
 					if(!$firstCheckInFlag){
-						//tanggal pertama ini buat digunakan untuk menentukan boleh cancel atau tidak berdasarkan 
+						//tanggal pertama ini buat digunakan untuk menentukan boleh cancel atau tidak berdasarkan
 						//data cut off nya
 						$firstCheckInFlag = true;
 						$firstCheckInDate = $date;
 					}
 
-					if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"), 
-	                    Helpers::dateFormatter($room->from_date), 
+					if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"),
+	                    Helpers::dateFormatter($room->from_date),
 	                    Helpers::dateFormatter($room->end_date))){
 
 						$counter++;
@@ -147,6 +167,7 @@ class RequestController extends Controller {
 	                	$priceDetail->allotment = $room->rate_allotment;
 	                	$priceDetail->mst023_id = $room->mst023_id;
 	                	$priceDetail->daily_price = $room->daily_price;
+	                	$priceDetail->cancel_fee_flag = $globalCancelFeeFlag;
 	                	$numBreakfast = $room->num_breakfast; //dan data numbreakfast ini global disini
 
 	                	$totalPrice += $room->nett_value;
@@ -182,25 +203,50 @@ class RequestController extends Controller {
 			$cutOffDateAgent = strtotime("-$longestCutOff day", strtotime($firstCheckInDate->format("Y-m-d")));
 			$cutOffDateAgent = date('d-m-Y', $cutOffDateAgent);
 
-			$bookingData = new StdClass();
-			$bookingData->nationality = $market;
-			$bookingData->hotel = $hotelDetail;
-			$bookingData->checkIn =  $checkIn;
-			$bookingData->checkOut = $checkOut;
-			$bookingData->adults = $adults;
-			$bookingData->child = $child;
-			$bookingData->periods = $dateList;
-			$bookingData->nights = $countDay;
-			$bookingData->totalRooms = $roomQty;
-			$bookingData->room = $newRoom;
-			$bookingData->totalPrice = $totalPrice;
-			$bookingData->averagePrice = $averagePrice;
-			$bookingData->rateId = $rateId;
-			$bookingData->cutOffDateAgent = $cutOffDateAgent;
-			$bookingData->cutOffDateHotel = $cutOffDateHotel;
-			$bookingData->numBreakfast = $numBreakfast;
+			//untuk mengambil nilai sisa deposit agent, jika tidak ditemukan ya di session akan menlempar nilai 0
+			$balanceAgentDeposit = BalanceAgentDeposit::where('mst001_id')->first();
 
-			Session::put('bookingData', $bookingData);
+			$requestData = new StdClass();
+			$requestData->nationality = $market;
+			$requestData->hotel = $hotelDetail;
+			$requestData->checkIn =  $checkIn;
+			$requestData->checkOut = $checkOut;
+			$requestData->adults = $adults;
+			$requestData->child = $child;
+			$requestData->periods = $dateList;
+			$requestData->nights = $countDay;
+			$requestData->totalRooms = $roomQty;
+			$requestData->room = $newRoom;
+			$requestData->totalPrice = $totalPrice;
+			$requestData->averagePrice = $averagePrice;
+			$requestData->rateId = $rateId;
+			$requestData->cutOffDateAgent = $cutOffDateAgent;
+			$requestData->cutOffDateHotel = $cutOffDateHotel;
+			$requestData->cutOffAgentCharge = $cutOffAgentCharge;
+			$requestData->longestCutOff = $longestCutOff;
+			$requestData->numBreakfast = $numBreakfast;
+			$requestData->globalCancelFeeFlag = $globalCancelFeeFlag;
+			$requestData->remainingDeposit = $balanceAgentDeposit ? $balanceAgentDeposit->deposit_value - $balanceAgentDeposit->used_value : 0;
+
+			//check news letter flag milik si agent, jika Yes maka centang, jika tidak maka No
+			$agent = Agent::where('mst001_id', '=', Auth::user()->id)->first();
+			if($agent){
+				$requestData->newsletterFlag = $agent->news_letter_flg;
+			} else {
+				$requestData->newsletterFlag = 'No';
+			}
+
+			//untuk handle Pending Payment method nya harus di munculin atau tidak.
+			if(strtotime("now") >= strtotime(Helpers::dateFormatter($cutOffDateAgent)))
+			{
+				$requestData->enablePendingPayment = false;
+			}
+			else
+			{
+				$requestData->enablePendingPayment = true;
+			}
+
+			Session::put('requestData', $requestData);
 			return view('agent.request.agent-request')
 			->with('nationality', $market)
 			->with('hotel', $hotelDetail)
@@ -217,7 +263,12 @@ class RequestController extends Controller {
 			->with('rateId', $rateId)
 			->with('cutOffDateAgent', $cutOffDateAgent)
 			->with('cutOffDateHotel', $cutOffDateHotel)
-			->with('numBreakfast', $numBreakfast);
+			->with('numBreakfast', $numBreakfast)
+			->with('newsletterFlag', $requestData->newsletterFlag)
+			->with('cutOffAgentCharge', $requestData->cutOffAgentCharge)
+			->with('globalCancelFeeFlag', $globalCancelFeeFlag)
+			->with('remainingDeposit', $requestData->remainingDeposit)
+			->with('enablePendingPayment', $requestData->enablePendingPayment);
 		}
 
 
@@ -226,15 +277,15 @@ class RequestController extends Controller {
 	public function postIndex(Request $request){
 		$hotelId = $request->hotel_id;
 		$roomId = $request->room_id;
-		$checkIn = $request->checkIn; 
+		$checkIn = $request->checkIn;
 		$checkOut = $request->checkOut;
 		$adults = $request->adults;
 		$child = $request->child;
 
 
 		//siklus nya jika halaman ini masuk makan booking data akan selalu kosong;
-		if(Session::has('bookingData')){
-			Session::forget('bookingData');
+		if(Session::has('requestData')){
+			Session::forget('requestData');
 		}
 
 		// echo '<pre>';
@@ -242,278 +293,275 @@ class RequestController extends Controller {
 		// echo '</pre>';
 		// die();
 
-		return redirect('agent/booking')
+		return redirect('agent/request')
 				->with('data', $request->all());
 
 	}
 
-	
+
 
 	public function postConfirm(Request $request){
 
-		$bookingData = Session::get('bookingData');
+		$requestData = Session::get('requestData');
 		// echo '<pre>';
-		// print_r($bookingData);
+		// print_r($requestData);
 		// die();
 
 		DB::beginTransaction();
+		$successInfo = new StdClass();
+
+
 		try {
 
-			$logAllotment = new LogHotelRoomAllotment();
-			$allotment = $logAllotment->getMinAllotment($bookingData->room->mst023_id, Helpers::dateFormatter($bookingData->checkIn), Helpers::dateFormatter($bookingData->checkOut));
-			if(empty($allotment)){
-				$allotment = $bookingData->room->allotment;
-				if(empty($allotment)){
-					//antisipasi jika data allotment nya tidak di temukan di session
-					$allotment = 0;
-				}
-			}
+			// $logAllotment = new LogHotelRoomAllotment();
+			// $allotment = $logAllotment->getMinAllotment($requestData->room->mst023_id, Helpers::dateFormatter($requestData->checkIn), Helpers::dateFormatter($requestData->checkOut));
+			// if(empty($allotment)){
+			// 	$allotment = $requestData->room->allotment;
+			// 	if(empty($allotment)){
+			// 		//antisipasi jika data allotment nya tidak di temukan di session
+			// 		$allotment = 0;
+			// 	}
+			// }
 
+			if(!$request->has('agreement')){
+				$error = array('agreement' => 'Please tick agree for do the confirmation request');
+				Session::flash('error', $error);
+				return redirect('agent/request')->withInput($request->all());
+			}
 
 			//update allotment if the remaining is enought
-			if($bookingData->totalRooms > $allotment){
+			$v = $this->validation($request);
+			// print_r($validation);
+			if($v->fails()){
+				$error = $v->errors()->all();
+				Session::flash('error', $error);
+				return redirect('agent/request')->withInput($request->all());
+			}
 
-				// echo 'gile itz stopped here ?';
-				Session::flash('error', array('The room is fully booked from our sistem'));
-				return redirect('agent/booking');
-			} else {
+			//PANTEKSAN - KEDEPANNYA MUNGKIN MAU DI CABUT;
+			//ambil dari mst020_id milik room lalu ke mst004 START FROM HERE
+			$defaultCurrencyId = $requestData->hotel->mst004_id;
 
-				$v = $this->validation($request);
-				// print_r($validation);
-				if($v->fails()){
-					$error = $v->errors()->all();
-					Session::flash('error', $error);
-					return redirect('agent/booking')->withInput($request->all());
-				}
+			//save and do object mode on here...
+			//save order booking - TRX010
+			$orderBooking = new OrderBooking();
+			$orderBooking->order_no = date('Ymd') . $orderBooking->getMaxCounter();
+			$orderBooking->order_yrmo = date('Ym');
+			$orderBooking->order_date = date('Y-m-d');
+			$orderBooking->mst001_id = Auth::user()->id;
+			$orderBooking->mst004_id = $defaultCurrencyId;
+			$orderBooking->save();
 
-				//PANTEKSAN - KEDEPANNYA MUNGKIN MAU DI CABUT;
-				//ambil dari mst020_id milik room lalu ke mst004 START FROM HERE
-				$defaultCurrencyId = $bookingData->hotel->mst004_id;
+			//newsletter flag
+			$agent = Agent::where('mst001_id', '=', $orderBooking->mst001_id)->first();
+			$agent->news_letter_flg = $request->news_letter_flg;
+			$agent->save();
 
-				//save and do object mode on here...
-				//save order booking - TRX010
-				$orderBooking = new OrderBooking();
-				$orderBooking->order_no = date('Ymd') . $orderBooking->getMaxCounter();
-				$orderBooking->order_yrmo = date('Ym');
-				$orderBooking->order_date = date('Y-m-d');
-				$orderBooking->mst001_id = Auth::user()->id;
-				$orderBooking->mst004_id = $defaultCurrencyId;
-				$orderBooking->save();
-				
+			$successInfo->orderNumber = $orderBooking->order_no;
 
-				//save balance order booking - BLNC001
-				$balanceOrderBooking = new BalanceOrderBooking();
-				$balanceOrderBooking->order_no = $orderBooking->order_no;
-				$balanceOrderBooking->order_yrmo = $orderBooking->order_yrmo;
-				$balanceOrderBooking->order_date = $orderBooking->order_date;
-				$balanceOrderBooking->mst001_id = $orderBooking->mst001_id;
-				$balanceOrderBooking->mst004_id = $defaultCurrencyId;
-				$balanceOrderBooking->save();
+			//save balance order booking - BLNC001
+			$balanceOrderBooking = new BalanceOrderBooking();
+			$balanceOrderBooking->order_no = $orderBooking->order_no;
+			$balanceOrderBooking->status_flag = 'Request';
+			$balanceOrderBooking->status_pymnt = 'Pending';
+			$balanceOrderBooking->order_yrmo = $orderBooking->order_yrmo;
+			$balanceOrderBooking->order_date = $orderBooking->order_date;
+			$balanceOrderBooking->mst001_id = $orderBooking->mst001_id;
+			$balanceOrderBooking->mst004_id = $defaultCurrencyId;
+			$balanceOrderBooking->save();
 
-				//save order booking summary detail
-				$orderSummaryDetail = new OrderSummaryDetail();
-				$orderSummaryDetail->trx010_id = $orderBooking->id;
-				$orderSummaryDetail->market = $bookingData->nationality;
-				$orderSummaryDetail->mst020_id = $bookingData->hotel->id;
-				$orderSummaryDetail->mst023_id = $bookingData->room->mst023_id;
-				$orderSummaryDetail->check_in_date = Helpers::dateFormatter($bookingData->checkIn);
-				$orderSummaryDetail->check_out_date = Helpers::dateFormatter($bookingData->checkOut);
-				$orderSummaryDetail->night = $bookingData->nights;
-				$orderSummaryDetail->type = $bookingData->numBreakfast > 0 ? 'Breakfast' : 'Room';
-				$orderSummaryDetail->room_name = $bookingData->room->room_name;
-				$orderSummaryDetail->room_id = $bookingData->room->room_name;
-				$orderSummaryDetail->room_num = $bookingData->totalRooms;
-				$orderSummaryDetail->num_adults = $bookingData->adults;
-				$orderSummaryDetail->num_child = $bookingData->child;
-				$orderSummaryDetail->num_breakfast = $bookingData->numBreakfast;
-				$orderSummaryDetail->non_smoking_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->interconnetion_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->early_check_in_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->late_check_in_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->high_floor_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->low_floor_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->twin_flag = $request->non_smoking_flag;
-				$orderSummaryDetail->honeymoon_flg = $request->non_smoking_flag;
-				$orderSummaryDetail->save();
+			//save order booking summary detail
+			$orderSummaryDetail = new OrderSummaryDetail();
+			$orderSummaryDetail->trx010_id = $orderBooking->id;
+			$orderSummaryDetail->market = $requestData->nationality;
+			$orderSummaryDetail->mst020_id = $requestData->hotel->id;
+			$orderSummaryDetail->mst023_id = $requestData->room->mst023_id;
+			$orderSummaryDetail->check_in_date = Helpers::dateFormatter($requestData->checkIn);
+			$orderSummaryDetail->check_out_date = Helpers::dateFormatter($requestData->checkOut);
+			$orderSummaryDetail->night = $requestData->nights;
+			$orderSummaryDetail->type = $requestData->numBreakfast > 0 ? 'Breakfast' : 'Room';
+			$orderSummaryDetail->room_name = $requestData->room->room_name;
+			$orderSummaryDetail->room_id = $requestData->room->room_name;
+			$orderSummaryDetail->room_num = $requestData->totalRooms;
+			$orderSummaryDetail->num_adults = $requestData->adults;
+			$orderSummaryDetail->num_child = $requestData->child;
+			$orderSummaryDetail->num_breakfast = $requestData->numBreakfast;
+			$orderSummaryDetail->non_smoking_flag = $request->non_smoking_flag;
+			$orderSummaryDetail->interconnetion_flag = $request->interconnetion_flag;
+			$orderSummaryDetail->early_check_in_flag = $request->early_check_in_flag;
+			$orderSummaryDetail->late_check_in_flag = $request->late_check_in_flag;
+			$orderSummaryDetail->high_floor_flag = $request->high_floor_flag;
+			$orderSummaryDetail->low_floor_flag = $request->low_floor_flag;
+			$orderSummaryDetail->twin_flag = $request->twin_flag;
+			$orderSummaryDetail->honeymoon_flag = $request->honeymoon_flag;
+			$orderSummaryDetail->cancel_fee_value = $requestData->cutOffAgentCharge;
+			$orderSummaryDetail->cut_off = $requestData->longestCutOff;
+			$orderSummaryDetail->cancel_fee_flag = $requestData->globalCancelFeeFlag;
+			$orderSummaryDetail->title = $request->title;
+			$orderSummaryDetail->first_name = $request->first_name;
+			$orderSummaryDetail->last_name = $request->last_name;
+			$orderSummaryDetail->save();
 
-				//save balance order booking summary detail 
-				$balanceOrderBookingSummaryDetail = new BalanceOrderBookingSummaryDetail();
-				$balanceOrderBookingSummaryDetail->blnc001_id = $balanceOrderBooking->id;
-				$balanceOrderBookingSummaryDetail->market = $orderSummaryDetail->market;
-				$balanceOrderBookingSummaryDetail->mst020_id = $orderSummaryDetail->mst020_id;
-				$balanceOrderBookingSummaryDetail->mst023_id = $orderSummaryDetail->mst023_id;
-				$balanceOrderBookingSummaryDetail->check_in_date = $orderSummaryDetail->check_in_date;
-				$balanceOrderBookingSummaryDetail->check_out_date = $orderSummaryDetail->check_out_date;
-				$balanceOrderBookingSummaryDetail->night = $orderSummaryDetail->night;
-				$balanceOrderBookingSummaryDetail->type = $orderSummaryDetail->type;
-				$balanceOrderBookingSummaryDetail->room_name = $orderSummaryDetail->room_name;
-				$balanceOrderBookingSummaryDetail->room_id = $orderSummaryDetail->room_id;
-				$balanceOrderBookingSummaryDetail->room_num = $orderSummaryDetail->room_num;
-				$balanceOrderBookingSummaryDetail->num_adults = $orderSummaryDetail->num_adults;
-				$balanceOrderBookingSummaryDetail->num_child = $orderSummaryDetail->num_child;
-				$balanceOrderBookingSummaryDetail->num_breakfast = $orderSummaryDetail->num_breakfast;
-				$balanceOrderBookingSummaryDetail->non_smoking_flag = $orderSummaryDetail->non_smoking_flag;
-				$balanceOrderBookingSummaryDetail->interconnetion_flag = $orderSummaryDetail->interconnetion_flag;
-				$balanceOrderBookingSummaryDetail->early_check_in_flag = $orderSummaryDetail->early_check_in_flag;
-				$balanceOrderBookingSummaryDetail->late_check_in_flag = $orderSummaryDetail->late_check_in_flag;
-				$balanceOrderBookingSummaryDetail->high_floor_flag = $orderSummaryDetail->high_floor_flag;
-				$balanceOrderBookingSummaryDetail->low_floor_flag = $orderSummaryDetail->low_floor_flag;
-				$balanceOrderBookingSummaryDetail->twin_flag = $orderSummaryDetail->twin_flag;
-				$balanceOrderBookingSummaryDetail->honeymoon_flg = $orderSummaryDetail->honeymoon_flg;
-				$balanceOrderBookingSummaryDetail->save();
+			//save balance order booking summary detail
+			$balanceOrderBookingSummaryDetail = new BalanceOrderBookingSummaryDetail();
+			$balanceOrderBookingSummaryDetail->blnc001_id = $balanceOrderBooking->id;
+			$balanceOrderBookingSummaryDetail->market = $orderSummaryDetail->market;
+			$balanceOrderBookingSummaryDetail->mst020_id = $orderSummaryDetail->mst020_id;
+			$balanceOrderBookingSummaryDetail->mst023_id = $orderSummaryDetail->mst023_id;
+			$balanceOrderBookingSummaryDetail->check_in_date = $orderSummaryDetail->check_in_date;
+			$balanceOrderBookingSummaryDetail->check_out_date = $orderSummaryDetail->check_out_date;
+			$balanceOrderBookingSummaryDetail->night = $orderSummaryDetail->night;
+			$balanceOrderBookingSummaryDetail->type = $orderSummaryDetail->type;
+			$balanceOrderBookingSummaryDetail->room_name = $orderSummaryDetail->room_name;
+			$balanceOrderBookingSummaryDetail->room_id = $orderSummaryDetail->room_id;
+			$balanceOrderBookingSummaryDetail->room_num = $orderSummaryDetail->room_num;
+			$balanceOrderBookingSummaryDetail->num_adults = $orderSummaryDetail->num_adults;
+			$balanceOrderBookingSummaryDetail->num_child = $orderSummaryDetail->num_child;
+			$balanceOrderBookingSummaryDetail->num_breakfast = $orderSummaryDetail->num_breakfast;
+			$balanceOrderBookingSummaryDetail->non_smoking_flag = $orderSummaryDetail->non_smoking_flag;
+			$balanceOrderBookingSummaryDetail->interconnetion_flag = $orderSummaryDetail->interconnetion_flag;
+			$balanceOrderBookingSummaryDetail->early_check_in_flag = $orderSummaryDetail->early_check_in_flag;
+			$balanceOrderBookingSummaryDetail->late_check_in_flag = $orderSummaryDetail->late_check_in_flag;
+			$balanceOrderBookingSummaryDetail->high_floor_flag = $orderSummaryDetail->high_floor_flag;
+			$balanceOrderBookingSummaryDetail->low_floor_flag = $orderSummaryDetail->low_floor_flag;
+			$balanceOrderBookingSummaryDetail->twin_flag = $orderSummaryDetail->twin_flag;
+			$balanceOrderBookingSummaryDetail->honeymoon_flag = $orderSummaryDetail->honeymoon_flag;
+			$balanceOrderBookingSummaryDetail->cancel_fee_value = $orderSummaryDetail->cancel_fee_value;
+			$balanceOrderBookingSummaryDetail->cut_off = $orderSummaryDetail->cut_off;
+			$balanceOrderBookingSummaryDetail->cancel_fee_flag = $orderSummaryDetail->cancel_fee_flag;
+			$balanceOrderBookingSummaryDetail->title = $request->title;
+			$balanceOrderBookingSummaryDetail->first_name = $request->first_name;
+			$balanceOrderBookingSummaryDetail->last_name = $request->last_name;
+			$balanceOrderBookingSummaryDetail->save();
 
-				// $orderSummaryDetail->note = ;
-				// $orderSummaryDetail->tot_commision_price = ;
-				// $orderSummaryDetail->tot_gross_price = ;
-				// $orderSummaryDetail->tot_disc = ;
-				// $orderSummaryDetail->tot_tax_base_price = ;
-				// $orderSummaryDetail->tot_tax_value = ;
-				// $orderSummaryDetail->tot_payment = ;
-				// $orderSummaryDetail->title = ;
-				// $orderSummaryDetail->first_name = $request->first_name;
-				// $orderSummaryDetail->last_name = ;
+			//params for success page
+			$successInfo->title = $balanceOrderBookingSummaryDetail->title;
+			$successInfo->firstName = $balanceOrderBookingSummaryDetail->first_name;
+			$successInfo->lastName = $balanceOrderBookingSummaryDetail->last_name;
 
-				//simpan OrderBookingDetailPayment - TRX012
-				$orderBookingDetailPayment = new OrderBookingDetailPayment();
-				$orderBookingDetailPayment->trx010_id = $orderBooking->id;
-				$orderBookingDetailPayment->payment_method = $request->payment_method;
-				if($orderBookingDetailPayment->payment_method == 'CreditCard'){
-					$orderBookingDetailPayment->card_type = $request->card_type;
-					$orderBookingDetailPayment->card_number = $request->card_number;
-					$orderBookingDetailPayment->card_name = $request->card_name;
-				}
-				$orderBookingDetailPayment->save();
+			$hotelDetail = HotelDetail::find($balanceOrderBookingSummaryDetail->mst020_id);
+			$successInfo->city = $hotelDetail->city->city_name;
+			$successInfo->country = $hotelDetail->country->country_name;
 
-				//simpan BalanceOrderBookingPayment - BLNC003
-				$balanceOrderBookingPayment = new BalanceOrderBookingPayment();
-				$balanceOrderBookingPayment->blnc001_id = $balanceOrderBooking->id;
-				$balanceOrderBookingPayment->payment_method = $orderBookingDetailPayment->payment_method;
-				if($balanceOrderBookingPayment->payment_method == 'CreditCard'){
-					$balanceOrderBookingPayment->card_type = $orderBookingDetailPayment->card_type;
-					$balanceOrderBookingPayment->card_number = $orderBookingDetailPayment->card_number;
-					$balanceOrderBookingPayment->card_name = $orderBookingDetailPayment->card_name;
-				}
-				$balanceOrderBookingPayment->save();
+			// $orderSummaryDetail->note = ;
+			// $orderSummaryDetail->tot_commision_price = ;
+			// $orderSummaryDetail->tot_gross_price = ;
+			// $orderSummaryDetail->tot_disc = ;
+			// $orderSummaryDetail->tot_tax_base_price = ;
+			// $orderSummaryDetail->tot_tax_value = ;
+			// $orderSummaryDetail->tot_payment = ;
+			// $orderSummaryDetail->title = ;
+			// $orderSummaryDetail->first_name = $request->first_name;
+			// $orderSummaryDetail->last_name = ;
 
-				//jika payment method = transfer maka status nya pending
-				if($balanceOrderBookingPayment->payment_method == 'CreditCard' || $balanceOrderBookingPayment->payment_method == 'Transfer'){
-					$balanceOrderBooking->status_flg = 'Pending';
-				} else if($balanceOrderBookingPayment->payment_method == 'Balance'){
-					$balanceOrderBooking->status_flg = 'Done';
+			//beware angka2 field untuk table TRX011 dibawah ini diupdate oleh detail nya
+			// $orderSummaryDetail->note = ;
+			$orderSummaryDetail->tot_commision_price = 0;
+			$orderSummaryDetail->tot_gross_price = 0;
+			$orderSummaryDetail->tot_disc = 0;
+			$orderSummaryDetail->tot_tax_base_price = 0;
+			$orderSummaryDetail->tot_tax_value = 0;
+			$orderSummaryDetail->tot_payment = 0;
+			//end beware
+
+			// echo '<pre>';
+			// print_r($orderSummaryDetail->toArray());
+			// die();
+
+			//simpan detail order, looping dari pricing
+			foreach($requestData->room->pricing as $pricing){
+
+				//TRX013
+				$orderBookingDetail = new OrderBookingDetail();
+				$orderBookingDetail->trx011_id = $orderSummaryDetail->id;
+				$orderBookingDetail->check_in_date = Helpers::dateFormatter($pricing->period_date);
+				$orderBookingDetail->cut_off = $pricing->cut_off;
+				$orderBookingDetail->daily_price = $pricing->daily_price;
+				$orderBookingDetail->nett_value = $pricing->nett_value;
+				$orderBookingDetail->tot_base_price = $orderBookingDetail->nett_value * $orderSummaryDetail->room_num;
+				$orderBookingDetail->commision_value = ($pricing->nett_value - $pricing->daily_price) * $orderSummaryDetail->room_num;
+				$orderBookingDetail->tot_comm_val = $orderBookingDetail->commision_value * $orderSummaryDetail->room_num;
+				$orderBookingDetail->gross_price = $orderBookingDetail->nett_value * $orderSummaryDetail->room_num;
+				$orderBookingDetail->disc = 0;
+				$orderBookingDetail->tax_base_price = $orderBookingDetail->tot_base_price - $orderBookingDetail->disc;
+				$orderBookingDetail->tax_value = 0;
+				$orderBookingDetail->cancel_fee_flag = $requestData->globalCancelFeeFlag;
+				$orderBookingDetail->cancel_fee_value = $pricing->nett_value;
+				$orderBookingDetail->save();
+
+				//update table trx011 disini - TRX011
+				$orderSummaryDetail->tot_commision_price += $orderBookingDetail->tot_comm_val;
+				$orderSummaryDetail->tot_gross_price += $orderBookingDetail->gross_price;
+				$orderSummaryDetail->tot_disc += $orderBookingDetail->disc;
+				$orderSummaryDetail->tot_tax_base_price += $orderBookingDetail->tax_base_price;
+				$orderSummaryDetail->tot_tax_value += $orderBookingDetail->tax_value;
+				$orderSummaryDetail->tot_payment += $orderBookingDetail->tax_base_price + $orderBookingDetail->tax_value;
+
+				//================SIMPAN SALDO DI BAWAH INI ===============================
+				$balanceOrderBookingDetail = new BalanceOrderBookingDetail();
+				$balanceOrderBookingDetail->blnc002_id = $balanceOrderBookingSummaryDetail->id;
+				$balanceOrderBookingDetail->check_in_date = $orderBookingDetail->check_in_date;
+				$balanceOrderBookingDetail->cut_off = $orderBookingDetail->cut_off;
+				$balanceOrderBookingDetail->daily_price = $orderBookingDetail->daily_price;
+				$balanceOrderBookingDetail->nett_value = $orderBookingDetail->nett_value;
+				$balanceOrderBookingDetail->tot_base_price = $orderBookingDetail->tot_base_price;
+				$balanceOrderBookingDetail->commision_value = $orderBookingDetail->commision_value;
+				$balanceOrderBookingDetail->tot_comm_val = $orderBookingDetail->tot_comm_val;
+				$balanceOrderBookingDetail->gross_price = $orderBookingDetail->gross_price;
+				$balanceOrderBookingDetail->disc = $orderBookingDetail->disc;
+				$balanceOrderBookingDetail->tax_base_price = $orderBookingDetail->tax_base_price;
+				$balanceOrderBookingDetail->tax_value = $orderBookingDetail->tax_value;
+				$balanceOrderBookingDetail->cancel_fee_flag = $orderBookingDetail->cancel_fee_flag;
+				$balanceOrderBookingDetail->cancel_fee_val = $orderBookingDetail->cancel_fee_value;
+				$balanceOrderBookingDetail->save();
+
+				//simpan data log disini
+				$logExists = LogHotelRoomAllotment::where('mst023_id', '=', $pricing->mst023_id)
+												->where('check_in_date', '=', $orderBookingDetail->check_in_date)
+												->first();
+				if($logExists){
+					$logExists->used_allotment += $requestData->totalRooms;
+					$logExists->save();
 				} else {
-					$balanceOrderBooking->status_flg = 'Pending';
+					$logHotelRoomAllotment = new LogHotelRoomAllotment();
+					$logHotelRoomAllotment->mst023_id = $pricing->mst023_id;
+					$logHotelRoomAllotment->check_in_date = $orderBookingDetail->check_in_date;
+					$logHotelRoomAllotment->allotment = $pricing->allotment;
+					$logHotelRoomAllotment->used_allotment = $requestData->totalRooms;
+					$logHotelRoomAllotment->save();
 				}
-				$balanceOrderBooking->save();
-
-				//beware angka2 field untuk table TRX011 dibawah ini diupdate oleh detail nya
-				// $orderSummaryDetail->note = ;
-				$orderSummaryDetail->tot_commision_price = 0;
-				$orderSummaryDetail->tot_gross_price = 0;
-				$orderSummaryDetail->tot_disc = 0;
-				$orderSummaryDetail->tot_tax_base_price = 0;
-				$orderSummaryDetail->tot_tax_value = 0;
-				$orderSummaryDetail->tot_payment = 0;
-				//end beware 
-
-				// echo '<pre>';
-				// print_r($orderSummaryDetail->toArray());
-				// die();
-
-				//simpan detail order, looping dari pricing
-				foreach($bookingData->room->pricing as $pricing){
-
-					//TRX013
-					$orderBookingDetail = new OrderBookingDetail();
-					$orderBookingDetail->trx011_id = $orderSummaryDetail->id;
-					$orderBookingDetail->check_in_date = Helpers::dateFormatter($pricing->period_date);
-					$orderBookingDetail->cut_off = $pricing->cut_off;
-					$orderBookingDetail->daily_price = $pricing->daily_price;
-					$orderBookingDetail->nett_value = $pricing->nett_value;
-					$orderBookingDetail->tot_base_price = $orderBookingDetail->nett_value * $orderSummaryDetail->room_num;
-					$orderBookingDetail->commision_value = ($pricing->nett_value - $pricing->daily_price) * $orderSummaryDetail->room_num;
-					$orderBookingDetail->tot_comm_val = $orderBookingDetail->commision_value * $orderSummaryDetail->room_num;
-					$orderBookingDetail->gross_price = $orderBookingDetail->nett_value * $orderSummaryDetail->room_num;
-					$orderBookingDetail->disc = 0;
-					$orderBookingDetail->tax_base_price = $orderBookingDetail->tot_base_price - $orderBookingDetail->disc;
-					$orderBookingDetail->tax_value = 0;
-					$orderBookingDetail->cancel_fee_flag = 'No';
-					$orderBookingDetail->cancel_fee_value = 0;
-					$orderBookingDetail->save();
-
-					//update table trx011 disini - TRX011
-					$orderSummaryDetail->tot_commision_price += $orderBookingDetail->tot_comm_val;
-					$orderSummaryDetail->tot_gross_price += $orderBookingDetail->gross_price;
-					$orderSummaryDetail->tot_disc += $orderBookingDetail->disc;
-					$orderSummaryDetail->tot_tax_base_price += $orderBookingDetail->tax_base_price;
-					$orderSummaryDetail->tot_tax_value += $orderBookingDetail->tax_value;
-					$orderSummaryDetail->tot_payment += $orderBookingDetail->commision_value;
-
-					//================SIMPAN SALDO DI BAWAH INI ===============================
-					$balanceOrderBookingDetail = new BalanceOrderBookingDetail();
-					$balanceOrderBookingDetail->blnc002_id = $balanceOrderBookingSummaryDetail->id;
-					$balanceOrderBookingDetail->check_in_date = $orderBookingDetail->check_in_date;
-					$balanceOrderBookingDetail->cut_off = $orderBookingDetail->cut_off;
-					$balanceOrderBookingDetail->daily_price = $orderBookingDetail->daily_price;
-					$balanceOrderBookingDetail->nett_value = $orderBookingDetail->nett_value;
-					$balanceOrderBookingDetail->tot_base_price = $orderBookingDetail->tot_base_price;
-					$balanceOrderBookingDetail->commision_value = $orderBookingDetail->commision_value;
-					$balanceOrderBookingDetail->tot_comm_val = $orderBookingDetail->tot_comm_val;
-					$balanceOrderBookingDetail->gross_price = $orderBookingDetail->gross_price;
-					$balanceOrderBookingDetail->disc = $orderBookingDetail->disc;
-					$balanceOrderBookingDetail->tax_base_price = $orderBookingDetail->tax_base_price;
-					$balanceOrderBookingDetail->tax_value = $orderBookingDetail->tax_value;
-					$balanceOrderBookingDetail->cancel_fee_flag = $orderBookingDetail->cancel_fee_flag;
-					$balanceOrderBookingDetail->cancel_fee_val = $orderBookingDetail->cancel_fee_value;
-					$balanceOrderBookingDetail->save();
-
-					//simpan data log disini
-					$logExists = LogHotelRoomAllotment::where('mst023_id', '=', $pricing->mst023_id)
-													->where('check_in_date', '=', $orderBookingDetail->check_in_date)
-													->first();
-					if($logExists){
-						$logExists->used_allotment += $bookingData->totalRooms;
-						$logExists->save();
-					} else {
-						$logHotelRoomAllotment = new LogHotelRoomAllotment();
-						$logHotelRoomAllotment->mst023_id = $pricing->mst023_id;
-						$logHotelRoomAllotment->check_in_date = $orderBookingDetail->check_in_date;
-						$logHotelRoomAllotment->allotment = $pricing->allotment;
-						$logHotelRoomAllotment->used_allotment = $bookingData->totalRooms;
-						$logHotelRoomAllotment->save();
-					}
-
-				}
-
-				$orderSummaryDetail->save();
-
-				$balanceOrderBookingSummaryDetail->tot_commision_price = $orderSummaryDetail->tot_commision_price;
-				$balanceOrderBookingSummaryDetail->tot_gross_price = $orderSummaryDetail->tot_gross_price;
-				$balanceOrderBookingSummaryDetail->tot_disc = $orderSummaryDetail->tot_disc;
-				$balanceOrderBookingSummaryDetail->tot_tax_base_price = $orderSummaryDetail->tot_tax_base_price;
-				$balanceOrderBookingSummaryDetail->tot_tax_value = $orderSummaryDetail->tot_tax_value;
-				$balanceOrderBookingSummaryDetail->tot_payment = $orderSummaryDetail->tot_payment;
-				$balanceOrderBookingSummaryDetail->save();
-
-				//simpan order booking nya 
-				//karena untuk sementara ini orderSummaryDetail tidak bersifat multi data untuk 1 cart
-				$orderBooking->tot_commision_val = $orderSummaryDetail->tot_commision_price;
-				$orderBooking->tot_gross_price = $orderSummaryDetail->tot_gross_price;
-				$orderBooking->tot_disc = $orderSummaryDetail->tot_disc;
-				$orderBooking->tot_tax_base_price = $orderSummaryDetail->tot_tax_base_price;
-				$orderBooking->tot_tax_value = $orderSummaryDetail->tot_tax_value;
-				$orderBooking->tot_payment = $orderSummaryDetail->tot_payment;
-				$orderBooking->save();
-
-				//BLNC001
-				$balanceOrderBooking->tot_commision_val = $orderBooking->tot_commision_val;
-				$balanceOrderBooking->tot_gross_price = $orderBooking->tot_gross_price;
-				$balanceOrderBooking->tot_disc = $orderBooking->tot_disc;
-				$balanceOrderBooking->tot_tax_base_price = $orderBooking->tot_tax_base_price;
-				$balanceOrderBooking->tot_tax_value = $orderBooking->tot_tax_value;
-				$balanceOrderBooking->tot_payment = $orderBooking->tot_payment;
-				$balanceOrderBooking->save();
 
 			}
+
+			$orderSummaryDetail->save();
+
+			$balanceOrderBookingSummaryDetail->tot_commision_price = $orderSummaryDetail->tot_commision_price;
+			$balanceOrderBookingSummaryDetail->tot_gross_price = $orderSummaryDetail->tot_gross_price;
+			$balanceOrderBookingSummaryDetail->tot_disc = $orderSummaryDetail->tot_disc;
+			$balanceOrderBookingSummaryDetail->tot_tax_base_price = $orderSummaryDetail->tot_tax_base_price;
+			$balanceOrderBookingSummaryDetail->tot_tax_value = $orderSummaryDetail->tot_tax_value;
+			$balanceOrderBookingSummaryDetail->tot_payment = $orderSummaryDetail->tot_payment;
+			$balanceOrderBookingSummaryDetail->save();
+
+			//simpan order booking nya
+			//karena untuk sementara ini orderSummaryDetail tidak bersifat multi data untuk 1 cart
+			$orderBooking->tot_commision_val = $orderSummaryDetail->tot_commision_price;
+			$orderBooking->tot_gross_price = $orderSummaryDetail->tot_gross_price;
+			$orderBooking->tot_disc = $orderSummaryDetail->tot_disc;
+			$orderBooking->tot_tax_base_price = $orderSummaryDetail->tot_tax_base_price;
+			$orderBooking->tot_tax_value = $orderSummaryDetail->tot_tax_value;
+			$orderBooking->tot_payment = $orderSummaryDetail->tot_payment;
+			$orderBooking->save();
+
+			//BLNC001
+			$balanceOrderBooking->tot_commision_val = $orderBooking->tot_commision_val;
+			$balanceOrderBooking->tot_gross_price = $orderBooking->tot_gross_price;
+			$balanceOrderBooking->tot_disc = $orderBooking->tot_disc;
+			$balanceOrderBooking->tot_tax_base_price = $orderBooking->tot_tax_base_price;
+			$balanceOrderBooking->tot_tax_value = $orderBooking->tot_tax_value;
+			$balanceOrderBooking->tot_payment = $orderBooking->tot_payment;
+			$balanceOrderBooking->save();
+
 
 		} catch (\Exception $e) {
 			DB::rollBack();
@@ -527,32 +575,34 @@ class RequestController extends Controller {
 		}
 		DB::commit();
 
-		if(Session::has('bookingData')){
-			Session::forget('bookingData');
+		if(Session::has('requestData')){
+			Session::forget('requestData');
 		}
 
-		//return 
-		echo 'sudah berhasil di simpan';
+		//return
+		// echo 'sudah berhasil di simpan';
+		return redirect('agent/request/success')
+				->with('data', $successInfo);
 	}
 
 	public function postConfirm2(Request $request){
 		echo '<pre>';
 		print_r($request->all());
 
-		$bookingData = Session::all();
-		print_r($bookingData);
+		$requestData = Session::all();
+		print_r($requestData);
 
-		// $hotelRoomRate = HotelRoomRate::find($bookingData->rateId);
+		// $hotelRoomRate = HotelRoomRate::find($requestData->rateId);
 		// print_r($hotelRoomRate->toArray());
 		// if($request)
 	}
 
 	public function getSuccess(Request $request){
-		echo 'Booking Success, go back to your profile ?';
-		echo '<a href="'.url().'">Go Home</a>';
+		$data = Session::get('data');
+		return view('agent.request.agent-request-success')->with('data', $data);
 	}
 
-	
+
 
 	private function validation(Request $request){
 
@@ -568,11 +618,11 @@ class RequestController extends Controller {
 			'low_floor_flag'   => 'required|in:Yes,No',
 			'twin_flag'   => 'required|in:Yes,No',
 			'honeymoon_flag'   => 'required|in:Yes,No',
-			'payment_method'   => 'required|in:Balance,Transfer,CreditCard,PendingPayment',
-			'card_type'   => 'required_if:payment_method,CreditCard|in:Visa,Master',
-			'card_holder'   => 'required_if:payment_method,CreditCard',
-			'card_number'   => 'required_if:payment_method,CreditCard',
-			'card_identification_number'   => 'required_if:payment_method,CreditCard',
+			// 'payment_method'   => 'required|in:Balance,Transfer,CreditCard,PendingPayment',
+			// 'card_type'   => 'required_if:payment_method,CreditCard|in:Visa,Master',
+			// 'card_holder'   => 'required_if:payment_method,CreditCard',
+			// 'card_number'   => 'required_if:payment_method,CreditCard',
+			// 'card_identification_number'   => 'required_if:payment_method,CreditCard',
 		);
 
 		$messages = array(
@@ -595,8 +645,8 @@ class RequestController extends Controller {
 			'twin_flag.in' => 'Twin floor value must valid',
 			'honeymoon_flag.required' => 'Honeymoon must valid',
 			'honeymoon_flag.in' => 'Honeymoon must valid',
-			'payment_method.required' => 'Payment method must valid must valid',
-			'payment_method.in' => 'Payment method must valid must valid',
+			// 'payment_method.required' => 'Payment method must valid must valid',
+			// 'payment_method.in' => 'Payment method must valid must valid',
 		);
 
 		$v = Validator::make($request->all(), $rules, $messages);
@@ -606,12 +656,12 @@ class RequestController extends Controller {
 	private function requeryBookingRoom(){
 		$query = " SELECT B.mst020_id, D.room_name, B.room_desc, G.num_adults, G.num_child, G.num_breakfast,
                              B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
-                            COALESCE(E.allotment,B.allotment) AS allotment, B.allotment as rate_allotment, B.mst023_id, 
+                            COALESCE(E.allotment,B.allotment) AS allotment, B.allotment as rate_allotment, B.mst023_id,
                             B.comm_value, B.cut_off, B.bed_type,
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.nett_value
                                 ELSE B.nett_value_wna
-                             END as nett_value, 
+                             END as nett_value,
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.daily_price
                                 ELSE B.daily_price_wna
@@ -625,8 +675,8 @@ class RequestController extends Controller {
                                 AND A.check_in_date between STR_TO_DATE(?, '%d-%m-%Y') and STR_TO_DATE(?, '%d-%m-%Y')) E
                                  on E.mst023_id = D.id
                      inner join (select X.mst023_id,MIN(X.num_breakfast) as num_breakfast,MIN(X.num_adults) as num_adults,MIN(X.num_child) as num_child
-                                 from MST022 X 
-                                  WHERE 
+                                 from MST022 X
+                                  WHERE
                                     (   X.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
                                         OR
                                         X.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
@@ -649,77 +699,36 @@ class RequestController extends Controller {
                                         SELECT MAX(AE.end_date) FROM MST022 AE WHERE AE.mst023_id = X.mst023_id
                                       )
                                      AND X.mst023_id = ?
-                                     group by X.mst023_id)G ON G.mst023_id = D.ID
+                                     group by X.mst023_id)G ON G.mst023_id = D.id
                      WHERE
                       (
                         B.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
                         OR
                         B.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
                       )
-                 
+
                      AND
                       (
                         B.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
                         OR
                         B.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
                       )
-                 
+
                      AND STR_TO_DATE(?, '%d-%m-%Y') >=
                       (
                         SELECT MIN(AB.from_date) FROM MST022 AB WHERE AB.mst023_id = B.mst023_id
                       )
-                 
+
                      AND STR_TO_DATE(?, '%d-%m-%Y') <=
                       (
                         SELECT MAX(AC.end_date) FROM MST022 AC WHERE AC.mst023_id = B.mst023_id
                       )
- 
+
                       AND B.mst023_id = ?
                       ORDER BY D.room_name, B.from_date;
                   ";
 
       return $query;
-	}
-
-	private function requeryBookingRoomOld(){
-		$query = " SELECT B.mst020_id, D.room_name, B.room_desc, D.num_adults, B.num_child, B.num_breakfast,
-				             B.from_date, B.end_date, B.net_fee, B.net, B.cancel_fee_flag, B.cancel_fee_val,
-				             B.allotment-B.used_allotment AS allotment, B.comm_value, B.cut_off, B.bed_type,
-				             CASE WHEN UPPER(?) = 'INDONESIA'
-				             	THEN B.nett_value
-				                ELSE B.nett_value_wna
-				             END as nett_value
-				     FROM MST022 B 
-				     inner join MST023 D on D.id = B.mst023_id
-				     WHERE
-				      (
-				        B.from_date >= STR_TO_DATE(?, '%d-%m-%Y')
-				        OR
-				        B.end_date >= STR_TO_DATE(?, '%d-%m-%Y')
-				      )
-				 
-				     AND
-				      (
-				        B.end_date <= STR_TO_DATE(?, '%d-%m-%Y')
-				        OR
-				        B.from_date <= STR_TO_DATE(?, '%d-%m-%Y')
-				      )
-				 
-				     AND STR_TO_DATE(?, '%d-%m-%Y') >=
-				      (
-				        SELECT MIN(AB.from_date) FROM MST022 AB WHERE AB.mst023_id = B.mst023_id
-				      )
-				 
-				     AND STR_TO_DATE(?, '%d-%m-%Y') <=
-				      (
-				        SELECT MAX(AC.end_date) FROM MST022 AC WHERE AC.mst023_id = B.mst023_id
-				      )
-
-				      AND B.mst023_id = ?
-				      ORDER BY D.room_name, B.from_date;
-		";
-
-		return $query;
 	}
 
 

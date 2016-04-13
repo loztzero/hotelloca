@@ -15,13 +15,13 @@
 @endsection
 
 @section('content')
-	
+
 <div class="container" ng-controller="MainCtrl">
 	<div class="container">
         <div class="row">
             <div id="main" class="col-sms-6 col-sm-8 col-md-9">
                 <div class="booking-section travelo-box">
-                    
+
                     <form class="booking-form" action="booking/confirm" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="person-information">
@@ -48,11 +48,11 @@
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
                                     <label>First Name</label>
-                                    <input type="text" class="input-text full-width" value="" name="first_name" placeholder="" value="{{ old('first_name') }}" />
+                                    <input type="text" class="input-text full-width" name="first_name" value="{{ old('first_name') }}" />
                                 </div>
                                 <div class="col-sm-6 col-md-5">
                                     <label>Last Name</label>
-                                    <input type="text" class="input-text full-width" value="" name="last_name" placeholder="" value="{{ old('last_name') }}" />
+                                    <input type="text" class="input-text full-width" name="last_name" value="{{ old('last_name') }}" />
                                 </div>
                             </div>
                             <!-- <div class="form-group row">
@@ -72,7 +72,8 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox"> I want to receive <span class="skin-color">Hotelloca</span> promotional offers in the future
+                                        <input type="hidden" name="news_letter_flg" value="No" >
+                                        <input type="checkbox" name="news_letter_flg" value="Yes" {{ $newsletterFlag == 'Yes' ? 'checked' : '' }}> I want to receive <span class="skin-color">Hotelloca</span> promotional offers in the future
                                     </label>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
@@ -165,7 +166,7 @@
                             <h2>Payment</h2>
                             <div class="form-group">
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Balance">Balance</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Balance">Deposit</label>
                                 </div>
                                 <div class="radio col-sm-6 col-md-4">
                                     <label><input type="radio" name="payment_method" ng-model="payment" value="Transfer">Transfer</label>
@@ -173,9 +174,11 @@
                                 <div class="radio col-sm-6 col-md-4">
                                     <label><input type="radio" name="payment_method" ng-model="payment" value="CreditCard">Credit Card</label>
                                 </div>
+								@if($enablePendingPayment)
                                 <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="PendingPayment">Pending Payment</label>
+                                    <label><input type="radio" name="payment_method" ng-model="payment" value="PendingPayment">Payment Later</label>
                                 </div>
+								@endif
                             </div>
                             <div style="clear:both;"></div>
 
@@ -183,26 +186,26 @@
                             <div ng-show="payment == 'Balance'">
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-5">
-                                        <label>Payment</label>
-                                        <input type="text" class="input-text full-width" name="balance_payment" />
+                                        <label>Deposit</label>
+                                        <input type="text" class="input-text full-width" name="balance_payment" value="{{ number_format(($totalPrice * $totalRooms), 0, ',', '.') }}" readonly />
                                     </div>
 
                                     <div class="col-sm-6 col-md-5">
                                         <label>Remaning Deposit</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
+                                        <input type="text" class="input-text full-width" value="{{ $remainingDeposit }}" readonly />
                                     </div>
                                 </div>
                             </div>
 
                             <!-- transfer -->
-                            <div ng-show="payment == 'Transfer'">
+                            <!-- <div ng-show="payment == 'Transfer'">
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-5">
                                         <label>Account Name</label>
                                         <input type="text" class="input-text full-width" value="" placeholder="" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- for credit card -->
                             <div ng-show="payment == 'CreditCard'">
@@ -275,9 +278,22 @@
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-12">
                                     <b><u>WARNING</u></b><br>
-                                    <b>Cancellation</b> on date <b style="color:red">{{ $cutOffDateAgent }}</b> will be <b>charged 1 night room rate</b><br>
-                                    <b>Cancellation</b> from date <b style="color:red">{{ $cutOffDateHotel }}</b> will be <b>charged full payment</b><br>
-                                    <span>Cancellation before {{ $cutOffDateAgent }} is free of charge</span>
+									@if($enablePendingPayment)
+									Except for <b>Payment Later</b> method payment, the rest payment method <b style="color:red">can not be cancelled</b>.<br>
+									@endif
+									<b>Transfer</b> must be done in <b style="color:red">30 minutes</b> or it will be automaticly cancelled.<br>
+									<b>Cancellation</b> will be done on our system at <b style="color:red">{{ $cutOffDateAgent }}</b> 02:30 GMT+7 If we do not receive any payment and payment confirmation from agent.<br>
+
+									<?php /*
+                                    @if($globalCancelFeeFlag == 'Yes')
+                                        <b style="color:red">Cancellation will be charged full payment</b>
+                                    @else
+
+                                        <b>Cancellation</b> on date <b style="color:red">{{ $cutOffDateAgent }}</b> will be <b>charged Rp. {{ number_format($cutOffAgentCharge, 0, ',', '.') }}</b><br>
+                                        <b>Cancellation</b> from date <b style="color:red">{{ $cutOffDateHotel }}</b> will be <b>charged full payment</b><br>
+                                        <span>Cancellation before {{ $cutOffDateAgent }} is free of charge</span>
+                                    @endif
+									*/ ?>
                                 </div>
                             </div>
                         </div>
@@ -285,7 +301,7 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
+                                    <input type="checkbox" name="agreement" required> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
                                 </label>
                             </div>
                         </div>
@@ -342,18 +358,19 @@
                             </div>
                         </div>
                     </article>
-                    
+
                     <h4>Other Details</h4>
                     <dl class="other-details">
-                        <dt class="feature">room Type:</dt><dd class="value">{{ $room->room_name }} </dd>
+                        <dt class="feature">Room Type:</dt><dd class="value">{{ $room->room_name }} </dd>
                         <dt class="feature">&nbsp;</dt><dd class="value">{{ $room->num_breakfast > 0 ? 'Include '. $room->num_breakfast .' Breakfast' : 'Room Only' }}</dd>
-                        <dt class="feature">avr Room price:</dt><dd class="value">Rp. {{ number_format($averagePrice, 0, ',', '.') }}</dd>
-                        <dt class="feature">{{ $nights }} night Stay:</dt><dd class="value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
-                        <dt class="feature">taxes and fees:</dt><dd class="value">Rp. {{ 0 }}</dd>
-                        <dt class="total-price">Total Price</dt><dd class="total-price-value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
+                        <dt class="feature">Avr Room Price:</dt><dd class="value">Rp. {{ number_format($averagePrice, 0, ',', '.') }}</dd>
+                        <dt class="feature">{{ $nights }} Night Stay:</dt><dd class="value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
+												<dt class="feature">x {{ $totalRooms }} {{ $totalRooms > 1 ? 'Rooms' : 'Room' }}</dt><dd>&nbsp;</dd>
+                        <dt class="feature">Taxes And Fees:</dt><dd class="value">Rp. {{ 0 }}</dd>
+                        <dt class="total-price">Total Price</dt><dd class="total-price-value">Rp. {{ number_format(($totalPrice * $totalRooms), 0, ',', '.') }}</dd>
                     </dl>
                 </div>
-                
+
                 <div class="travelo-box contact-box">
                     <h4>Need Hotelloca Help?</h4>
                     <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>
@@ -376,7 +393,7 @@
 var app = angular.module("ui.hotelloca", []);
 app.controller("MainCtrl", function ($scope, $http, $filter) {
 
-    $scope.payment = 'Transfer';
+    $scope.payment = "{{ old('payment_method', 'Transfer') }}";
 
 });
 

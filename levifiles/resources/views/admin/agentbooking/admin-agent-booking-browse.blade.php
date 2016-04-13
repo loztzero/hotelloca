@@ -18,60 +18,68 @@
 	<div class="container" ng-controller="MainCtrl">
 
 		<div class="travelo-box">
-			<form action="{{url('/admin/hotel')}}" method="get" >
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+			<form action="" method="get" >
 
-				<h3>Agent Booking List</h3>
-				@include('layouts.message-helper')
-			    <div class="row form-group">
-			        <div class="col-xs-6">
-			            <label>Agent Email</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
+                <h3>Agent Booking List</h3>
+                @include('layouts.message-helper')
 
-			        <div class="col-xs-6">
-			            <label>Booking Number</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
-			    </div>
+                <div class="row form-group">
+                    <div class="col-xs-12">
+                        <label>Booking Number</label>
+                        <input type="text" class="input-text full-width"  value="{{ Request::get('order_no')}}" id="orderNo" name="order_no">
+                    </div>
+                </div>
 
-			    <div class="row form-group">
-			        <div class="col-xs-6">
-			            <label>Check In Date From</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
+                <div class="row form-group">
+                    <div class="col-xs-6">
+                        <label>Check In Date</label>
+                        <div class="datepicker-wrap">
+                            <input type="text" name="date_from" class="input-text full-width" placeholder="dd-mm-yy" />
+                        </div>
+                    </div>
 
-			        <div class="col-xs-6">
-			            <label>Check Out Date</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
-			    </div>
+                    <div class="col-xs-6">
+                        <label>Check Out Date</label>
+                        <div class="datepicker-wrap">
+                            <input type="text" name="date_to" class="input-text full-width" placeholder="dd-mm-yy" />
+                        </div>
+                    </div>
+                </div>
 
-			    <div class="row form-group">
-			        <div class="col-xs-6">
-			            <label>Country</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
+                <div class="row form-group">
+                    <div class="col-xs-6">
+                        <label>Country</label>
+                        <div class="selector">
+                            {!! Form::select('country', ['' => 'All'] + $countries->toArray(), null, array('ng-model' => 'field.country', 'ng-change' => 'getCity()', 'class' => 'full-width')) !!}
+                        </div>
+                    </div>
 
-			        <div class="col-xs-6">
-			            <label>City</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
-			    </div>
+                    <div class="col-xs-6">
+                        <label>City</label>
+                        <div class="selector" id="citySelector">
+                            <select ng-model="field.city" name="city" id="city">
+                                <option value="">All</option>
+                                <option ng-repeat="city in cities" value="@{{city.id}}">@{{city.city_name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-			    <div class="row form-group">
-			        <div class="col-xs-6">
-			            <label>Order Status</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
-			    </div>
+                <div class="row form-group">
+                    <div class="col-xs-6">
+                        <label>Status Pesanan</label>
+                        <div class="selector">
+                            {!! Form::select('status', array('' => 'All', 'Pending' => 'Pending', 'Done' => 'Done', 'Cancel' => 'Cancel'), null, array('class' => 'full-width')) !!}
+                        </div>
+                    </div>
+                </div>
 
-			    <div class="row form-group">
-			        <div class="col-xs-12">
-			            <button type="submit" class="button small" value="search">Search</button>
-			        </div>
-			    </div>
-			</form>
+                <div class="row form-group">
+                    <div class="col-xs-12">
+                        <button type="submit" class="button small">Search</button>
+                    </div>
+                </div>
+            </form>
 		</div>
 
 		<div class="travelo-box">
@@ -88,48 +96,31 @@
 						<th>Tamu</th>
 						<th>Tanggal Pembayaran</th>
 						<th>Status</th>
-						<th>Total Payment</th>
+						<th class="td-right">Total Payment</th>
 						<th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach(array() as $hotel)
-					<tr>
-						<td>
-							<form action="{{URL::to('admin/hotel/load-data')}}" method="post" class="pull-left">
-								<input type="hidden" value="{{ csrf_token() }}" name="_token">
-				            	<input type="hidden" value="{{ $hotel->id }}" name="id">
-				            	<button type="submit" class="btn-primary" title="Edit Hotel"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-							</form>
-							@if($hotel->active_flg == 'Inactive')
-								<form action="{{URL::to('admin/hotel/activate-hotel')}}" method="post" class="pull-right">
-									<input type="hidden" value="{{ csrf_token() }}" name="_token">
-					            	<input type="hidden" value="{{$hotel->id}}" name="id">
-					            	<button class="btn-primary" title="Activate the hotel"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
-								</form>
-							@elseif($hotel->active_flg == 'Active')
-								<form action="{{URL::to('admin/hotel/deactivate-hotel')}}" method="post" class="pull-right">
-									<input type="hidden" value="{{ csrf_token() }}" name="_token">
-					            	<input type="hidden" value="{{$hotel->id}}" name="id">
-					            	<button class="btn-warning" title="Deadactivated the hotel"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-								</form>
-							@endif
-						</td>
-						<td>{{ $hotel->hotel_name }}</td>
-						<td class="hide-for-small">{{ $hotel->country->country_name }}</td>
-						<td class="hide-for-small">{{ $hotel->city->city_name }}</td>
-						<td class="hide-for-small">{{ $hotel->address }}</td>
-						<td class="hide-for-small">{{ $hotel->phone_number }}</td>
-						<td>
-							{{ $hotel->active_flg }}
-						</td>
-					</tr>
-					@endforeach
+					@foreach($bookingList as $booking)
+                    <tr>
+						<td>Agent Name</td>
+                        <td>{{ $booking->order_no }}</td>
+                        <td>{{ $booking->check_in_date }}</td>
+                        <td>{{ $booking->check_out_date }}</td>
+                        <td>{{ $booking->first_name }}</td>
+                        <td>{{ $booking->transfer_date }}</td>
+                        <td>{{ $booking->status_flg }}</td>
+                        <td class="td-right">{{ number_format($booking->tot_payment, 0, ',', '.') }}</td>
+                        <td>
+                            <a href="{{ url('agent/booking-history/order-detail/').'/'.$booking->order_no }}" class="button btn-small green">Order Detail</a>
+                        </td>
+                    </tr>
+                    @endforeach
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="7" id="pagination">
-							{{-- $hotelList->appends(Request::only('hotel_name', 'country', 'city'))->render() --}}
+						<td colspan="9" id="pagination">
+							{!! $bookingList->appends(Request::only('hotel_name', 'date_from', 'date_to', 'country', 'city', 'status'))->render() !!}
 						</td>
 					</tr>
 				</tfoot>
@@ -154,12 +145,15 @@
 				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
 				if(oldCity.length == 0){
 					$scope.field.city = '';
-					tjq('#citySelector span').html('Select A City');
+					tjq('#citySelector span').html('All');
 				} else {
 					tjq('#citySelector span').html(oldCity[0].city_name);
 				}
 			})
 		}
+
+		$scope.getCity();
+    	$scope.field.city = '{{ Request::get("city", '') }}';
 
 	});
 </script>

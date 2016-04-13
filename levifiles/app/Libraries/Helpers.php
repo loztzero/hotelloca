@@ -1,7 +1,7 @@
 <?php namespace App\Libraries;
 
 use DB, DateTime, DatePeriod, DateInterval, StdClass;
-class Helpers { 
+class Helpers {
 
 	public static function mysqlID(){
 		$results = DB::select('select uuid() as z from dual ');
@@ -17,7 +17,7 @@ class Helpers {
 		$json = json_encode($simpleXml);
 
 		return $json;
-	} 
+	}
 
 	/**
 	parameter stringDate wajib menggunakan format ddmmyy
@@ -75,6 +75,6 @@ class Helpers {
 	}
 
 
-} 
+}
 
 ?>

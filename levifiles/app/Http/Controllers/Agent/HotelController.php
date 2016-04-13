@@ -23,7 +23,10 @@ use App\Models\HotelRoom;
 use App\Models\HotelRoomRate;
 use App\Http\Controllers\Controller;
 use DateInterval, DatePeriod;
+use App\Http\Traits\CityFromCountry;
 class HotelController extends Controller {
+
+	use CityFromCountry;
 
 	public function getIndex(){
 
@@ -39,7 +42,7 @@ class HotelController extends Controller {
 	public function getBasicSearchHotel(){
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
         $countries = Country::lists('country_name', 'country_name');
-		return view('agent.hotel.agent-hotel-basic-search')->with('countries', $countries)->with('indonesia', $indonesia);	
+		return view('agent.hotel.agent-hotel-basic-search')->with('countries', $countries)->with('indonesia', $indonesia);
 	}
 
 	public function getSearch(Request $request){
@@ -66,7 +69,7 @@ class HotelController extends Controller {
 		$checkIn = $request->date_from;
 		$checkOut = $request->date_to;
 		$hotelName = $request->hotel_name;
-		
+
 		$checkIn = Helpers::dateFormatter($checkIn);
 		$checkOut = Helpers::dateFormatter($checkOut);
 		//$rooms = HotelRoom::join('mst020', 'mst020.id', '=', 'mst020_id')->get();
@@ -74,60 +77,60 @@ class HotelController extends Controller {
 					$q->where('hotel_name', 'like', '%');
 				 })->get();*/
 
-		
+
 		$query = "
 			select a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict,
-			case when ? = 'Indonesia' 
-				then min(h.nett_value) else min(h.nett_value_wna) 
+			case when ? = 'Indonesia'
+				then min(h.nett_value) else min(h.nett_value_wna)
 			end as nett_value
-			from MST020 a	
-			inner join 
+			from MST020 a
+			inner join
 			(
-				select c.mst020_id, c.nett_value, c.nett_value_wna, c.rate_type, c.comm_type, 
+				select c.mst020_id, c.nett_value, c.nett_value_wna, c.rate_type, c.comm_type,
 				c.comm_pct,c.comm_value,c.num_adults,c.allotment,
 				c.from_date, c.end_date
-				from MST022 c 
-				where 
-				 c.num_adults >= 0 
-				and c.allotment-c.used_allotment >= 0 
+				from MST022 c
+				where
+				 c.num_adults >= 0
+				and c.allotment-c.used_allotment >= 0
 				and (
-						c.from_date >= STR_TO_DATE(?, '%Y-%m-%d') 
-						or 
-						c.end_date >= STR_TO_DATE(?, '%Y-%m-%d') 
+						c.from_date >= STR_TO_DATE(?, '%Y-%m-%d')
+						or
+						c.end_date >= STR_TO_DATE(?, '%Y-%m-%d')
 					)
 				and (
-						c.end_date <= STR_TO_DATE(?, '%Y-%m-%d') 
-						or 
-						c.from_date <= STR_TO_DATE(?, '%Y-%m-%d') 
+						c.end_date <= STR_TO_DATE(?, '%Y-%m-%d')
+						or
+						c.from_date <= STR_TO_DATE(?, '%Y-%m-%d')
 					)
-				and STR_TO_DATE(?, '%Y-%m-%d') >= 
+				and STR_TO_DATE(?, '%Y-%m-%d') >=
 				(
-					select min(ab.from_date) 
-					from MST022 ab 
+					select min(ab.from_date)
+					from MST022 ab
 					where ab.mst020_id = c.mst020_id
 				)
-				and STR_TO_DATE(?, '%Y-%m-%d')  <= 
+				and STR_TO_DATE(?, '%Y-%m-%d')  <=
 				(
-					select max(ac.end_date) 
-					from MST022 ac 
+					select max(ac.end_date)
+					from MST022 ac
 					where ac.mst020_id = c.mst020_id
 				)
-			) as h on h.mst020_id = a.id 
+			) as h on h.mst020_id = a.id
 
-			left join 
+			left join
 			(
 				select e.pict,e.mst020_id as mst020_id
-				from MST021 e 
+				from MST021 e
 				where e.line_number =
 				(
-					select max(f.line_number) 
-					from MST021 f 
+					select max(f.line_number)
+					from MST021 f
 					where f.mst020_id = e.mst020_id
 				)
 			) as j on j.mst020_id = a.id
 
 			where a.mst002_id = ? ";
-		
+
 		$params = array($nationality, $checkIn, $checkIn, $checkOut, $checkOut, $checkIn, $checkOut, $country);
 		if(!empty($city)){
 			$query .= ' and a.mst003_id = ? ';
@@ -141,7 +144,7 @@ class HotelController extends Controller {
 
 		if(!empty($hotelName)){
 			$query .= 'and a.hotel_name like ?';
-			array_push($params, '%' . $hotelName . '%');	
+			array_push($params, '%' . $hotelName . '%');
 		}
 
 		$query .= " group by a.id, a.address, a.description, a.hotel_id, a.hotel_name, a.star, j.pict
@@ -190,19 +193,6 @@ class HotelController extends Controller {
 		return $result;
 	}
 
-	//untuk load kota di halaman search data hotel
-	public function postCityFromCountry(Request $request){
-        // print_r(Input::all());
-        if($request->country){
-        	$countryDetail = Country::where('id', '=', $request->country)->first();
-            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
-            return $cities;
-        } 
-
-        return json_encode(array());
-    }
-
-
     //BAGIAN PERINCIAN HOTEL DETAIL DISINI
     public function getHotelDetailTrial(Request $request){
     	$hotel = HotelDetail::find('0597bfb1-8f57-459d-af6e-d653775a0a73');
@@ -212,7 +202,7 @@ class HotelController extends Controller {
     }
 
     public function getHotelDetail(Request $request){
-    	
+
 		//  cara mendapatkan relationship dengan filter query detail ya seperti ini.
 	    // 	$rooms = HotelRoom::with(array('roomRates'=>function($query){
 	    // 				$query->where('daily_price', '=', 200000);
@@ -223,16 +213,21 @@ class HotelController extends Controller {
     	$hotel = HotelDetail::find($request->hotel);
     	$checkIn = $request->checkIn;
 		$checkOut = $request->checkOut;
-		
+
 		$checkIn = Helpers::dateFormatter($checkIn);
 		$checkOut = Helpers::dateFormatter($checkOut);
 
     	$pictures = HotelPicture::where('mst020_id', '=', $hotel->id)->get();
-    	
+
     	$sessionId = Session::getId();
     	$hotelId = $hotel->id;
     	$fromDate = $request->checkIn;
-    	$endDate = $request->checkOut;
+
+    	// $endDate = $request->checkOut;
+			//khusus untuk sp nya si nita az nie .. karena menggunakan between .. zzz
+			$tempEndDate = Helpers::dateFormatter($request->checkOut);
+			$endDate = date('d-m-Y', strtotime('-1 day', strtotime($tempEndDate)));
+
     	$market = 'Indonesia';
     	$allotment = $request->room;
     	$adults = $request->adults;
@@ -281,11 +276,11 @@ class HotelController extends Controller {
     	// print_r($result);
     	// die();
 		foreach($result as $room){
-			
+
 			foreach($period as $date){
 
-				if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"), 
-                    Helpers::dateFormatter($room->from_date), 
+				if(Helpers::isDate1BetweenDate2AndDate3($date->format("d-m-Y"),
+                    Helpers::dateFormatter($room->from_date),
                     Helpers::dateFormatter($room->end_date))){
 
 					$counter++;
@@ -334,7 +329,7 @@ class HotelController extends Controller {
     		->with('period', $period)
     		->with('helpers', new Helpers())
     		->with('request', $request);;
-    	
+
     }
 
     public function getTrialDate(){

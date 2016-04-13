@@ -35,7 +35,7 @@ class HotelDetail extends Emodel {
     }
 
     public function currency(){
-    	return $this->hasOne('App\Models\Currency', 'id', 'mst004_id');	
+    	return $this->hasOne('App\Models\Currency', 'id', 'mst004_id');
     }
 
 	public function rules($data)

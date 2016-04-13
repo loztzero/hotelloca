@@ -26,7 +26,7 @@ class HotelRoomFacility extends Emodel {
 		$v = Validator::make($request->all(), $rules, $messages);
 		if($v->fails()){
 			$error = $v->errors()->all();
-			
+
 		}
 
 		return $error;

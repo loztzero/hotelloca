@@ -23,7 +23,7 @@ class OrderBooking extends Emodel {
 
 	public function getMaxCounter(){
 		$record = OrderBooking::where('order_no', 'like', date('Ymd').'%')->max('order_no');
-		
+
 		if($record){
 
 			$number = intval(substr($record, -4)) + 1;

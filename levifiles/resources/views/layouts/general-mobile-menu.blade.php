@@ -4,8 +4,8 @@
 
 <div class="container">
     <h1 class="logo navbar-brand">
-        <a href="index.html" title="Travelo - home">
-            <img src="{{ url('/') }}/assets/images/logo.png" alt="Travelo HTML5 Template" />
+        <a href="{{ url('main') }}" title="Travelo - home">
+            <img src="{{ url('/') }}/assets/images/logo.png" alt="Hotelloca Logo" />
         </a>
     </h1>
 
@@ -28,7 +28,7 @@
         <li class="menu-item"><a href="{{ url('/main/term-and-condition') }}">Term And Condition</a></li>
         <li class="menu-item"><a href="{{ url('/main/contact-us') }}">Contact Us</a></li>
     </ul>
-    
+
     <ul class="mobile-topnav container">
         @if(Auth::check() && Auth::user()->role == 'Agent')
             <li class="ribbon menu-color-skin">
@@ -104,7 +104,7 @@
             </ul>
         </li>
 
-        
+
     </ul>
-    
+
 </nav>

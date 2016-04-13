@@ -24,12 +24,12 @@ class BookingController extends Controller {
 		$result = HotelDetail::where('api_flg', '=', 'No');
 		$result = isset($request->hotel_name) && $request->hotel_name != '' ? $result->where('hotel_name', 'like', $request->hotel_name) : $result;
 
-		$result = isset($request->country) && $request->country != ''  
-					? $result->join('MST002', 'MST002.id', '=', 'MST020.mst002_id')->where('MST002.country_code', '=', $request->country) 
+		$result = isset($request->country) && $request->country != ''
+					? $result->join('MST002', 'MST002.id', '=', 'MST020.mst002_id')->where('MST002.country_code', '=', $request->country)
 					: $result;
 
-		$result = isset($request->city) && $request->city != '' 
-					? $result->join('MST003', 'MST003.id', '=', 'MST020.mst003_id')->where('MST003.city_code', '=', $request->city) 
+		$result = isset($request->city) && $request->city != ''
+					? $result->join('MST003', 'MST003.id', '=', 'MST020.mst003_id')->where('MST003.city_code', '=', $request->city)
 					: $result;
 
 		$hotelList = $result->paginate(20);
@@ -103,10 +103,10 @@ class BookingController extends Controller {
 				}
 
 			}
-			
+
 		} catch (\Exception $e) {
-			
-			DB::rollback();			
+
+			DB::rollback();
 			Session::flash('error', array($e->getMessage()));
 			return Redirect::to('hotel-admin/hotel-input')->withInput(Input::all());
 		}
@@ -141,7 +141,7 @@ class BookingController extends Controller {
 
 			if($hotel->active_flg == 'Active'){
 				Session::flash('error', array('Hotel '.$hotel->hotel_name.' already activated'));
-				return Redirect::to('hotel-admin/hotel-browse');	
+				return Redirect::to('hotel-admin/hotel-browse');
 			}
 
 			$hotel->active_flg = 'Active';
@@ -159,7 +159,7 @@ class BookingController extends Controller {
 
 			if($hotel->active_flg == 'Inactive'){
 				Session::flash('error', array('Hotel '.$hotel->hotel_name.' already inactive'));
-				return Redirect::to('hotel-admin/hotel-browse');	
+				return Redirect::to('hotel-admin/hotel-browse');
 			}
 
 			$hotel->active_flg = 'Inactive';
@@ -177,7 +177,7 @@ class BookingController extends Controller {
         	$countryDetail = Country::where('country_code', '=', $request->country)->first();
             $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
             return $cities;
-        } 
+        }
 
         return json_encode(array());
     }

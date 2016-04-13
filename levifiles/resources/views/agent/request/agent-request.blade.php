@@ -15,13 +15,13 @@
 @endsection
 
 @section('content')
-	
+
 <div class="container" ng-controller="MainCtrl">
 	<div class="container">
         <div class="row">
             <div id="main" class="col-sms-6 col-sm-8 col-md-9">
                 <div class="booking-section travelo-box">
-                    
+
                     <form class="booking-form" action="request/confirm" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="person-information">
@@ -48,11 +48,11 @@
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
                                     <label>First Name</label>
-                                    <input type="text" class="input-text full-width" value="" name="first_name" placeholder="" value="{{ old('first_name') }}" />
+                                    <input type="text" class="input-text full-width" name="first_name" placeholder="" value="{{ old('first_name') }}" />
                                 </div>
                                 <div class="col-sm-6 col-md-5">
                                     <label>Last Name</label>
-                                    <input type="text" class="input-text full-width" value="" name="last_name" placeholder="" value="{{ old('last_name') }}" />
+                                    <input type="text" class="input-text full-width" name="last_name" placeholder="" value="{{ old('last_name') }}" />
                                 </div>
                             </div>
                             <!-- <div class="form-group row">
@@ -72,7 +72,8 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox"> I want to receive <span class="skin-color">Hotelloca</span> promotional offers in the future
+										<input type="hidden" name="news_letter_flg" value="No" >
+                                        <input type="checkbox" name="news_letter_flg" value="Yes" {{ $newsletterFlag == 'Yes' ? 'checked' : '' }}> I want to receive <span class="skin-color">Hotelloca</span> promotional offers in the future
                                     </label>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-6 col-md-5">
                                         <div class="checkbox">
                                             <label>
@@ -161,116 +162,8 @@
                             </div>
                         </div>
                         <hr />
-                        <div class="card-information">
-                            <h2>Payment</h2>
-                            <div class="form-group">
-                                <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Balance">Balance</label>
-                                </div>
-                                <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="Transfer">Transfer</label>
-                                </div>
-                                <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="CreditCard">Credit Card</label>
-                                </div>
-                                <div class="radio col-sm-6 col-md-4">
-                                    <label><input type="radio" name="payment_method" ng-model="payment" value="PendingPayment">Pending Payment</label>
-                                </div>
-                            </div>
-                            <div style="clear:both;"></div>
 
-                            <!-- balance -->
-                            <div ng-show="payment == 'Balance'">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Payment</label>
-                                        <input type="text" class="input-text full-width" name="balance_payment" />
-                                    </div>
-
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Remaning Deposit</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- transfer -->
-                            <div ng-show="payment == 'Transfer'">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Account Name</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- for credit card -->
-                            <div ng-show="payment == 'CreditCard'">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Credit Card Type</label>
-                                        <div class="selector">
-                                            <select class="full-width" name="card_type">
-                                                <option>Visa</option>
-                                                <option>Master</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Card holder name</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" name="card_holder" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Card number</label>
-                                        <input type="text" class="input-text full-width" value="" name="card_number" placeholder="" />
-                                    </div>
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Card identification number</label>
-                                        <input type="text" class="input-text full-width" value="" name="card_identification_number" placeholder="" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 col-md-5">
-                                        <label>Expiration Date</label>
-                                        <div class="constant-column-2">
-                                            <div class="selector">
-                                                <select class="full-width">
-                                                    <option value="01">January</option>
-                                                    <option value="02">February</option>
-                                                    <option value="03">March</option>
-                                                    <option value="04">April</option>
-                                                    <option value="05">May</option>
-                                                    <option value="06">June</option>
-                                                    <option value="07">July</option>
-                                                    <option value="08">August</option>
-                                                    <option value="09">September</option>
-                                                    <option value="10">October</option>
-                                                    <option value="11">November</option>
-                                                    <option value="12">December</option>
-                                                </select>
-                                            </div>
-                                            <div class="selector">
-                                                <select class="full-width">
-                                                    <option value="2016">2016</option>
-                                                    <option value="2016">2017</option>
-                                                    <option value="2016">2019</option>
-                                                    <option value="2016">2019</option>
-                                                    <option value="2016">2020</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3 col-md-2">
-                                        <label>billing zip code</label>
-                                        <input type="text" class="input-text full-width" value="" placeholder="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr />
-
+						<?php /*
                         <div class="form-group">
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-12">
@@ -280,12 +173,14 @@
                                     <span>Cancellation before {{ $cutOffDateAgent }} is free of charge</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */
+
+						?>
 
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
+                                    <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
                                 </label>
                             </div>
                         </div>
@@ -342,7 +237,7 @@
                             </div>
                         </div>
                     </article>
-                    
+
                     <h4>Other Details</h4>
                     <dl class="other-details">
                         <dt class="feature">room Type:</dt><dd class="value">{{ $room->room_name }} </dd>
@@ -353,7 +248,7 @@
                         <dt class="total-price">Total Price</dt><dd class="total-price-value">Rp. {{ number_format($totalPrice, 0, ',', '.') }}</dd>
                     </dl>
                 </div>
-                
+
                 <div class="travelo-box contact-box">
                     <h4>Need Hotelloca Help?</h4>
                     <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>

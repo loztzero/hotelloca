@@ -14,19 +14,24 @@ use App\Models\Currency;
 use App\Models\HotelDetail;
 use App\Models\HotelPicture;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CityFromCountry;
 class HotelController extends Controller {
+
+	use CityFromCountry;
 
 	public function getIndex(Request $request){
 
 		$result = HotelDetail::where('api_flg', '=', 'No');
+		$result->whereNotNull('mst001_id');
+
 		$result = isset($request->hotel_name) && $request->hotel_name != '' ? $result->where('hotel_name', 'like', $request->hotel_name) : $result;
 
-		$result = isset($request->country) && $request->country != ''  
-					? $result->join('MST002', 'MST002.id', '=', 'MST020.mst002_id')->where('MST002.country_code', '=', $request->country) 
+		$result = isset($request->country) && $request->country != ''
+					? $result->join('MST002', 'MST002.id', '=', 'MST020.mst002_id')->where('MST002.country_code', '=', $request->country)
 					: $result;
 
-		$result = isset($request->city) && $request->city != '' 
-					? $result->join('MST003', 'MST003.id', '=', 'MST020.mst003_id')->where('MST003.city_code', '=', $request->city) 
+		$result = isset($request->city) && $request->city != ''
+					? $result->join('MST003', 'MST003.id', '=', 'MST020.mst003_id')->where('MST003.city_code', '=', $request->city)
 					: $result;
 
 		$hotelList = $result->paginate(20);
@@ -109,10 +114,10 @@ class HotelController extends Controller {
 				}
 
 			}
-			
+
 		} catch (\Exception $e) {
-			
-			DB::rollback();			
+
+			DB::rollback();
 			Session::flash('error', array($e->getMessage()));
 			return Redirect::to('admin/hotel/input')->withInput(Input::all());
 		}
@@ -147,7 +152,7 @@ class HotelController extends Controller {
 
 			if($hotel->active_flg == 'Active'){
 				Session::flash('error', array('Hotel '.$hotel->hotel_name.' already activated'));
-				return Redirect::to('admin/hotel');	
+				return Redirect::to('admin/hotel');
 			}
 
 			$hotel->active_flg = 'Active';
@@ -165,7 +170,7 @@ class HotelController extends Controller {
 
 			if($hotel->active_flg == 'Inactive'){
 				Session::flash('error', array('Hotel '.$hotel->hotel_name.' already inactive'));
-				return Redirect::to('admin/hotel');	
+				return Redirect::to('admin/hotel');
 			}
 
 			$hotel->active_flg = 'Inactive';
@@ -176,17 +181,5 @@ class HotelController extends Controller {
 
 		return Redirect::to('admin/hotel/input');
 	}
-
-	public function postCityFromCountry(Request $request){
-        // print_r(Input::all());
-        if($request->country){
-        	//$countryDetail = Country::where('country_code', '=', $request->country)->first();
-        	$countryDetail = Country::where('country_name', '=', $request->country)->first();
-            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
-            return $cities;
-        } 
-
-        return json_encode(array());
-    }
 
 }

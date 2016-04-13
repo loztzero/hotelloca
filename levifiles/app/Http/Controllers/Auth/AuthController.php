@@ -25,7 +25,7 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers;
-    protected $redirectPath = '/'; //kalau tidak di handle .. ntar pulang nya pasti selalu ke home .. huff dasar aneh 
+    protected $redirectPath = '/'; //kalau tidak di handle .. ntar pulang nya pasti selalu ke home .. huff dasar aneh
 
     /**
      * Create a new authentication controller instance.
@@ -79,7 +79,7 @@ class AuthController extends Controller
             DB::beginTransaction();
 
             try {
-                
+
                 $user = new User();
                 $user->email = $request->email;
                 $user->password = Hash::make(str_random(6));
@@ -101,9 +101,9 @@ class AuthController extends Controller
                 return redirect('auth/register')->withInput($request->all());
             }
 
-            
+
         }
-        
+
     }
 
     public function postCityFromCountry(Request $request){
@@ -113,7 +113,7 @@ class AuthController extends Controller
             $countryDetail = Country::where('id', '=', $request->country)->first();
             $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
             return $cities;
-        } 
+        }
 
         return json_encode(array());
     }

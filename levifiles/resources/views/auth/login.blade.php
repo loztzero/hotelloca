@@ -5,7 +5,7 @@
 <head>
     <!-- Page Title -->
     <title>Travelo - Travel, Tour Booking HTML5 Template</title>
-    
+
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta name="keywords" content="HTML5 Template" />
@@ -13,32 +13,32 @@
     <meta name="author" content="SoapTheme">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Theme Styles -->
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/font-awesome.min.css">
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,200,300,500' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/animate.min.css">
-    
+
     <!-- Main Style -->
     <link id="main-style" rel="stylesheet" href="{{ url('/') }}/assets/css/style-sea-blue.css">
-    
+
     <!-- Updated Styles -->
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/updates.css">
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/custom.css">
-    
+
     <!-- Responsive Styles -->
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/responsive.css">
-    
+
     <!-- CSS for IE -->
     <!--[if lte IE 9]>
         <link rel="stylesheet" type="text/css" href="{{ url('/') }}/assets/css/ie.css" />
     <![endif]-->
-    
-    
+
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script type='text/javascript' src="{{ url('/') }}/assets/http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -52,7 +52,7 @@
                 <div id="main">
                     <h1 class="logo block">
                         <a href="{{ url('/') }}/main" title="Travelo - home">
-                            <img src="{{ url('/') }}/assets/images/logo2.png" alt="Travelo HTML5 Template" />
+                            <img src="{{ url('/') }}/assets/images/logo-white.png" alt="Hotelloca.com Logo" style="width:194px;height:70px;" />
                         </a>
                     </h1>
                     <div class="text-center yellow-color box" style="font-size: 4em; font-weight: 300; line-height: 1em;">Welcome back!</div>
@@ -101,23 +101,22 @@
     <script type="text/javascript" src="{{ url('/') }}/assets/js/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="{{ url('/') }}/assets/js/jquery.placeholder.js"></script>
     <script type="text/javascript" src="{{ url('/') }}/assets/js/jquery-ui.1.10.4.min.js"></script>
-    
+
     <!-- Twitter Bootstrap -->
     <script type="text/javascript" src="{{ url('/') }}/assets/js/bootstrap.js"></script>
-    
+
     <script type="text/javascript">
         var enableChaser = 0;
     </script>
     <!-- parallax -->
     <script type="text/javascript" src="{{ url('/') }}/assets/js/jquery.stellar.min.js"></script>
-    
+
     <!-- waypoint -->
     <script type="text/javascript" src="{{ url('/') }}/assets/js/waypoints.min.js"></script>
 
     <!-- load page Javascript -->
     <script type="text/javascript" src="{{ url('/') }}/assets/js/theme-scripts.js"></script>
     <script type="text/javascript" src="{{ url('/') }}/assets/js/scripts.js"></script>
-    
+
 </body>
 </html>
-

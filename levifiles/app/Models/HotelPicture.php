@@ -13,7 +13,7 @@ class HotelPicture extends Emodel {
 		$messages = array();
 
 		$rules = array(
-			'files'    => 'required|image|max:250|mimes:jpeg',
+			'files'    => 'required|image|max:1000|mimes:jpeg',
 			'title'    => 'required',
 		);
 
@@ -31,7 +31,7 @@ class HotelPicture extends Emodel {
 		$v = Validator::make($request->all(), $rules, $messages);
 		if($v->fails()){
 			$error = $v->errors()->all();
-			
+
 		}
 
 		return $error;

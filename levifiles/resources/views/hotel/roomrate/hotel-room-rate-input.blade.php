@@ -205,14 +205,15 @@
 		        </div>
 		    </div>
 
-		    <!-- <div class="form-group">
+		    <div class="form-group">
 		    	<div class="col-xs-12">
-			    	<input type="checkbox" class="pull-left" ng-model="field.cancel_fee_flag" ng-true-value="'Yes'" ng-false-value="'No'">
-			    	<input type="hidden" value="@{{ field.cancel_fee_flag }}" name="cancel_fee_flag" >
+			    	<input type="hidden" value="No" name="cancel_fee_flag" >
+			    	<input type="checkbox" value="Yes" name="cancel_fee_flag" class="pull-left" >
 			    	<label class="pull-left">&nbsp; Cancel Fee</label>
 		    	</div>
 		    </div>
 
+		    <!-- 
 		    <div class="form-group" ng-show="field.cancel_fee_flag == 'Yes'">
 		    	<div class="col-xs-6">
 		          	<label>Cancelation Fee Value</label>

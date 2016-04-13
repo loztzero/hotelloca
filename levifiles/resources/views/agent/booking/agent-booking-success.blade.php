@@ -29,7 +29,6 @@
                             <h4 class="main-message">Thank You. Your Booking Order is Confirmed Now.</h4>
                             <p>A confirmation email has been sent to your provided email address.</p>
                         </div>
-                        <a href="#" class="button btn-small print-button uppercase">print Details</a>
                     </div>
                     <hr />
                     <h2>Traveler Information</h2>
@@ -45,7 +44,7 @@
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />
-                    <p class="red-color">Payment is made by {{ $data->paymentMethod }} Paypal.</p>
+                    <p class="red-color">Payment is made by {{ $data->paymentMethod }}.</p>
                     <hr />
                     <h2>View Booking Details</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>

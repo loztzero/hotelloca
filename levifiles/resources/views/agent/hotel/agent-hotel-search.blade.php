@@ -123,9 +123,18 @@
                     <h4 class="sort-by-title block-sm">Sort results by:</h4><br>
                     <h4 class="sort-by-title block-sm">
                         <?php 
-                            $url = $request->url() . '?adults=' . $request->adults . '&child=' . $request->child . '/city=' . $request->city . '&country=' . $request->country . '&date_from=' . $request->date_from . '&date_to=' . $request->date_to . '&hotel_name=' . $request->hotel_name . '&nationality=' . $request->nationality . '&room=' . $request->room;
+                            $url = $request->url() 
+                            . '?adults=' . $request->adults 
+                            . '&child=' . $request->child 
+                            . '&city=' . $request->city 
+                            . '&country=' . $request->country 
+                            . '&date_from=' . $request->date_from 
+                            . '&date_to=' . $request->date_to 
+                            . '&hotel_name=' . $request->hotel_name 
+                            . '&nationality=' . $request->nationality 
+                            . '&room=' . $request->room;
                         ?>
-                        {{ $url . '&order_by=' }}
+                        {{-- $url . '&order_by=' --}}
                     </h4>
                     <ul class="sort-bar clearfix block-sm">
                         <li class="sort-by-name {{ $request->input('order_by', 'name') == 'name' ? 'active' : '' }}">

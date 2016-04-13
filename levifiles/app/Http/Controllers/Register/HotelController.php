@@ -12,7 +12,10 @@ use App\Models\City;
 use App\Models\Currency;
 use App\Models\HotelDetail;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CityFromCountry;
 class HotelController extends Controller {
+
+	use CityFromCountry;
 
 	public function getIndex()
 	{
@@ -84,10 +87,10 @@ class HotelController extends Controller {
 	        	$hotelDetail->save();
 
 			}
-			
+
 		} catch (\Exception $e) {
-			
-			DB::rollback();			
+
+			DB::rollback();
 			Session::flash('error', array($e->getMessage()));
 			return Redirect::to('register/hotel')->withInput(Input::all());
 		}
@@ -102,17 +105,5 @@ class HotelController extends Controller {
         return Redirect::to('register/hotel/success');
 
 	}
-
-	public function postCityFromCountry(Request $request){
-        // print_r(Input::all());
-        if($request->country){
-        	//$countryDetail = Country::where('country_code', '=', $request->country)->first();
-        	$countryDetail = Country::where('id', '=', $request->country)->first();
-            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
-            return $cities;
-        } 
-
-        return json_encode(array());
-    }
 
 }
