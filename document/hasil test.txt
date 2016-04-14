@@ -1,7 +1,7 @@
--- master hotel
-1. g coba masukin email login yang dah ada errornya bukan pesan error tp
-Error : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'hotel3@yahoo.com' for key 'TUC_MST001_1' (SQL: insert into `MST001` (`email`, `password`, `role`, `id`, `updated_at`, `created_at`) values (hotel3@yahoo.com, y$Eb4l5C6mLvwJA6j3KSP9ceiV0sX9mKQH76XPECDHogtFyvbVT1uLK, Hotel, e18539e4-e280-4807-a688-d04407446d6b, 2016-03-28 19:26:17, 2016-03-28 19:26:17))
-2. landmark name blh kosong hrsnys
+-- my booking
+1. waktu filter status dipilih trus search, error kaya di foto
+2. print voucher, field breakfast,children sama adultnya isinya pending
+3. coba filter tgl check outnya dimasukin yang sesuai ma tgl check out yang ada tapi ga keluar.
 
-
-logo harus bisa diklik untuk set ke home page awal
+-- order hotel
+1. waktu confirm errornya seperti di foto kmrn
