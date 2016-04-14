@@ -2,6 +2,14 @@
 1. waktu filter status dipilih trus search, error kaya di foto
 2. print voucher, field breakfast,children sama adultnya isinya pending
 3. coba filter tgl check outnya dimasukin yang sesuai ma tgl check out yang ada tapi ga keluar.
-
+4. date picker bs mundur
 -- order hotel
 1. waktu confirm errornya seperti di foto kmrn
+
+
+input hotel
+1. landmark name nya bs kosong
+
+input roomnya
+1. gambarnya bs kosong
+
