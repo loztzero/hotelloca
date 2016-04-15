@@ -1,15 +1,24 @@
 -- my booking
-1. waktu filter status dipilih trus search, error kaya di foto
+1.kurang tombol back di order detail dan payment
 2. print voucher, field breakfast,children sama adultnya isinya pending
 3. coba filter tgl check outnya dimasukin yang sesuai ma tgl check out yang ada tapi ga keluar.
-4. date picker bs mundur
+4. di pdf invoice tgl saja jgn pake jam
+5. di payment kurang note ky halaman order hotel note klo ga transfer 30 menit otomatis cancel
+6. di payment, tambahin tampilan nilai yg hrs dibyr di atas pilihan payment method
+7 , cb input dgn order nomor 201604150003 statusnya pending hrsnya di my booking muncul tombol payment, tp nie ga muncul
 -- order hotel
-1. waktu confirm errornya seperti di foto kmrn
-
+1. ada kurang isi ke log010 liat sheet order hotel yg kuning
+    untuk specny
 
 input hotel
 1. landmark name nya bs kosong
 
 input roomnya
-1. gambarnya bs kosong
+1. description bisa kosong
+
+input deposit:
+1.used value dan remaining value disabled
+2. query browsenya diubah
+
+
 
