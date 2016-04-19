@@ -1,24 +1,24 @@
 -- my booking
-1.kurang tombol back di order detail dan payment
-2. print voucher, field breakfast,children sama adultnya isinya pending
-3. coba filter tgl check outnya dimasukin yang sesuai ma tgl check out yang ada tapi ga keluar.
-4. di pdf invoice tgl saja jgn pake jam
-5. di payment kurang note ky halaman order hotel note klo ga transfer 30 menit otomatis cancel
-6. di payment, tambahin tampilan nilai yg hrs dibyr di atas pilihan payment method
-7 , cb input dgn order nomor 201604150003 statusnya pending hrsnya di my booking muncul tombol payment, tp nie ga muncul
--- order hotel
-1. ada kurang isi ke log010 liat sheet order hotel yg kuning
-    untuk specny
+1.waktu payment pake deposit errornya
+Undefined variable: balanceOrderBooking
 
-input hotel
-1. landmark name nya bs kosong
+247
+gagal simpan
+2. waktu payment cr bayar transfer error
+Fatal error: Class 'App\Http\Controllers\Agent\BalanceOrderBookingPayment' not found 
 
 input roomnya
 1. description bisa kosong
 
-input deposit:
-1.used value dan remaining value disabled
-2. query browsenya diubah
+order hotel:
+jika cr byr pending payment errornya
+Undefined variable: balanceOrderBookingPayment
 
+662
+gagal simpan
 
+Menu
+Hotel di pidanh di company profile
+
+company profile,service, term and condition disimpen di footer
 
