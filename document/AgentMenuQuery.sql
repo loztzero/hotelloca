@@ -1,10 +1,11 @@
 -- Query untuk halaman my booking
 SELECT A.order_no,B.check_in_date,B.check_out_date,B.first_name,
-       D.transfer_date, A.status_flg,A.tot_payment
+       D.transfer_date, A.status_flg,A.tot_payment,coalesce(E.payment_menthod,'pending') as payament_mehtod
 FROM BLNC001 A
 INNER JOIN BLNC002 B ON B.blnc001_id = A.id
 INNER JOIN MST020 C ON C.id = B.mst020_id
 LEFT JOIN TRX001 D ON D.order_no = A.order_no
+LEFT JOIN BLNC003 E ON E.blnc001_id = a.id
 WHERE A.order_no LIKE '%123%'
 AND B.check_in_date =  STR_TO_DATE('2016-02-11', '%Y-%m-%d')
 AND B.check_out_date = STR_TO_DATE('2016-02-11', '%Y-%m-%d')

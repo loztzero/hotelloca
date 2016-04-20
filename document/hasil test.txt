@@ -1,13 +1,17 @@
 -- my booking
 1.waktu payment pake deposit errornya
-Undefined variable: balanceOrderBooking
+Creating default object from empty value
 
-247
+262
 gagal simpan
 2. waktu payment cr bayar transfer error
-Fatal error: Class 'App\Http\Controllers\Agent\BalanceOrderBookingPayment' not found 
+Creating default object from empty value
 
-input roomnya
+262
+gagal simpan
+
+
+
 1. description bisa kosong
 
 order hotel:
@@ -17,8 +21,4 @@ Undefined variable: balanceOrderBookingPayment
 662
 gagal simpan
 
-Menu
-Hotel di pidanh di company profile
-
-company profile,service, term and condition disimpen di footer
 
