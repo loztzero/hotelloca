@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2016-04-15 20:30                                #
+# Created on:            2016-04-20 22:21                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -14,21 +14,18 @@
 # ---------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------- #
-# Add table "LOG010"                                                     #
+# Add table "MST030"                                                     #
 # ---------------------------------------------------------------------- #
 
-CREATE TABLE `LOG010` (
+CREATE TABLE `MST030` (
     `id` VARCHAR(100) NOT NULL,
-    `mst001_id` VARCHAR(100) NOT NULL,
-    `type` VARCHAR(15) NOT NULL COMMENT 'added/used',
-    `log_no` VARCHAR(40) NOT NULL COMMENT 'nomor yang menggunakan log',
-    `log_yrmo` VARCHAR(6) NOT NULL COMMENT 'tahun bulan yang menggunakan log',
-    `log_date` DATE COMMENT 'tgl yang menggunakan log',
-    `deposit_value` DOUBLE(30,2) NOT NULL COMMENT 'nilai deposit yang dipakai /ditambah',
+    `mst003_id` VARCHAR(100) NOT NULL COMMENT 'kota',
+    `area` VARCHAR(100) NOT NULL COMMENT 'area contoh  jakarta barat, selatan',
+    `location` VARCHAR(100) NOT NULL COMMENT 'lokasi:grogol, cengkareng',
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
-    CONSTRAINT `PK_LOG010` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_LOG010_1` UNIQUE (`mst001_id`, `type`, `log_no`, `log_yrmo`)
+    CONSTRAINT `PK_MST030` PRIMARY KEY (`id`),
+    CONSTRAINT `TUC_MST030_1` UNIQUE (`mst003_id`)
 )
 ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -36,5 +33,5 @@ ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 # Foreign key constraints                                                #
 # ---------------------------------------------------------------------- #
 
-ALTER TABLE `LOG010` ADD CONSTRAINT `MST001_LOG010` 
-    FOREIGN KEY (`mst001_id`) REFERENCES `MST001` (`id`);
+ALTER TABLE `MST030` ADD CONSTRAINT `MST003_MST030` 
+    FOREIGN KEY (`mst003_id`) REFERENCES `MST003` (`id`);
