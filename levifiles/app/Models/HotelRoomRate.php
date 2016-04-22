@@ -38,6 +38,7 @@ class HotelRoomRate extends Emodel {
 			'rate_type'      	=> !isset($request->id) ? 'required' : '',
 			'daily_price'      	=> 'required|numeric',
 			'daily_price_wna'      	=> 'required|numeric',
+			'surcharge_value'      	=> 'numeric',
 			'comm_type'      	=> !isset($request->id) ? 'required_if:rate_type,"Commision"' : '',
 			'comm_pct'      	=> !isset($request->id) ? 'required_if:comm_type,"percentage"|numeric' : '',
 			'comm_value'      	=> !isset($request->id) ? 'required_if:comm_type,"value"|numeric' : '',
@@ -75,12 +76,13 @@ class HotelRoomRate extends Emodel {
 			'daily_price.numeric' => 'Daily price must be numeric',
 			'daily_price_wna.required' => 'Daily price foreign must be filled',
 			'daily_price_wna.numeric' => 'Daily price foreign must be numeric',
+			'surcharge_value.numeric' => 'Surcharge value be numeric',
 
 			'comm_type.required_if' => 'Commission type must be selected',
 			'comm_pct.required_if' => 'Commission percentage must be filled',
 			'comm_pct.numeric' => 'Commission type must be numeric',
 			'comm_value.required_if' => 'Commision value must be filled',
-			'comm_value.numeric' => 'Commision value must be filled', 
+			'comm_value.numeric' => 'Commision value must be filled',
 
 			// 'image.required' => 'Picture is required',
 			// 'image.image' => 'Picture must be image',
@@ -101,7 +103,7 @@ class HotelRoomRate extends Emodel {
 				if($exists->id != $request->id){
 					$error = array_add($error, 'exists', 'Room name and end date already exists, please change to other');
 				}
-			} 
+			}
 
 			//cek apakah  tanggalnya terdaftar di periode yang sudah ada atau belum
 			$dateFrom = DateTime::createFromFormat('d-m-Y', $request->date_from)->format('Y-m-d');
@@ -146,13 +148,13 @@ class HotelRoomRate extends Emodel {
 					if($toExists->id != $request->id){
 						$error = array_add($error, 'exists_to', 'This end date is not valid and already exists between in a period ');
 					}
-					
+
 				} else {
 					$error = array_add($error, 'exists_to', 'This end date is not valid and already exists between in a period ');
 				}
-				
+
 			}
-				
+
 
 		}
 
@@ -230,8 +232,7 @@ class HotelRoomRate extends Emodel {
 
 		}
 
-
-		
+		$object->surcharge_value = $data['surcharge_value'];
 		return $object;
 	}
 }

@@ -29,7 +29,7 @@ class HotelRoom extends Emodel {
 			'net'				=> 'required',
 			'net_fee'			=> 'required|numeric',
 			'num_breakfast'     => 'required|numeric',
-			'room_desc'      	=> 'required',
+			//'room_desc'      	=> 'required',
 			'image'    			=> 'image|max:1000|mimes:jpeg',
 		);
 

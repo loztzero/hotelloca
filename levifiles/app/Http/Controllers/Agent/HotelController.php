@@ -288,7 +288,15 @@ class HotelController extends Controller {
                     // array_push($newRooms, $newRoom);
                     $priceDetail = new StdClass();
                 	$priceDetail->period_date = $date->format("d-m-Y");
-                	$priceDetail->nett_value = $room->nett_value;
+
+					//nembak surcharge ke netvalue jika weekend
+					$day = $date->format('w');
+					if($day == 5 || $day == 6){
+						$priceDetail->nett_value = $room->nett_value + $room->surcharge;
+					} else {
+						$priceDetail->nett_value = $room->nett_value;
+					}
+
                 	$priceDetail->from_date = $room->from_date;
                 	$priceDetail->end_date = $room->end_date;
                 	// $priceDetail->nett_value_wna = $room->nett_value_wna;

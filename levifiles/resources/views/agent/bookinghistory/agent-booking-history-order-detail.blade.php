@@ -17,6 +17,7 @@
 
 @section('content')
     <div class="container" ng-controller="MainCtrl">
+        <a href="{{ url('agent/booking-history') }}" class="button tiny secondary"><< Back</a><br>
         <div class="travelo-box col-md-9">
             <form method="post" action="{{ url('agent/booking-history/voucher') }}" target="_blank">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

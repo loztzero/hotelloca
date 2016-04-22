@@ -91,7 +91,7 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Landmark Name</label>
-			            <input type="text" class="input-text full-width" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name" required>
+			            <input type="text" class="input-text full-width" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name">
 			        </div>
 			    </div>
 
@@ -171,7 +171,7 @@
 			                // Replace the <textarea id="editor1"> with a CKEditor
 			                // instance, using default configuration.
 			                CKEDITOR.replace( 'description' );
-											CKEDITOR.config.removePlugins = 'about, link';
+							CKEDITOR.config.removePlugins = 'about, link';
 			            </script>
 			        </div>
 			    </div>

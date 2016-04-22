@@ -1,7 +1,7 @@
 @extends('layouts.general-travel-layout')
 @section('content')
 <div class="container" ng-controller="MainCtrl">
-	
+
 
 	<div class="travelo-box">
 
@@ -76,7 +76,7 @@
 		    <div class="row form-group">
 		        <div class="col-xs-12">
 		            <label>Landmark Name</label>
-		            <input type="text" class="input-text full-width" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name" required>
+		            <input type="text" class="input-text full-width" value="{{old('landmark_name')}}" id="landmarkName" name="landmark_name">
 		        </div>
 		    </div>
 
@@ -134,7 +134,7 @@
 		    <div class="form-group">
 		    	<div class="col-xs-12">
 		    		<input type="hidden" value="@{{ field.group_flg }}" name="group_flg" >
-			    	<input type="checkbox" class="pull-left" ng-model="field.group_flg" ng-true-value="'Yes'" ng-false-value="'No'"> 
+			    	<input type="checkbox" class="pull-left" ng-model="field.group_flg" ng-true-value="'Yes'" ng-false-value="'No'">
 			    	<label class="pull-left">&nbsp; Part Of Group</label>
 		    	</div>
 		    </div>
@@ -151,6 +151,12 @@
 		        <div class="col-xs-12">
 	            	<label>Description Hotel</label>
 	           		<textarea id="description" class="full-width" name="description">{{ old('description') }}</textarea>
+					<script>
+						// Replace the <textarea id="editor1"> with a CKEditor
+						// instance, using default configuration.
+						CKEDITOR.replace('description');
+						CKEDITOR.config.removePlugins = 'about, link';
+					</script>
 		        </div>
 		    </div>
 
@@ -186,7 +192,7 @@
 		            <button type="submit" class="button small">{{ empty(old('id')) ? 'Register' : 'Update' }}</button>
 		        </div>
 		    </div>
-	    	
+
 		</form>
 	</div>
 </div>

@@ -1,6 +1,7 @@
 -- Query untuk halaman my booking
 SELECT A.order_no,B.check_in_date,B.check_out_date,B.first_name,
-       D.transfer_date, A.status_flg,A.tot_payment,coalesce(E.payment_menthod,'pending') as payament_mehtod
+       D.transfer_date, A.status_flg,A.tot_payment,coalesce(E.payment_menthod,'pending') as payment_mehtod,
+       CASE WHEN now() < ADDDATE(b.check_in_date, - (b.cut_off +1)) THEN true ELSE false END as show_cancel
 FROM BLNC001 A
 INNER JOIN BLNC002 B ON B.blnc001_id = A.id
 INNER JOIN MST020 C ON C.id = B.mst020_id
@@ -63,4 +64,3 @@ INNER JOIN BLNC002 B ON B.id = A.blnc002_id
 INNER JOIN BLNC001 C ON C.id = B.blnc001_id
 WHERE C.order_no = pOrderNo
 AND C.mst001_id = :userid;
-

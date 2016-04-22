@@ -47,27 +47,29 @@
 					<tr>
 						<th width="100px">Action</th>
 						<th>Agent</th>
+						<th>Email</th>
 						<th class="hide-for-small">Currency</th>
-						<th class="hide-for-small">Deposit Value</th>
-						<th class="hide-for-small">Used Value</th>
-						<th class="hide-for-small">Remaining Deposit</th>
+						<th class="hide-for-small td-right">Deposit Value</th>
+						<th class="hide-for-small td-right">Used Value</th>
+						<th class="hide-for-small td-right">Remaining Deposit</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach(array() as $deposit)
+					@foreach($deposits as $deposit)
 					<tr>
 						<td>
 							<form action="{{URL::to('admin/agent-deposit/load-data')}}" method="post" class="pull-left">
 								<input type="hidden" value="{{ csrf_token() }}" name="_token">
-				            	<input type="hidden" value="{{ $depost->id }}" name="id">
+				            	<input type="hidden" value="{{ $deposit->email }}" name="email">
 				            	<button type="submit" class="btn-primary" title="Edit Deposit"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
 							</form>
 						</td>
-						<td>{{ $deposit->hotel_name }}</td>
-						<td class="hide-for-small">{{ $deposit->currency->curr_code }}</td>
-						<td class="hide-for-small">{{ $deposit->city->city_name }}</td>
-						<td class="hide-for-small">{{ $deposit->address }}</td>
-						<td class="hide-for-small">{{ $deposit->phone_number }}</td>
+						<td>{{ $deposit->comp_name }}</td>
+						<td class="hide-for-small">{{ $deposit->email }}</td>
+						<td class="hide-for-small">{{ $deposit->curr_code }}</td>
+						<td class="hide-for-small td-right">{{ number_format($deposit->deposit_value, 0, ',', '.') }}</td>
+						<td class="hide-for-small td-right">{{ number_format($deposit->used_value, 0, ',', '.') }}</td>
+						<td class="hide-for-small td-right">{{ number_format($deposit->remain_value, 0, ',', '.') }}</td>
 					</tr>
 					@endforeach
 				</tbody>

@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="container" ng-controller="MainCtrl">
-	
+
 	<a href="{{ url('hotel/room-rate') }}" class="button tiny secondary"><< Back</a>
 	<div class="travelo-box">
 
@@ -140,7 +140,7 @@
 		        </div>--}}
 		    </div>
 
-		    
+
 		    <div class="form-group">
 				<div class="col-xs-12">
 	          		<label>Description</label>
@@ -161,7 +161,7 @@
 		          	<div class="selector" id="typeSelector">
 		          		{!! Form::select('rate_type', array('Nett' => 'Nett', 'Commision' => 'Commision') , old('rate_type'), array('required', 'ng-model' => 'field.rate_type', 'ng-change' => 'rateTypeChange()', old('id') ? 'disabled' : '', 'class' => 'full-width')) !!}
 		          	</div>
-		        </div> 
+		        </div>
 		    </div>
 
 		    <div class="form-group">
@@ -185,14 +185,21 @@
 		        </div>
 		    </div>
 
-			
+			<div class="form-group">
+		    	<div class="col-xs-6">
+		          	<label>Surcharge For Weekend <b>(Friday and Saturday)</b></label>
+		          	<input type="text" class="input-text full-width" id="surchargeValue" name="surcharge_value" value="{{ old('surcharge_value',0) }}">
+		        </div>
+		    </div>
+
+
 		    <div class="form-group" ng-show="field.rate_type == 'Commision'">
 				<div class="col-xs-6">
 		          	<label>Type Commision</label>
 		          	<div class="selector" id="typeCommisionSelector">
 			          	{!! Form::select('comm_type', array('%' => '%', 'Value' => 'Value') , null, array('required', 'ng-model' => 'field.comm_type', old('id') ? 'disabled' : '', 'class' => 'full-width')) !!}
 		          	</div>
-		        </div> 
+		        </div>
 
 		        <div class="col-xs-6" ng-if="field.comm_type == '%'">
 		          	<label>% Commision</label>
@@ -209,11 +216,11 @@
 		    	<div class="col-xs-12">
 			    	<input type="hidden" value="No" name="cancel_fee_flag" >
 			    	<input type="checkbox" value="Yes" name="cancel_fee_flag" class="pull-left" >
-			    	<label class="pull-left">&nbsp; Cancel Fee</label>
+			    	<label class="pull-left">&nbsp; Cancel Fee Flag</label>
 		    	</div>
 		    </div>
 
-		    <!-- 
+		    <!--
 		    <div class="form-group" ng-show="field.cancel_fee_flag == 'Yes'">
 		    	<div class="col-xs-6">
 		          	<label>Cancelation Fee Value</label>
@@ -223,7 +230,7 @@
 
 	    	<div class="form-group">
 		        <div class="col-xs-12">
-					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Room Rate' : 'Update Room Rate' }}</button>          
+					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Room Rate' : 'Update Room Rate' }}</button>
 		        </div>
 		    </div>
 
@@ -241,21 +248,21 @@
 tjq(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
 	var form = $(this).parents('form');
-	swal({   
-		title: "Are you sure?",   
-		text: "This picture will be deleted",   
-		type: "warning",   
-		showCancelButton: true,   
-		confirmButtonColor: "#f04124",   
-		confirmButtonText: "Yes, delete it!",   
-		closeOnConfirm: false }, 
-	function(confirmed){   
+	swal({
+		title: "Are you sure?",
+		text: "This picture will be deleted",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#f04124",
+		confirmButtonText: "Yes, delete it!",
+		closeOnConfirm: false },
+	function(confirmed){
 		if (confirmed) form.submit();
 	});
 
 });
 
-	
+
 
 </script>
 <script>

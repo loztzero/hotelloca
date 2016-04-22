@@ -31,6 +31,7 @@ use App\Models\BalanceOrderBookingDetail;
 use App\Models\BalanceOrderBookingPayment;
 use App\Models\BalanceOrderBookingSummaryDetail;
 use App\Models\LogHotelRoomAllotment;
+use App\Models\LogDeposit;
 use App\Http\Controllers\Controller;
 use DateInterval, DatePeriod;
 class BookingController extends Controller {
@@ -161,18 +162,31 @@ class BookingController extends Controller {
 						$counter++;
 	                    $priceDetail = new StdClass();
 	                	$priceDetail->period_date = $date->format("d-m-Y");
-	                	$priceDetail->nett_value = $room->nett_value;
+
+						//inject surcharge waktu weekend
+						$day = $date->format('w');
+						if($day == 5 || $day == 6){
+							$priceDetail->nett_value = $room->nett_value + $room->surcharge;
+						} else {
+							$priceDetail->nett_value = $room->nett_value;
+						}
 	                	$priceDetail->from_date = $room->from_date;
 	                	$priceDetail->end_date = $room->end_date;
 	                	$priceDetail->num_breakfast = $room->num_breakfast;
 	                	$priceDetail->cut_off = $room->cut_off;
 	                	$priceDetail->allotment = $room->rate_allotment;
 	                	$priceDetail->mst023_id = $room->mst023_id;
-	                	$priceDetail->daily_price = $room->daily_price;
+
+						if($day == 5 || $day == 6){
+							$priceDetail->daily_price = $room->daily_price + $room->surcharge;
+						} else {
+							$priceDetail->daily_price = $room->daily_price;
+						}
+
 	                	$priceDetail->cancel_fee_flag = $globalCancelFeeFlag;
 	                	$numBreakfast = $room->num_breakfast; //dan data numbreakfast ini global disini
 
-	                	$totalPrice += $room->nett_value;
+	                	$totalPrice += $priceDetail->nett_value;
 	                	array_push($pricing, $priceDetail);
 
 	                }
@@ -206,7 +220,7 @@ class BookingController extends Controller {
 			$cutOffDateAgent = date('d-m-Y', $cutOffDateAgent);
 
 			//untuk mengambil nilai sisa deposit agent, jika tidak ditemukan ya di session akan menlempar nilai 0
-			$balanceAgentDeposit = BalanceAgentDeposit::where('mst001_id')->first();
+			$balanceAgentDeposit = BalanceAgentDeposit::where('mst001_id', '=', Auth::user()->id)->first();
 
 			$bookingData = new StdClass();
 			$bookingData->nationality = $market;
@@ -645,6 +659,25 @@ class BookingController extends Controller {
 				$balanceOrderBooking->tot_payment = $orderBooking->tot_payment;
 				$balanceOrderBooking->save();
 
+				if($request->payment_method == 'Balance'){
+					//potong deposit jika pembayarannya balance
+					$deposit = BalanceAgentDeposit::where('mst001_id', '=', Auth::user()->id)->first();
+					$deposit->used_value += $balanceOrderBooking->tot_payment;
+					$deposit->save();
+
+					//bikin data ke log deposit
+					$logDeposit = new LogDeposit();
+					$logDeposit->mst001_id = Auth::user()->id;
+					$logDeposit->type = 'Used';
+					$logDeposit->log_no = $balanceOrderBooking->order_no;
+					$logDeposit->log_yrmo = $orderBooking->order_yrmo;
+					$logDeposit->log_date = $orderBooking->order_date;
+					$logDeposit->deposit_value = $balanceOrderBooking->tot_payment;
+					$logDeposit->save();
+
+				}
+
+
 			}
 
 		} catch (\Exception $e) {
@@ -750,7 +783,8 @@ class BookingController extends Controller {
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.daily_price
                                 ELSE B.daily_price_wna
-                             END as daily_price
+                             END as daily_price,
+							 B.surcharge_value as surcharge
                      FROM MST022 B
                      inner join MST023 D on D.id = B.mst023_id
                      left join (select A.mst023_id,Min(A.allotment-A.used_allotment) as allotment

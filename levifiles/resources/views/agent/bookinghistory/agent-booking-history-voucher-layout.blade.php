@@ -70,12 +70,12 @@
 	<tr>
 		<td class="td-left">Check In Date</td>
 		<td class="small-gap">:</td>
-		<td>{{ $voucher->check_in_date }}</td>
+		<td>{{ date('d-m-Y', strtotime($voucher->check_in_date)) }}</td>
 	</tr>
 	<tr>
 		<td class="td-left">Check Out Date</td>
 		<td class="small-gap">:</td>
-		<td>{{ $voucher->check_out_date }}</td>
+		<td>{{ date('d-m-Y', strtotime($voucher->check_out_date)) }}</td>
 	</tr>
 	<tr>
 		<td class="td-left">Note</td>
@@ -88,19 +88,19 @@
 		<td>{{ $voucher->room_num }}</td>
 	</tr>
 	<tr>
-		<td class="td-left">Adults :</td>
+		<td class="td-left">Adults </td>
 		<td class="small-gap">:</td>
-		<td>{{ $voucher->status_flag }}</td>
+		<td>{{ $voucher->num_adults }} Person</td>
 	</tr>
 	<tr>
-		<td class="td-left">Children :</td>
+		<td class="td-left">Children </td>
 		<td class="small-gap">:</td>
-		<td>{{ $voucher->status_flag }}</td>
+		<td>{{ $voucher->num_child }} Person</td>
 	</tr>
 	<tr>
-		<td class="td-left">Breakfast :</td>
+		<td class="td-left">Breakfast </td>
 		<td class="small-gap">:</td>
-		<td>{{ $voucher->status_flag }}</td>
+		<td>{{ $voucher->num_breakfast }} Pack</td>
 	</tr>
 </table>
 </div>

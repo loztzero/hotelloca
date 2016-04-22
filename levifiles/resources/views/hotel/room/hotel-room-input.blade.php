@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="container" ng-controller="MainCtrl">
-	
+
 	<a href="{{ url('hotel/room') }}" class="button">Back</a>
 
 	<div class="travelo-box">
@@ -120,12 +120,18 @@
 				<div class="col-xs-12">
 	          		<label>Description</label>
 					<textarea id="roomDesc" name="room_desc" class="input-text full-width">{{ old('room_desc') }}</textarea>
+					<script>
+						// Replace the <textarea id="editor1"> with a CKEditor
+						// instance, using default configuration.
+						CKEDITOR.replace( 'roomDesc' );
+						CKEDITOR.config.removePlugins = 'about, link';
+					</script>
 		        </div>
 		    </div>
 
     	 	<div class="form-group">
 		        <div class="col-xs-12">
-					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Room' : 'Update Room' }}</button>          
+					<button type="submit" class="button">{{ empty(old('id')) ? 'Add New Room' : 'Update Room' }}</button>
 		        </div>
 		    </div>
 	    </form>
@@ -154,34 +160,34 @@ var fromDate = $('#fromDate').fdatepicker({
 	format : 'dd-mm-yyyy',
 	onRender: function (date) {
 		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}	
+	}
 });
 
 var endDate = $('#endDate').fdatepicker({
 	format : 'dd-mm-yyyy',
 	onRender: function (date) {
 		return date.valueOf() < now.valueOf() ? 'disabled' : '';
-	}	
+	}
 });
 
 $(".confirm-delete").on("click", function(e) {
 	e.preventDefault();
 	var form = $(this).parents('form');
-	swal({   
-		title: "Are you sure?",   
-		text: "This picture will be deleted",   
-		type: "warning",   
-		showCancelButton: true,   
-		confirmButtonColor: "#f04124",   
-		confirmButtonText: "Yes, delete it!",   
-		closeOnConfirm: false }, 
-	function(confirmed){   
+	swal({
+		title: "Are you sure?",
+		text: "This picture will be deleted",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#f04124",
+		confirmButtonText: "Yes, delete it!",
+		closeOnConfirm: false },
+	function(confirmed){
 		if (confirmed) form.submit();
 	});
 
 });
 
-	
+
 
 </script>
 <script>

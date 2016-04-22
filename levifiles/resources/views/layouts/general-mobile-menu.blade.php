@@ -11,22 +11,18 @@
 
     <nav id="main-menu" role="navigation">
         <ul class="menu">
-            <li class="menu-item"><a href="{{ url('/main') }}">Home</a></li>
-            <li class="menu-item"><a href="{{ url('/main/company-profile') }}">Company Profile</a></li>
-            <li class="menu-item"><a href="{{ url('/main/services') }}">Service</a></li>
-            <li class="menu-item"><a href="{{ url('/main/term-and-condition') }}">Term And Condition</a></li>
-            <li class="menu-item"><a href="{{ url('/main/contact-us') }}">Contact Us</a></li>
+            <li class="menu-item"><a href="{{ url('main') }}" title="Home">Home</a></li>
+            @if(Auth::check() && Auth::user()->role == 'Agent')
+            <li class="menu-item"><a href="{{ url('agent/hotel') }}" title="Hotel">Hotel</a></li>
+            @endif
         </ul>
     </nav>
+
 </div>
 
 <nav id="mobile-menu-01" class="mobile-menu collapse">
     <ul id="mobile-primary-menu" class="menu">
-        <li class="menu-item"><a href="{{ url('/main') }}">Home</a></li>
-        <li class="menu-item"><a href="{{ url('/main/company-profile') }}">Company Profile</a></li>
-        <li class="menu-item"><a href="{{ url('/main/services') }}">Service</a></li>
-        <li class="menu-item"><a href="{{ url('/main/term-and-condition') }}">Term And Condition</a></li>
-        <li class="menu-item"><a href="{{ url('/main/contact-us') }}">Contact Us</a></li>
+        <li class="menu-item"><a href="{{ url('/main') }}">Hotel</a></li>
     </ul>
 
     <ul class="mobile-topnav container">

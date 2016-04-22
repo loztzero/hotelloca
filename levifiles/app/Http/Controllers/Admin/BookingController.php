@@ -2,7 +2,7 @@
 
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Http\Request;
-use Input, Auth, Session, Redirect, Hash, Form;
+use Input, Auth, Session, Redirect, Hash, Form, Mail;
 use App;
 use App\User;
 use App\Libraries\Helpers;

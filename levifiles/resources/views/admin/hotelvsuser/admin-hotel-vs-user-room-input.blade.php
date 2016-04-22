@@ -121,6 +121,12 @@
 				<div class="col-xs-12">
 	          		<label>Description</label>
 					<textarea id="roomDesc" name="room_desc" class="input-text full-width">{{ old('room_desc') }}</textarea>
+					<script>
+						// Replace the <textarea id="editor1"> with a CKEditor
+						// instance, using default configuration.
+						CKEDITOR.replace( 'roomDesc' );
+						CKEDITOR.config.removePlugins = 'about, link';
+					</script>
 		        </div>
 		    </div>
 

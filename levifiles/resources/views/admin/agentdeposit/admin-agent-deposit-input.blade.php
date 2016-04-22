@@ -20,7 +20,7 @@
 
 		<a href="{{ url('admin/agent-deposit') }}" class="button tiny secondary"><< Back</a><br>
 		<div class="travelo-box col-xs-12">
-			<form action="{{url('/admin/hotel/save')}}" method="post" >
+			<form action="{{url('/admin/agent-deposit/save')}}" method="post" >
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 				<h3>Deposit Agent Input</h3>
@@ -29,7 +29,7 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Agent *</label>
-			            <input type="text" class="input-text full-width"  value="{{ old('hotel_name')}}" id="hotelName" name="hotel_name" required>
+			            <input type="email" class="input-text full-width"  value="{{ old('email')}}" id="agent" name="email" required>
 			        </div>
 			    </div>
 
@@ -43,7 +43,7 @@
 			        <div class="col-xs-7">
 			            <label>&nbsp;</label>
 			            <div class="selector">
-			            	<input type="text" class="input-text full-width" value="{{old('meal_price', 0)}}" name="meal_price" id="mealPrice">	
+			            	<input type="text" class="input-text full-width" value="{{old('deposit_value', 0)}}" name="deposit_value" id="deposit_value">
 		            	</div>
 			        </div>
 			    </div>
@@ -51,14 +51,14 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Used Value</label>
-			            <input type="text" class="input-text full-width" value="{{old('meal_price', 0)}}" name="meal_price" id="mealPrice">
+			            <input type="text" class="input-text full-width" value="{{ old('used_value', 0) }}" readonly>
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Remaining Deposit *</label>
-			            <input type="text" class="input-text full-width" value="{{old('bed_price', 0)}}" name="bed_price" id="bedPrice">
+			            <input type="text" class="input-text full-width" value="{{ number_format(old('old_deposit_value', 0) - old('used_value', 0), 0, ',', '.') }}">
 			        </div>
 			    </div>
 
@@ -81,6 +81,6 @@
 
 	});
 
-	
+
 </script>
 @endsection

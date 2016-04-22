@@ -33,14 +33,14 @@
                     <div class="col-xs-6">
                         <label>Check In Date</label>
                         <div class="datepicker-wrap">
-                            <input type="text" name="date_from" class="input-text full-width" placeholder="dd-mm-yy" />
+                            <input type="text" name="date_from" id="dateFrom" class="input-text full-width" placeholder="dd-mm-yy" />
                         </div>
                     </div>
 
                     <div class="col-xs-6">
                         <label>Check Out Date</label>
                         <div class="datepicker-wrap">
-                            <input type="text" name="date_to" class="input-text full-width" placeholder="dd-mm-yy" />
+                            <input type="text" name="date_to" id="dateTo" class="input-text full-width" placeholder="dd-mm-yy" />
                         </div>
                     </div>
                 </div>
@@ -97,20 +97,20 @@
                     @foreach($bookingList as $booking)
                     <tr>
                         <td>{{ $booking->order_no }}</td>
-                        <td>{{ $booking->check_in_date }}</td>
-                        <td>{{ $booking->check_out_date }}</td>
+                        <td>{{ date('d-m-Y', strtotime($booking->check_in_date)) }}</td>
+                        <td>{{ date('d-m-Y', strtotime($booking->check_out_date)) }}</td>
                         <td>{{ $booking->first_name }}</td>
                         <td>{{ $booking->transfer_date }}</td>
-                        <td>{{ $booking->status_flg }}</td>
+                        <td>{{ $booking->status_flag }}</td>
                         <td class="td-right">{{ number_format($booking->tot_payment, 0, ',', '.') }}</td>
                         <td>
                             <a href="{{ url('agent/booking-history/order-detail/').'/'.$booking->order_no }}" class="button btn-small green">Order Detail</a>
                             <a href="{{ url('agent/booking-history/invoice/').'/'.$booking->order_no }}" class="button btn-small green">Invoice</a>
-                            @if($booking->status_flag == 'Cancel' && $booking->status_pymnt == 'Pending' && $booking->show_cancel)
-                                <a href="{{ url('agent/booking-history/order-detail/').'/'.$booking->order_no }}" class="button btn-small green">Cancel</a>
+                            @if($booking->status_flag != 'Cancel' && $booking->status_pymnt == 'Pending' && $booking->show_cancel)
+                                <a href="{{ url('agent/booking-history/cancel/').'/'.$booking->order_no }}" class="button btn-small green" onclick="javascript: return confirm('Cancellation can not be undone, are you sure?')">Cancel</a>
                             @endif
                             @if($booking->status_pymnt == 'Pending')
-                                <a href="{{ url('agent/booking-history/order-detail/').'/'.$booking->order_no }}" class="button btn-small green">Payment</a>
+                                <a href="{{ url('agent/booking-history/payment/').'/'.$booking->order_no }}" class="button btn-small green">Payment</a>
                             @endif
                         </td>
                     </tr>
@@ -129,6 +129,51 @@
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    tjq('#dateFrom').datepicker({
+        showOn: 'button',
+        buttonImage: '{{ url("assets/images/icon/blank.png") }}',
+        buttonText: '',
+        buttonImageOnly: true,
+        changeYear: false,
+        dateFormat: "dd-mm-yy",
+        dayNamesMin: ["S", "M", "T", "W", "T", "F", "S"],
+        beforeShow: function(input, inst) {
+            var themeClass = tjq(input).parent().attr("class").replace("datepicker-wrap", "");
+            tjq('#ui-datepicker-div').attr("class", "");
+            tjq('#ui-datepicker-div').addClass("ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
+            tjq('#ui-datepicker-div').addClass(themeClass);
+        }
+    });
+
+    tjq('#dateTo').datepicker({
+        showOn: 'button',
+        buttonImage: '{{ url("assets/images/icon/blank.png") }}',
+        buttonText: '',
+        buttonImageOnly: true,
+        changeYear: false,
+        dateFormat: "dd-mm-yy",
+        dayNamesMin: ["S", "M", "T", "W", "T", "F", "S"],
+        beforeShow: function(input, inst) {
+            var themeClass = tjq(input).parent().attr("class").replace("datepicker-wrap", "");
+            tjq('#ui-datepicker-div').attr("class", "");
+            tjq('#ui-datepicker-div').addClass("ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
+            tjq('#ui-datepicker-div').addClass(themeClass);
+        }
+    });
+
+    // tjq('#dateTo').fdatepicker({
+    // 	format : 'dd-mm-yyyy'
+    // });
+
+    @if(Input::get('date_to') != null)
+    tjq('#dateTo').datepicker('setDate', new Date({{ strtotime(Input::get('date_to')) * 1000 }}));
+    @endif
+
+    @if(Input::get('date_from') != null)
+    tjq('#dateFrom').datepicker('setDate', new Date({{ strtotime(Input::get('date_from')) * 1000 }}));
+    @endif
+</script>
 <script>
     var app = angular.module("ui.hotelloca", []);
     app.controller("MainCtrl", function ($scope, $http, $filter) {

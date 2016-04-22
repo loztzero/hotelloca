@@ -46,13 +46,13 @@
 
                 <div id="hotel-features" class="tab-container">
                     <ul class="tabs">
-                        <li class="active"><a href="#hotel-description" data-toggle="tab">Description</a></li>
-                        <li><a href="#hotel-availability" data-toggle="tab">Availability</a></li>
+                        <li><a href="#hotel-description" data-toggle="tab">Description</a></li>
+                        <li class="active"><a href="#hotel-availability" data-toggle="tab">Availability</a></li>
                         <li><a href="#hotel-amenities" data-toggle="tab">Amenities</a></li>
                         <li><a href="#hotel-faqs" data-toggle="tab">FAQs</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="hotel-description">
+                        <div class="tab-pane fade" id="hotel-description">
                             <div class="intro table-wrapper full-width hidden-table-sms">
                                 <div class="col-sm-5 col-lg-4 features table-cell">
                                     <ul>
@@ -72,7 +72,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="hotel-availability">
+                        <div class="tab-pane fade in active" id="hotel-availability">
                             <form method="get" action="{{ url('agent/hotel/hotel-detail') }}">
                                 <div class="update-search clearfix">
                                     <div class="col-md-5">
@@ -149,7 +149,18 @@
                                                             @foreach($room->pricing as $price)
                                                             <tr>
                                                                 <td>{{ $price->period_date }}</td>
-                                                                <td>{{ number_format($price->nett_value, 0, ',', '.') }}</td>
+                                                                <td>
+                                                                    <?php
+                                                                        $date = new DateTime($helpers::dateFormatter($price->period_date));
+                                                                        $day = $date->format('w');
+                                                                    ?>
+                                                                    @if($day == 5 || $day == 6)
+                                                                        {{ number_format($price->nett_value , 0, ',', '.') }}
+                                                                    @else
+                                                                        {{ number_format($price->nett_value, 0, ',', '.') }}
+                                                                    @endif
+
+                                                                </td>
                                                             </tr>
                                                             <?php $totalPrice += $price->nett_value ;?>
                                                             @endforeach

@@ -7,6 +7,10 @@
                     <ul class="discover triangle hover row">
                         <li class="col-xs-12"><a href="{{ url('register/agent') }}">Become our partner</a></li>
                         <li class="col-xs-12"><a href="{{ url('register/hotel') }}">Register your hotel</a></li>
+                        <li class="col-xs-12"><a href="{{ url('/main/company-profile') }}">Company Profile</a></li>
+                        <li class="col-xs-12"><a href="{{ url('/main/services') }}">Service</a></li>
+                        <li class="col-xs-12"><a href="{{ url('/main/term-and-condition') }}">Term And Condition</a></li>
+                        <li class="col-xs-12"><a href="{{ url('/main/contact-us') }}">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-6 col-md-3">
@@ -15,25 +19,25 @@
                         <li>
                             <div class="thumb">
                                 <a href="#">
-                                    <img src="http://placehold.it/63x63" alt="" width="63" height="63" />
+                                    <img src="{{ url('assets/images/main-63/telephone.jpg') }}" alt="" width="63" height="63" />
                                 </a>
                             </div>
                             <div class="description">
                                 <h5 class="s-title"><a href="#">Amazing Places</a></h5>
-                                <p>Purus ac congue arcu cursus ut vitae pulvinar massaidp.</p>
-                                <span class="date">25 Sep, 2013</span>
+                                <p>London - Amsterdam - Paris - Milan - Dubai - Maldives - Bali</p>
+                                <span class="date">{{ date('Y') }}</span>
                             </div>
                         </li>
                         <li>
                             <div class="thumb">
                                 <a href="#">
-                                    <img src="http://placehold.it/63x63" alt="" width="63" height="63" />
+                                    <img src="{{ url('assets/images/main-63/peace-of-mind.jpg') }}" alt="" width="63" height="63" />
                                 </a>
                             </div>
                             <div class="description">
                                 <h5 class="s-title"><a href="#">Travel Insurance</a></h5>
-                                <p>Purus ac congue arcu cursus ut vitae pulvinar massaidp.</p>
-                                <span class="date">24 Sep, 2013</span>
+                                <p>A Powerful earthquake rocks the southern Japanese city of Kumamoto in the middle of the night</p>
+                                <span class="date">{{ date('Y') }}</span>
                             </div>
                         </li>
                     </ul>
@@ -49,11 +53,11 @@
                     <span>We respect your privacy</span>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                    <h2>About Travelo</h2>
-                    <p>Nunc cursus libero purus ac congue arcu cursus ut sed vitae pulvinar massaidp nequetiam lore elerisque.</p>
+                    <h2>About Hotelloca</h2>
+                    <p>We are providing the best hotel rate for retailer agents in indonesia.</p>
                     <br />
                     <address class="contact-details">
-                        <span class="contact-phone"><i class="soap-icon-phone"></i> 1-800-123-HELLO</span>
+                        <span class="contact-phone"><i class="soap-icon-phone"></i> +62-8HOTEL-LOCA</span>
                         <br />
                         <a href="#" class="contact-email">help@hotelloca.com</a>
                     </address>

@@ -159,18 +159,30 @@ class RequestController extends Controller {
 						$counter++;
 	                    $priceDetail = new StdClass();
 	                	$priceDetail->period_date = $date->format("d-m-Y");
-	                	$priceDetail->nett_value = $room->nett_value;
+
+						//inject surcharge waktu weekend
+						$day = $date->format('w');
+						if($day == 5 || $day == 6){
+							$priceDetail->nett_value = $room->nett_value + $room->surcharge;
+						} else {
+							$priceDetail->nett_value = $room->nett_value;
+						}
 	                	$priceDetail->from_date = $room->from_date;
 	                	$priceDetail->end_date = $room->end_date;
 	                	$priceDetail->num_breakfast = $room->num_breakfast;
 	                	$priceDetail->cut_off = $room->cut_off;
 	                	$priceDetail->allotment = $room->rate_allotment;
 	                	$priceDetail->mst023_id = $room->mst023_id;
-	                	$priceDetail->daily_price = $room->daily_price;
+
+						if($day == 5 || $day == 6){
+							$priceDetail->daily_price = $room->daily_price + $room->surcharge;
+						} else {
+							$priceDetail->daily_price = $room->daily_price;
+						}
 	                	$priceDetail->cancel_fee_flag = $globalCancelFeeFlag;
 	                	$numBreakfast = $room->num_breakfast; //dan data numbreakfast ini global disini
 
-	                	$totalPrice += $room->nett_value;
+	                	$totalPrice += $priceDetail->nett_value;
 	                	array_push($pricing, $priceDetail);
 
 	                }
@@ -665,7 +677,8 @@ class RequestController extends Controller {
                              CASE WHEN UPPER(?) = 'INDONESIA'
                                 THEN B.daily_price
                                 ELSE B.daily_price_wna
-                             END as daily_price
+                             END as daily_price,
+							 B.surcharge_value as surcharge
                      FROM MST022 B
                      inner join MST023 D on D.id = B.mst023_id
                      left join (select A.mst023_id,Min(A.allotment-A.used_allotment) as allotment

@@ -20,7 +20,7 @@ class HotelController extends Controller {
 	public function getIndex()
 	{
 		$indonesia = Country::where('country_name', '=', 'Indonesia')->first();
-        $countries = Country::lists('country_name', 'id');
+        $countries = Country::where('country_name', '=', 'Indonesia')->lists('country_name', 'id');
         $currencies = Currency::where('curr_code', Config::get('enums.rupiah'))->lists('curr_code', 'id');
         $hotelTypes = Config::get('enums.hotelTypes');
 		return view('register.hotel.register-hotel')

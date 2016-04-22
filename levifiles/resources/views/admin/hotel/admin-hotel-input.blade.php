@@ -165,6 +165,12 @@
 			        <div class="col-xs-12">
 		            	<label>Description Hotel</label>
 		           		<textarea id="description" class="full-width" name="description">{{ old('description') }}</textarea>
+						<script>
+			                // Replace the <textarea id="editor1"> with a CKEditor
+			                // instance, using default configuration.
+			                CKEDITOR.replace( 'description' );
+							CKEDITOR.config.removePlugins = 'about, link';
+			            </script>
 			        </div>
 			    </div>
 

@@ -42,7 +42,7 @@
         <td>{{ $invoice->order_no }}</td>
         <td class="td-left">Booking Date</td>
         <td class="small-gap">:</td>
-        <td>{{ $invoice->order_date }}</td>
+        <td>{{ date('d-m-Y', strtotime($invoice->order_date)) }}</td>
     </tr>
     <tr>
         <td class="td-left">Payment Date</td>
@@ -93,15 +93,15 @@
         @foreach($details as $detail)
         <tr>
             <td>{{ $detail->check_in_date }}</td>
-            <td class="right">{{ $detail->daily_price }}</td>
-            <td class="right">{{ $detail->total }}</td>
+            <td class="right">{{ number_format($detail->daily_price, 0, ',', '.') }}</td>
+            <td class="right">{{ number_format($detail->total, 0, ',', '.') }}</td>
         </tr>
         <?php $totalPayment += $detail->total; ?>
         @endforeach
     </tbody>
 </table>
 
-<b>Total Payment : </b>{{ $totalPayment }}
+<b>Total Payment : </b>{{ number_format($totalPayment, 0, ',', '.') }}
 
 </body>
 </html>
