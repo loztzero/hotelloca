@@ -12,13 +12,11 @@ gagal simpan
 
 
 
-1. description bisa kosong
+input hotel:
+waktu search tampilan beda sama waktu init (halaman browse)
 
 order hotel:
-jika cr byr pending payment errornya
-Undefined variable: balanceOrderBookingPayment
-
-662
-gagal simpan
+jika cr byr pending payment 
+status_flag sama statu_payment di blnc001 kosong hrsnya pending
 
 
