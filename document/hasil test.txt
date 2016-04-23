@@ -1,22 +1,14 @@
 -- my booking
-1.waktu payment pake deposit errornya
-Creating default object from empty value
-
-262
-gagal simpan
-2. waktu payment cr bayar transfer error
-Creating default object from empty value
-
-262
-gagal simpan
-
+1. minta tambah satu field, payment method ditamplin
 
 
 input hotel:
 waktu search tampilan beda sama waktu init (halaman browse)
 
-order hotel:
-jika cr byr pending payment 
-status_flag sama statu_payment di blnc001 kosong hrsnya pending
+
+input room rate cancel fee flag di centang error
+Undefined index: cancel_fee_val kalau ga dicentang ga masalah
+
+
 
 
