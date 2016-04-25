@@ -4,5 +4,8 @@ di halaman http://hotelloca.com/tester/agent/profile
 kurang description
 
 
+di halaman http://hotelloca.com/tester/agent/booking
+bagian Remaning Deposit nilainya blm diksh format
+
 
 
