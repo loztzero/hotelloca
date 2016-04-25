@@ -8,4 +8,7 @@ di halaman http://hotelloca.com/tester/agent/booking
 bagian Remaning Deposit nilainya blm diksh format
 
 
+cancel
+cancelnya ga error tapi ga ada tulis ke mana2. status di BLNC001 ga keupdate jg
+
 
