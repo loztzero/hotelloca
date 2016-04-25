@@ -1,13 +1,7 @@
--- my booking
-1. minta tambah satu field, payment method ditamplin
 
 
-input hotel:
-waktu search tampilan beda sama waktu init (halaman browse)
-
-
-input room rate cancel fee flag di centang error
-Undefined index: cancel_fee_val kalau ga dicentang ga masalah
+di halaman http://hotelloca.com/tester/agent/profile
+kurang description
 
 
 
