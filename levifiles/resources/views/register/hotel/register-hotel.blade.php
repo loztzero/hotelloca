@@ -43,7 +43,7 @@
 		    <div class="row form-group">
 		        <div class="col-xs-12">
 	            	<label>Address *</label>
-	           		<textarea id="address" class="full-width" required name="address">{{old('address')}}</textarea>
+	           		<textarea id="address" class="full-width" name="address">{{old('address')}}</textarea>
 		        </div>
 		    </div>
 
@@ -58,18 +58,28 @@
 		        <div class="col-xs-6">
 		            <label>City *</label>
 		            <div class="selector" id="citySelector">
-			            <select ng-model="field.city" name="mst003_id" required id="city" class="full-width">
+			            <select ng-model="field.city" name="mst003_id" required id="city" class="full-width" ng-change="cityChange()">
 				          	<option value="">Select A City</option>
 				          	<option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
 			          	</select>
-			          </div>
+		          	</div>
 		        </div>
 		    </div>
 
 		    <div class="row form-group">
-		        <div class="col-xs-12">
+		        <div class="col-xs-6">
 		            <label>Postcode *</label>
 		            <input type="text" class="input-text full-width" value="{{old('postcode')}}" id="postCode" name="postcode" required>
+		        </div>
+
+				<div class="col-xs-6">
+		            <label>Location *</label>
+		            <div class="selector" id="locationSelector">
+			            <select ng-model="field.location" name="mst030_id" required id="location" class="full-width">
+				          	<option value="">Select A Location</option>
+				          	<option ng-repeat="location in locations" value="@{{location.id}}" ng-selected="field.location == location.id">@{{location.area}} - @{{location.location}}</option>
+			          	</select>
+			          </div>
 		        </div>
 		    </div>
 
@@ -208,11 +218,14 @@
 		$scope.field.country = '{{ old("mst002_id", $indonesia) }}';
 		$scope.field.group_flg = '{{ old("group_flg", "No") }}';
 		$scope.cities = [];
+		$scope.locations = [];
 		$scope.getCity = function(){
 			console.log($scope.field);
 			$http.post('{{url("register/hotel/city-from-country")}}', $scope.field).success(function(response){
 				$scope.cities = response;
 				$scope.field.city = '{{ old("mst003_id", "") }}';
+				$scope.field.location = '{{ old("mst030_id", "") }}';
+
 
 				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
 				if(oldCity.length == 0){
@@ -220,12 +233,31 @@
 					tjq('#citySelector span').html('Select A City');
 				} else {
 					tjq('#citySelector span').html(oldCity[0].city_name);
+
+					//for load location list
+					$scope.locations = oldCity[0].locations;
+					//track if have location value
+					var oldLocation = $filter('filter')($scope.locations, { id : $scope.field.location }, true);
+					if(oldLocation.length == 0){
+						$scope.field.location = '';
+						tjq('#locationSelector span').html('Select A Location');
+					} else {
+						tjq('#locationSelector span').html(oldLocation[0].area + ' - ' + oldLocation[0].location);
+					}
 				}
-				console.log(oldCity);
 			})
 		}
 
 		$scope.getCity();
+
+		$scope.cityChange = function(){
+			if($scope.field.city != ''){
+				var currentCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
+				$scope.field.location = '';
+				$scope.locations = currentCity[0].locations;
+				tjq('#locationSelector span').html('Select A Location');
+			}
+		}
 
 	});
 </script>

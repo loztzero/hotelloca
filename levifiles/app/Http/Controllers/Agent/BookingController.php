@@ -549,6 +549,9 @@ class BookingController extends Controller {
 
 				} else {
 					$successInfo->paymentMethod = $request->payment_method;
+					$balanceOrderBooking->status_flag = 'Pending';
+					$balanceOrderBooking->status_pymnt = 'Pending';
+					$balanceOrderBooking->save();
 				}
 
 				//beware angka2 field untuk table TRX011 dibawah ini diupdate oleh detail nya
@@ -670,8 +673,8 @@ class BookingController extends Controller {
 					$logDeposit->mst001_id = Auth::user()->id;
 					$logDeposit->type = 'Used';
 					$logDeposit->log_no = $balanceOrderBooking->order_no;
-					$logDeposit->log_yrmo = $orderBooking->order_yrmo;
-					$logDeposit->log_date = $orderBooking->order_date;
+					$logDeposit->log_yrmo = date('Ym');
+					$logDeposit->log_date = date('Ymd');
 					$logDeposit->deposit_value = $balanceOrderBooking->tot_payment;
 					$logDeposit->save();
 

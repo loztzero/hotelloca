@@ -12,7 +12,7 @@ trait CityFromCountry
         // print_r(Input::all());
         if($request->country){
             $countryDetail = Country::where('id', '=', $request->country)->first();
-            $cities = City::where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
+            $cities = City::with('locations')->where('mst002_id', '=', $countryDetail->id)->orderBy('city_code')->get();
             return $cities;
         }
 

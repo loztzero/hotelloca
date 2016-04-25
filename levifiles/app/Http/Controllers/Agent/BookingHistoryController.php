@@ -239,6 +239,7 @@ class BookingHistoryController extends Controller {
 					} else {
 
 						$order->status_pymnt = 'Done';
+						$order->status_flag = 'Done';
 						$order->save();
 
 						//potong biaya deposit
@@ -262,7 +263,7 @@ class BookingHistoryController extends Controller {
 
 				//simpan blnc003
 				$balanceOrderBookingPayment = BalanceOrderBookingPayment::where('blnc001_id', '=', $order->id)->first();
-				if($balanceOrderBookingPayment){
+				if(!$balanceOrderBookingPayment){
 					$balanceOrderBookingPayment = new BalanceOrderBookingPayment();
 					$balanceOrderBookingPayment->blnc001_id	= $order->id;
 				}
@@ -279,6 +280,11 @@ class BookingHistoryController extends Controller {
 				//simpan trx012
 				$trxOrder = OrderBooking::where('order_no', '=', $request->order_no)->first();
 				$trxOrderBookingDetailPayment = OrderBookingDetailPayment::where('trx010_id', '=', $trxOrder->id)->first();
+				if(!$trxOrderBookingDetailPayment){
+					$trxOrderBookingDetailPayment = new OrderBookingDetailPayment();
+					$trxOrderBookingDetailPayment->trx010_id	= $trxOrder->id;
+				}
+
 				$trxOrderBookingDetailPayment->payment_method = $request->payment_method;
 				if($request->payment_method == 'CreditCard'){
 					$trxOrderBookingDetailPayment->card_type = $request->card_type;

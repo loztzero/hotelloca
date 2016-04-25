@@ -138,7 +138,8 @@ class HotelDetail extends Emodel {
 		$object->postcode = $data['postcode'];
 		$object->phone_number = $data['phone_number'];
 		$object->fax_number = $data['fax_number'];
-		$object->landmark_name = $data['landmark_name'];
+		$object->landmark_name = isset($data['landmark_name']) ? $data['landmark_name'] : null;
+		$object->mst030_id = isset($data['mst030_id']) ? $data['mst030_id'] : null;
 		$object->email = $data['email'];
 		$object->website = $data['website'];
 		$object->mst004_id = $data['mst004_id'];
