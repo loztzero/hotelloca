@@ -1,12 +1,16 @@
 -- Query untuk halaman my booking
 SELECT A.order_no,B.check_in_date,B.check_out_date,B.first_name,
-       D.transfer_date, A.status_flg,A.tot_payment,coalesce(E.payment_menthod,'pending') as payment_mehtod,
-       CASE WHEN now() < ADDDATE(b.check_in_date, - (b.cut_off +1)) THEN true ELSE false END as show_cancel
+       D.transfer_date, A.status_flag,A.tot_payment,coalesce(E.payment_method,'Pending') as payment_method,
+       CASE WHEN now() < ADDDATE(B.check_in_date, - (B.cut_off +1)) THEN true ELSE false END as show_cancel,
+       CASE WHEN LOWER(E.payment_method) = 'transfer' THEN D.transfer_date
+	WHEN LOWER(E.payment_method = 'balance') THEN F.log_date ELSE null END as payment_date
 FROM BLNC001 A
 INNER JOIN BLNC002 B ON B.blnc001_id = A.id
 INNER JOIN MST020 C ON C.id = B.mst020_id
 LEFT JOIN TRX001 D ON D.order_no = A.order_no
-LEFT JOIN BLNC003 E ON E.blnc001_id = a.id
+LEFT JOIN BLNC003 E ON E.blnc001_id = A.id
+LEFT JOIN LOG010 F ON F.log_no = A.order_no
+		   AND F.log_yrmo = A.order_yrmo
 WHERE A.order_no LIKE '%123%'
 AND B.check_in_date =  STR_TO_DATE('2016-02-11', '%Y-%m-%d')
 AND B.check_out_date = STR_TO_DATE('2016-02-11', '%Y-%m-%d')
