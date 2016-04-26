@@ -11,6 +11,9 @@ payment konfirmasi
 conf_payment_no
 conf_payment_date
 
+http://hotelloca.com/tester/admin/agent-payment-statement
+statusnya kenapa kosong?status flag hrsnya kan..
+
 
 
 
