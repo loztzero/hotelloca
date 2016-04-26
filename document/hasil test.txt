@@ -1,14 +1,16 @@
+di halaman boking paling akhir yg resume confirm booking, dha keluar nomor order
+jika payment methodnya transfer , ksh link ke halaman payment confirmation di
+bagian payment methodnya, trus ntar menuju ke halaman pament confirmation dgn posisi
+order nomor dah keisi
 
 
-di halaman http://hotelloca.com/tester/agent/profile
-kurang description
+payment konfirmasi
+1. no order di validasi harus ada di BLNC001
+2. order date muncul otomatis klo order no diisi ga sah diisi ma user
+3. BLNC003 ga ke update ke table BLNC003
+conf_payment_no
+conf_payment_date
 
 
-di halaman http://hotelloca.com/tester/agent/booking
-bagian Remaning Deposit nilainya blm diksh format
-
-
-cancel
-cancelnya ga error tapi ga ada tulis ke mana2. status di BLNC001 ga keupdate jg
 
 
