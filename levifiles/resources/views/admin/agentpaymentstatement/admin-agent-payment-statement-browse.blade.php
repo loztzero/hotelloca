@@ -18,48 +18,60 @@
 	<div class="container" ng-controller="MainCtrl">
 
 		<div class="travelo-box">
-			<form action="{{ url('/admin/agent-deposit') }}" method="get" >
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+			<form action="{{ url('/admin/agent-payment-statement') }}" method="get" >
 
 				<h3>Agent Payment Statement</h3>
 				@include('layouts.message-helper')
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Order Number</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+			            <input type="text" class="input-text full-width" value="{{ Request::get('order_no') }}" id="orderNo" name="order_no">
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Agent</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+			            <input type="text" class="input-text full-width" value="{{ Request::get('agent') }}" id="agent" name="agent">
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
 			        <div class="col-xs-6">
 			            <label>Start Order Date</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+						<div class="datepicker-wrap">
+			            	<input type="text" class="input-text full-width date-handle" value="{{ Request::get('start_date') }}" id="startDate" name="start_date">
+						</div>
 			        </div>
 
 			         <div class="col-xs-6">
 			            <label>End Order Date</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+						<div class="datepicker-wrap">
+			            	<input type="text" class="input-text full-width date-handle" value="{{ Request::get('end_date') }}" id="endDate" name="end_date">
+						</div>
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
-			        <div class="col-xs-12">
-			            <label>Order Number</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
-			        </div>
-			    </div>
-
-			    <div class="row form-group">
-			        <div class="col-xs-12">
+			        <div class="col-xs-6">
 			            <label>Hotel</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel') }}" id="hotel" name="hotel">
+			        </div>
+
+					<div class="col-xs-6">
+			            <label>Status Payment</label>
+						<div class="selector">
+							{!! Form::select('status_payment', array('' => 'All', 'Pending' => 'Pending', 'Done' => 'Done', 'Failed' => 'Failed'), Request::get('status_payment'), array('class' => 'full-width')) !!}
+						</div>
+			        </div>
+			    </div>
+
+			    <div class="row form-group">
+			        <div class="col-xs-6">
+			            <label>Status Order</label>
+						<div class="selector">
+							{!! Form::select('status_order', array('' => 'All', 'Pending' => 'Pending', 'Confirmed' => 'Confirmed', 'Cancel' => 'Cancel'), Request::get('status_order'), array('class' => 'full-width')) !!}
+						</div>
 			        </div>
 			    </div>
 
@@ -101,11 +113,11 @@
 						<td>{{ $helpers::dateFormatterMysql($payment->order_date) }}</td>
 						<td>{{ $payment->agent->email }}</td>
 						<td>{{ $payment->tot_gross_price }}</td>
-						<td>{{ $payment->status_flg }}</td>
+						<td>{{ $payment->status_flag }}</td>
 						<td>
 							<div class="selector">
 								<select class="full-width">
-									<option value="Cancel">Cancel</option>	
+									<option value="Cancel">Cancel</option>
 									<option value="Done">Done</option>
 								</select>
 							</div>
@@ -126,6 +138,24 @@
 @endsection
 
 @section('script')
+<script>
+tjq('.date-handle').datepicker({
+    showOn: 'button',
+    buttonImage: '{{ url("assets/images/icon/blank.png") }}',
+    buttonText: '',
+    buttonImageOnly: true,
+    changeYear: false,
+    dateFormat: "dd-mm-yy",
+    dayNamesMin: ["S", "M", "T", "W", "T", "F", "S"],
+    beforeShow: function(input, inst) {
+        var themeClass = tjq(input).parent().attr("class").replace("datepicker-wrap", "");
+        tjq('#ui-datepicker-div').attr("class", "");
+        tjq('#ui-datepicker-div').addClass("ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
+        tjq('#ui-datepicker-div').addClass(themeClass);
+    }
+});
+</script>
+
 <script>
 	var app = angular.module("ui.hotelloca", []);
 	app.controller("MainCtrl", function ($scope, $http, $filter) {

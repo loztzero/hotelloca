@@ -89,6 +89,9 @@
                                     <li {{ Request::segment('2') == 'booking-history' ? 'class=active' : '' }} >
                                         <a href="{{ url('agent/booking-history') }}" title="My Booking">My Booking</a>
                                     </li>
+                                    <li {{ Request::segment('2') == 'confirmation-payment' ? 'class=active' : '' }} >
+                                        <a href="{{ url('agent/confirmation-payment') }}" title="Confirmation Payment">Confirmation Payment</a>
+                                    </li>
                                     <li>
                                         <a href="{{ url('auth/logout') }}" title="Logout">Logout</a>
                                     </li>

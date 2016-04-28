@@ -22,9 +22,7 @@
 
         </form>
 
-			<form action="{{url('/admin/hotel')}}" method="get" >
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
+			<form action="{{url('/admin/hotel-vs-user')}}" method="get" >
 				<h3>Hotels</h3>
 				@include('layouts.message-helper')
 
@@ -89,8 +87,8 @@
 							</form>
 						</td>
 						<td>{{ $hotel->hotel_name }}</td>
-						<td class="hide-for-small">{{ $hotel->country->country_name }}</td>
-						<td class="hide-for-small">{{ $hotel->city->city_name }}</td>
+						<td class="hide-for-small">{{ $hotel->country_name }}</td>
+						<td class="hide-for-small">{{ $hotel->city_name }}</td>
 						<td class="hide-for-small">{{ $hotel->address }}</td>
 						<td class="hide-for-small">{{ $hotel->phone_number }}</td>
 						<td class="hide-for-small">{{ $hotel->created_at }}</td>
@@ -124,14 +122,15 @@
 	app.controller("MainCtrl", function ($scope, $http, $filter) {
 
 		$scope.field = {};
+		$scope.field.country = "{{ Request::input('country', '') }}";
 		$scope.cities = [];
 		$scope.getCity = function(){
 			console.log($scope.field);
 			$http.post('{{url("admin/hotel/city-from-country")}}', $scope.field).success(function(response){
 				$scope.cities = response;
-				$scope.field.city = '{{ old("mst003_id", "") }}';
+				$scope.field.city = '{{ Request::input("city", "") }}';
 
-				var oldCity = $filter('filter')($scope.cities, { id : $scope.field.city }, true);
+				var oldCity = $filter('filter')($scope.cities, { city_name : $scope.field.city }, true);
 				if(oldCity.length == 0){
 					$scope.field.city = '';
 					tjq('#citySelector span').html('Select A City');
@@ -140,6 +139,8 @@
 				}
 			})
 		}
+
+		$scope.getCity();
 
 	});
 </script>

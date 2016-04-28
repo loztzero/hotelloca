@@ -191,8 +191,8 @@
                                     </div>
 
                                     <div class="col-sm-6 col-md-5">
-                                        <label>Remaning Deposit</label>
-                                        <input type="text" class="input-text full-width" value="{{ $remainingDeposit }}" readonly />
+                                        <label>Remaining Deposit</label>
+                                        <input type="text" class="input-text full-width" value="{{ number_format($remainingDeposit, 0, ',', '.') }}" readonly />
                                     </div>
                                 </div>
                             </div>

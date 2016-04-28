@@ -21,22 +21,27 @@ class HotelVsUserController extends Controller {
 
 	public function getIndex(Request $request){
 
-		$result = HotelDetail::where('api_flg', '=', 'No');
-		$result->where('mst001_id', '=', null);
+		$result = HotelDetail::from('MST020 as a')
+					->join('MST002 as b', 'b.id', '=', 'a.mst002_id')
+					->join('MST003 as c', 'c.id', '=', 'a.mst003_id')
+					->where('a.api_flg', '=', 'No')
+					->where('a.mst001_id', '=', null);
 
-		$result = isset($request->hotel_name) && $request->hotel_name != '' ? $result->where('hotel_name', 'like', $request->hotel_name) : $result;
+		$result = $request->has('hotel_name') ? $result->where('a.hotel_name', 'like', $request->hotel_name) : $result;
 
-		$result = isset($request->country) && $request->country != ''
-					? $result->join('MST002', 'MST002.id', '=', 'MST020.mst002_id')->where('MST002.country_code', '=', $request->country)
+		$result = $request->has('country')
+					? $result->where('b.id', '=', $request->country)
 					: $result;
 
-		$result = isset($request->city) && $request->city != ''
-					? $result->join('MST003', 'MST003.id', '=', 'MST020.mst003_id')->where('MST003.city_code', '=', $request->city)
+		$result = $request->has('city')
+					? $result->where('c.city_code', '=', $request->city)
 					: $result;
 
-		$result = $result->orderBy('created_at', 'desc');
+		$result = $result->select('a.id', 'a.hotel_name', 'b.country_name', 'c.city_name', 'a.address', 'a.phone_number', 'a.active_flg', 'a.created_at', 'a.updated_at');
+
+		$result = $result->orderBy('a.created_at', 'desc');
 		$hotelList = $result->paginate(20);
-		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
+		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
 		return view('admin.hotelvsuser.admin-hotel-vs-user-browse')
 				->with('hotelList', $hotelList)
 				->with('countries', $countries);

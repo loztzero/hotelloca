@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-	
+
 <div class="container" ng-controller="MainCtrl">
 	<div class="container">
         <div class="row">
@@ -44,7 +44,20 @@
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />
-                    <p class="red-color">Payment is made by {{ $data->paymentMethod }}.</p>
+					@if($data->paymentMethod == 'PendingPayment')
+						<p class="red-color">Payment is made by Pending Payment.</p>
+					@elseif($data->paymentMethod == 'Transfer')
+						<p class="red-color">
+							Payment is made by {{ $data->paymentMethod }}.
+							<form method="post" action="{{ url('agent/confirmation-payment') }}" target="_blank">
+								<input type="hidden" name="_token" value="{{ csrf_token() }}">
+								<input type="hidden" name="order_no" value="{{ $data->orderNumber }}">
+								<button type="submit">Click Here For Do Your Confirmation Payment</button>
+							</form>
+						</p>
+					@else
+                    	<p class="red-color">Payment is made by {{ $data->paymentMethod }}.</p>
+					@endif
                     <hr />
                     <h2>View Booking Details</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>

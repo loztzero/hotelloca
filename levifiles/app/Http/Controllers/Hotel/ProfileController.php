@@ -54,16 +54,16 @@ class ProfileController extends ActivatedController {
 		        	$hotelDetail->save();
 
 				} else {
-					
+
 					Session::flash('error', array('Data hotel is not valid'));
         			return Redirect::to('hotel/profile');
 				}
 
 			}
-			
+
 		} catch (\Exception $e) {
-			
-			DB::rollback();			
+
+			DB::rollback();
 			Session::flash('error', array($e->getMessage()));
 			return Redirect::to('hotel/profile')->withInput(Input::all());
 		}

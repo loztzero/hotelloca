@@ -66,7 +66,7 @@
 
                 <div class="row form-group">
                     <div class="col-xs-6">
-                        <label>Status Pesanan</label>
+                        <label>Status Order</label>
                         <div class="selector">
                             {!! Form::select('status', array('' => 'All', 'Pending' => 'Pending', 'Done' => 'Done', 'Cancel' => 'Cancel'), null, array('class' => 'full-width')) !!}
                         </div>
@@ -87,9 +87,10 @@
                         <th class="hide-for-small">Check In</th>
                         <th class="hide-for-small">Check Out</th>
                         <th>Tamu</th>
-                        <th class="hide-for-small">Tanggal Pembayaran</th>
+                        <th class="hide-for-small">Payment Date</th>
                         <th class="hide-for-small">Status</th>
-                        <th class="hide-for-small td-right">Total Pembayaran</th>
+                        <th class="td-right">Total Payment</th>
+                        <th>Payment Method</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -104,12 +105,19 @@
                         <td>{{ $booking->status_flag }}</td>
                         <td class="td-right">{{ number_format($booking->tot_payment, 0, ',', '.') }}</td>
                         <td>
+                            @if($booking->payment_method == 'PendingPayment')
+                                Pending Payment
+                            @else
+                                {{ $booking->payment_method }}
+                            @endif
+                        </td>
+                        <td>
                             <a href="{{ url('agent/booking-history/order-detail/').'/'.$booking->order_no }}" class="button btn-small green">Order Detail</a>
                             <a href="{{ url('agent/booking-history/invoice/').'/'.$booking->order_no }}" class="button btn-small green">Invoice</a>
                             @if($booking->status_flag != 'Cancel' && $booking->status_pymnt == 'Pending' && $booking->show_cancel)
                                 <a href="{{ url('agent/booking-history/cancel/').'/'.$booking->order_no }}" class="button btn-small green" onclick="javascript: return confirm('Cancellation can not be undone, are you sure?')">Cancel</a>
                             @endif
-                            @if($booking->status_pymnt == 'Pending')
+                            @if($booking->status_pymnt == 'Pending' && $booking->status_flag == 'Pending' && $booking->payment_method == 'PendingPayment')
                                 <a href="{{ url('agent/booking-history/payment/').'/'.$booking->order_no }}" class="button btn-small green">Payment</a>
                             @endif
                         </td>

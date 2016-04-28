@@ -6,6 +6,7 @@ Route::group(['prefix' => 'agent', 'middleware' => 'role:Agent'], function() {
 	Route::controller('booking', 'Agent\BookingController');
 	Route::controller('request', 'Agent\RequestController');
 	Route::controller('booking-history', 'Agent\BookingHistoryController');
+	Route::controller('confirmation-payment', 'Agent\ConfirmationPaymentController');
 	//Route::controller('profile', 'Agent\ProfileController');
 
 });

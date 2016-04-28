@@ -42,6 +42,7 @@ class BookingHistoryController extends Controller {
 						->join('MST020 as c', 'c.id', '=', 'b.mst020_id')
 						->leftJoin('TRX001 as d', 'd.order_no', '=', 'a.order_no')
 						->leftJoin('BLNC003 as e', 'e.blnc001_id', '=', 'a.id')
+						->leftJoin('LOG010 as f', 'f.log_no', '=', 'a.order_yrmo')
 						->where('a.mst001_id', '=', Auth::user()->id);
 
 
@@ -74,11 +75,13 @@ class BookingHistoryController extends Controller {
 			$query = $query->where('a.status_flag', '=', $request->status);
 		}
 
-		$query = $query->orderBy('a.created_at');
+		$query = $query->orderBy('a.created_at', 'desc');
 
 		$query = $query->select('a.order_no', 'b.check_in_date', 'b.check_out_date','b.first_name' ,
-					       'd.transfer_date', 'a.status_flag', 'a.tot_payment', 'a.status_pymnt',
-						   DB::raw('CASE WHEN now() < ADDDATE(b.check_in_date, - (b.cut_off +1)) THEN true ELSE false END as show_cancel')
+					       'd.transfer_date', 'a.status_flag', 'a.tot_payment', 'a.status_pymnt', 'e.payment_method',
+						   DB::raw('CASE WHEN now() < ADDDATE(b.check_in_date, - (b.cut_off +1)) THEN true ELSE false END as show_cancel'),
+						   DB::raw('CASE WHEN LOWER(e.payment_method) = "transfer" THEN d.transfer_date
+ 					   				WHEN LOWER(e.payment_method) = "balance" THEN f.log_date ELSE null END as payment_date')
 					   );
 		$result = $query->paginate(20);
 		$result->setPath(url('agent/booking-history')); //buat handle error paginasi pada laravel nya
@@ -365,7 +368,7 @@ class BookingHistoryController extends Controller {
 			try {
 
 				//update flag ke cancel
-				$balanceOrderBooking = BalanceOrderBooking::where('order_no', '=', $orderBooking->id);
+				$balanceOrderBooking = BalanceOrderBooking::find($orderBooking->id);
 				$balanceOrderBooking->status_flag = 'Cancel';
 				$balanceOrderBooking->save();
 
@@ -381,6 +384,8 @@ class BookingHistoryController extends Controller {
 
 			} catch (\Exception $e) {
 				DB::rollBack();
+				Session::flash('error', array('There is error in cancellation, please try again, or contact our support'));
+				return redirect('agent/booking-history');
 			}
 
 			DB::commit();

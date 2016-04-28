@@ -207,11 +207,11 @@ class HotelRoomRate extends Emodel {
 		}
 
 		$object->cancel_fee_flag = $data['cancel_fee_flag'];
-		if($object->cancel_fee_flag == 'Yes'){
-			$object->cancel_fee_val = $data['cancel_fee_val'];
-		} else {
-			$object->cancel_fee_val = 0;
-		}
+		// if($object->cancel_fee_flag == 'Yes'){
+		// 	$object->cancel_fee_val = $data['cancel_fee_val'];
+		// } else {
+		$object->cancel_fee_val = 0; //<- sekarang ini sudah tidak menggunakan nilai cancel fee value
+		// }
 
 		$object->nett_value = 0;
 		$object->nett_value_wna = 0;

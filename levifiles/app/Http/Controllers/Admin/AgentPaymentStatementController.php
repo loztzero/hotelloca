@@ -29,18 +29,24 @@ class AgentPaymentStatementController  extends Controller {
 	{
 
 		//payment agent dilihat nya dari order booking - blnc001
-		// $balanceOrderBooking = 
-		$query = BalanceOrderBooking::where('order_no', 'like', $request->input('order_no', '%'));
+		// $balanceOrderBooking =
+		$query = BalanceOrderBooking::from('BLNC001 as a')
+				->join('MST001 as b', 'a.mst001_id', '=', 'b.id');
+
+		if($request->has('order_no')){
+			$query = $query->where('a.order_no', 'like', $request->order_no);
+		}
+
 		if($request->has('start_date')){
-			$query = $query->where('order_date', '>=', $request->start_date);
+			$query = $query->where('a.order_date', '>=', $request->start_date);
 		}
 
 		if($request->has('end_date')){
-			$query = $query->where('order_date', '<=', $request->end_date);
+			$query = $query->where('a.order_date', '<=', $request->end_date);
 		}
 
-		if($request->has('hotel')){
-			$query = $query->where('mst001_id', '=', $request->hotel);
+		if($request->has('agent')){
+			$query = $query->where('b.email', '=', $request->agent);
 		}
 
 		$result = $query->get();

@@ -19,11 +19,11 @@
 
 	<div class="travelo-box">
 
-		<form action="{{url('/agent/profile/save')}}" method="post" >
+		<form action="{{url('/hotel/profile/save')}}" method="post" >
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			<input type="hidden" name="id" value="{{ $profile->id }}">
 
-			<h3>Profile</h3> 
+			<h3>Profile</h3>
 			@include('layouts.message-helper')
 
 		    <div class="row form-group">
@@ -100,6 +100,35 @@
 		            <input type="text" class="input-text full-width" value="{{ $profile->currency->curr_code }}" id="currency" readonly>
 		        </div>
 		    </div>
+
+			<div class="row form-group">
+				<div class="col-xs-12">
+					<label>Meal Price *</label>
+					<input type="text" class="input-text full-width" value="{{ number_format(old('meal_price', $profile->meal_price), 0, ',', '.') }}" name="meal_price" id="mealPrice">
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-xs-12">
+					<label>Bed Price *</label>
+					<input type="text" class="input-text full-width" value="{{ number_format(old('bed_price', $profile->bed_price), 0, ',', '.') }}" name="bed_price" id="bedPrice">
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-xs-12">
+					<label>Description Hotel</label>
+					<textarea name="description" id="description" rows="10">
+						{{ old('description', $profile->description) }}
+					</textarea>
+					<script>
+						// Replace the <textarea id="editor1"> with a CKEditor
+						// instance, using default configuration.
+						CKEDITOR.replace( 'description' );
+						CKEDITOR.config.removePlugins = 'about, link';
+					</script>
+				</div>
+			</div>
 
 		    <div class="row form-group">
 		        <div class="col-xs-12">

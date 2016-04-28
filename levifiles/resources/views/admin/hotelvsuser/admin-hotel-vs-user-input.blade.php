@@ -90,7 +90,7 @@
 					<div class="col-xs-6">
 			            <label>Location *</label>
 			            <div class="selector" id="locationSelector">
-				            <select ng-model="field.location" name="mst030_id" required id="location" class="full-width">
+				            <select ng-model="field.location" name="mst030_id" id="location" class="full-width">
 					          	<option value="">Select A Location</option>
 					          	<option ng-repeat="location in locations" value="@{{location.id}}" ng-selected="field.location == location.id">@{{location.area}} - @{{location.location}}</option>
 				          	</select>
@@ -145,14 +145,14 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Meal Price *</label>
-			            <input type="text" class="input-text full-width" value="{{old('meal_price', 0)}}" name="meal_price" id="mealPrice">
+			            <input type="text" class="input-text full-width" value="{{ number_format(old('meal_price', 0), 0, ',', '.') }}" name="meal_price" id="mealPrice">
 			        </div>
 			    </div>
 
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Bed Price *</label>
-			            <input type="text" class="input-text full-width" value="{{old('bed_price', 0)}}" name="bed_price" id="bedPrice">
+			            <input type="text" class="input-text full-width" value="{{ number_format(old('bed_price', 0), 0, ',', '.') }}" name="bed_price" id="bedPrice">
 			        </div>
 			    </div>
 

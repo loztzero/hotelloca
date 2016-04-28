@@ -95,15 +95,15 @@ class HotelDetail extends Emodel {
 		$messages = array();
 
 		$rules = array(
-			'hotel_name'    => 'required',
-			'star'      	=> 'required',
+			//'hotel_name'    => 'required',
+			//'star'      	=> 'required',
 			'address'      	=> 'required',
 			'phone_number'  => 'required',
-			'mst004_id'    	=> 'required',
+			//'mst004_id'    	=> 'required',
 			'meal_price'    => 'numeric',
 			'bed_price'     => 'numeric',
-			'group_flg'  	=> 'required|in:Yes,No',
-			'group_name'  	=> 'required_if:group_flg,Yes',
+			//'group_flg'  	=> 'required|in:Yes,No',
+			//'group_name'  	=> 'required_if:group_flg,Yes',
 		);
 
 		$messages = array(
@@ -161,21 +161,21 @@ class HotelDetail extends Emodel {
 	//digunakan oleh hotel owner controller
 	public function doParamsOwner($object, $data)
 	{
-		$object->star = $data['star'];
+		//$object->star = $data['star'];
 		$object->address = $data['address'];
 		$object->postcode = $data['postcode'];
 		$object->phone_number = $data['phone_number'];
 		$object->fax_number = $data['fax_number'];
 		$object->landmark_name = $data['landmark_name'];
-		$object->email = $data['email'];
+		// $object->email = $data['email'];
 		$object->website = $data['website'];
-		$object->mst004_id = $data['mst004_id'];
+		//$object->mst004_id = $data['mst004_id'];
 		$object->meal_price = isset($data['meal_price']) ? $data['meal_price'] : 0;
 		$object->bed_price = isset($data['bed_price']) ? $data['meal_price'] : 0;
 		$object->market = isset($data['market']) ? $data['market'] : 'All';
 		$object->description = isset($data['description']) ? $data['description'] : null;
-		$object->group_flg = isset($data['group_flg']) ? $data['group_flg'] : 'No';
-		$object->group_name = isset($data['group_name']) ? $data['group_name'] : null;
+		//$object->group_flg = isset($data['group_flg']) ? $data['group_flg'] : 'No';
+		//$object->group_name = isset($data['group_name']) ? $data['group_name'] : null;
 		return $object;
 	}
 
