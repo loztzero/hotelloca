@@ -5,7 +5,7 @@
 <PROJECTSETTINGS>
 <COMMONSETTINGS>
 <PROJECTFILENAME>I:\Document\BoardingPassku\table.dez</PROJECTFILENAME>
-<MODIFIED>2016-05-01</MODIFIED>
+<MODIFIED>2016-05-09</MODIFIED>
 <CREATED>2015-02-09</CREATED>
 <CREATED2></CREATED2>
 <PROJECTNAME></PROJECTNAME>
@@ -7208,7 +7208,7 @@ jika rate_type =Commision and h.comm_type = Value maka daily_price_wna + comm_va
 </NNCON>
 </ATTR>
 <ATTR>
-<NAME>no_conf_order</NAME>
+<NAME>no_conf_date</NAME>
 <ID>22</ID>
 <POSNR>0</POSNR>
 <SCHEMA></SCHEMA>
@@ -7216,8 +7216,7 @@ jika rate_type =Commision and h.comm_type = Value maka daily_price_wna + comm_va
 <NOTE></NOTE>
 <DOMAINID>-1</DOMAINID>
 <DT>
-<DTLISTNAME>VARCHAR</DTLISTNAME>
-<LE>40</LE>
+<DTLISTNAME>DATE</DTLISTNAME>
 <SD>0</SD>
 <INC>1</INC>
 </DT>
