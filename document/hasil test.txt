@@ -1,8 +1,9 @@
+update cancel otomatis:
+ada 2 step ikutin aja yang g tulis ya stepnya
+tapi tu waktu insert g ga tau gmn cr dptin idnya tu, bs ga samain ma table BLNC004nya
 
-payment konfirmasi
-3. BLNC003 ga ke update ke table BLNC003
-conf_payment_no
-conf_payment_date
+trus nama filenya updatecancelotomatis.yg insert g blm test yg update udah..soalnya idnya ga tau isi apa
+
 
 agent payment
 1. combo status payment ga ada pending
