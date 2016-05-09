@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2016-04-21 20:48                                #
+# Created on:            2016-05-01 20:23                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -25,7 +25,7 @@ CREATE TABLE `MST030` (
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_MST030` PRIMARY KEY (`id`),
-    CONSTRAINT `TUC_MST030_1` UNIQUE (`mst003_id`)
+    CONSTRAINT `TUC_MST030_1` UNIQUE (`mst003_id`, `area`, `location`)
 )
 ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 

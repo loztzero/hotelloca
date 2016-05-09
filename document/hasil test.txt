@@ -1,18 +1,13 @@
-di halaman boking paling akhir yg resume confirm booking, dha keluar nomor order
-jika payment methodnya transfer , ksh link ke halaman payment confirmation di
-bagian payment methodnya, trus ntar menuju ke halaman pament confirmation dgn posisi
-order nomor dah keisi
-
 
 payment konfirmasi
-1. no order di validasi harus ada di BLNC001
-2. order date muncul otomatis klo order no diisi ga sah diisi ma user
 3. BLNC003 ga ke update ke table BLNC003
 conf_payment_no
 conf_payment_date
 
-http://hotelloca.com/tester/admin/agent-payment-statement
-statusnya kenapa kosong?status flag hrsnya kan..
+agent payment
+1. combo status payment ga ada pending
+2. munculin tipe kamar sama jumlah hari dan check in date
+3. liat spec g kuningin ada tambahan di payment agentnya
 
 
 
