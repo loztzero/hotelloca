@@ -6,8 +6,6 @@ trus nama filenya updatecancelotomatis.yg insert g blm test yg update udah..soal
 
 
 agent payment
-1. combo status payment ga ada pending
-2. munculin tipe kamar sama jumlah hari dan check in date
 3. liat spec g kuningin ada tambahan di payment agentnya
 
 
