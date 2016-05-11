@@ -5,7 +5,7 @@
 # Project name:                                                          #
 # Author:                                                                #
 # Script type:           Database creation script                        #
-# Created on:            2016-05-11 20:24                                #
+# Created on:            2016-05-11 20:29                                #
 # ---------------------------------------------------------------------- #
 
 
@@ -24,6 +24,7 @@ CREATE TABLE `LOG040` (
     `transfer_date` DATE NOT NULL COMMENT 'nomor yang menggunakan log',
     `payment_val` DOUBLE(30,2) NOT NULL,
     `read_flag` VARCHAR(100) NOT NULL COMMENT 'tahun bulan yang menggunakan log',
+    `note` TEXT NOT NULL,
     `updated_at` TIMESTAMP NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
     CONSTRAINT `PK_LOG040` PRIMARY KEY (`id`),
