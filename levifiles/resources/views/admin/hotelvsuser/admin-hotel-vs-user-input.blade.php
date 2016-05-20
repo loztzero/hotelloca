@@ -8,7 +8,7 @@
 	        </div>
 	        <ul class="breadcrumbs pull-right">
 	            <li><a href="#">Admin</a></li>
-	            <li><a href="{{ url('admin/hotel') }}">Hotels</a></li>
+	            <li><a href="{{ url('admin/hotel-vs-user') }}">Hotel Vs User</a></li>
 	            <li class="active">Hotel Input</li>
 	        </ul>
 	    </div>
@@ -41,7 +41,7 @@
 			        <div class="col-xs-6">
 			            <label>Type *</label>
 			            <div class="selector">
-		             		{!! Form::select('types', $hotelTypes , old('types'), array('required', 'class' => 'full-width')) !!}
+		             		{!! Form::select('type', $hotelTypes , old('type'), array('required', 'class' => 'full-width')) !!}
 			            </div>
 			        </div>
 			    </div>
@@ -115,7 +115,7 @@
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Fax No</label>
-			            <input type="text" class="input-text full-width"  value="{{ old('hotel_name')}}" value="{{old('fax_number')}}" id="faxNumber" name="fax_number">
+			            <input type="text" class="input-text full-width"  value="{{old('fax_number')}}" id="faxNumber" name="fax_number">
 			        </div>
 			    </div>
 

@@ -130,6 +130,7 @@ class HotelDetail extends Emodel {
 	public function doParams($object, $data, $editMode = false)
 	{
 		$object->hotel_name = $data['hotel_name'];
+		$object->type = $data['type'];
 		$object->hotel_id = isset($data['hotel_id']) ? $data['hotel_id'] : uniqid();
 		$object->star = $data['star'];
 		$object->address = $data['address'];
@@ -139,7 +140,7 @@ class HotelDetail extends Emodel {
 		$object->phone_number = $data['phone_number'];
 		$object->fax_number = $data['fax_number'];
 		$object->landmark_name = isset($data['landmark_name']) ? $data['landmark_name'] : null;
-		$object->mst030_id = isset($data['mst030_id']) ? $data['mst030_id'] : null;
+		$object->mst030_id = !empty($data['mst030_id']) ? $data['mst030_id'] : null;
 		$object->email = $data['email'];
 		$object->website = $data['website'];
 		$object->mst004_id = $data['mst004_id'];

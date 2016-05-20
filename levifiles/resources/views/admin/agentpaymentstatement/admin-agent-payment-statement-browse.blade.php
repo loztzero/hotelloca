@@ -70,7 +70,7 @@
 			        <div class="col-xs-6">
 			            <label>Status Order</label>
 						<div class="selector">
-							{!! Form::select('status_order', array('' => 'All', 'Pending' => 'Pending', 'Confirmed' => 'Confirmed', 'Cancel' => 'Cancel'), Request::get('status_order'), array('class' => 'full-width')) !!}
+							{!! Form::select('status_flag', array('' => 'All', 'Pending' => 'Pending', 'Confirmed' => 'Confirmed', 'Cancel' => 'Cancel'), Request::get('status_flag'), array('class' => 'full-width')) !!}
 						</div>
 			        </div>
 			    </div>
@@ -87,12 +87,13 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th width="100px" rowspan="2">Action</th>
 						<th colspan="2">Order Booking</th>
 						<th rowspan="2">Agent</th>
-						<th rowspan="2">Total Payment</th>
+						<th rowspan="2">Hotel</th>
+						<th rowspan="2" class="td-right">Total Payment</th>
 						<th rowspan="2">Status</th>
 						<th rowspan="2">Status Payment</th>
+						<th rowspan="2">Action</th>
 					</tr>
 					<tr>
 						<th>Number</th>
@@ -102,25 +103,17 @@
 				<tbody>
 					@foreach($paymentList as $payment)
 					<tr>
-						<td>
-							<form action="{{URL::to('admin/agent-payment-statement/do-something-here')}}" method="post" class="pull-left">
-								<input type="hidden" value="{{ csrf_token() }}" name="_token">
-				            	<input type="hidden" value="{{ $payment->id }}" name="id">
-				            	<button type="submit" class="btn-primary" title="Edit Deposit"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-							</form>
-						</td>
 						<td>{{ $payment->order_no }}</td>
 						<td>{{ $helpers::dateFormatterMysql($payment->order_date) }}</td>
 						<td>{{ $payment->agent->email }}</td>
-						<td>{{ $payment->tot_gross_price }}</td>
+						<td>{{ $payment->hotel_name }}</td>
+						<td class="td-right">{{ $payment->curr_code }}. {{ number_format($payment->tot_gross_price, 0, ',', '.') }}</td>
 						<td>{{ $payment->status_flag }}</td>
+						<td>{{ $payment->status_pymnt }}</td>
 						<td>
-							<div class="selector">
-								<select class="full-width">
-									<option value="Cancel">Cancel</option>
-									<option value="Done">Done</option>
-								</select>
-							</div>
+							@if($payment->status_pymnt == 'Pending')
+			            		<a href="{{ url('admin/agent-payment-statement/change-status/'). '/' .$payment->id }}" class="button btn-small sky-blue1" title="Change Status Payment"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp; Change Status Payment</a>
+							@endif
 						</td>
 					</tr>
 					@endforeach

@@ -100,6 +100,7 @@
 							<a href="{{ url('admin/hotel-vs-user/facility') . '?hotel=' . $hotel->id }}" class="button btn-small sky-blue2">Add Facility</a>
 							<a href="{{ url('admin/hotel-vs-user/room') . '?hotel=' . $hotel->id }}" class="button btn-small sky-blue2">Add Rooms</a><br><br>
 							<a href="{{ url('admin/hotel-vs-user/picture') . '?hotel=' . $hotel->id }}" class="button btn-small sky-blue2">Add Picture</a>
+							<a href="{{ url('admin/hotel-vs-user/user') . '?hotel=' . $hotel->id }}" class="button btn-small sky-blue2">Connect To User</a>
 						</td>
 					</tr>
 					@endforeach

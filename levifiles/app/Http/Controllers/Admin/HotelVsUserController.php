@@ -76,7 +76,14 @@ class HotelVsUserController extends Controller {
 		}
 
 		$hotelDetail = $hotelDetail->doParams($hotelDetail, $data);
+		// echo '<pre>';
+		// echo 'Wait A Moment, tested data';
+		// print_r($data['description']);
+		//die();
     	$hotelDetail->save();
+		// echo '=========';
+		// print_r($hotelDetail->description);
+		// die();
 
 		DB::commit();
 
@@ -365,6 +372,49 @@ class HotelVsUserController extends Controller {
     	Session::flash('message', array('Successfully saved your facility'));
         return Redirect::to('admin/hotel-vs-user/room-facility?room='.$room->id);
 
+	}
+
+	public function getUser(Request $request){
+		if($request->has('hotel')){
+			$hotel = HotelDetail::where('id', '=', $request->get('hotel'))->first();
+			return view('admin.hotelvsuser.admin-hotel-vs-user-email')
+					->with('hotel', $hotel);
+		}
+	}
+
+	public function postSaveUser(Request $request){
+
+		$this->validate($request, [
+	        'email' => 'required|email',
+			'id' => 'required'
+	    ], [
+			'email.required' => 'This email must be filled',
+			'email.email' => 'This email must valid',
+			'id.required' => 'The data hotel must be valid',
+		]);
+
+		$hotel = HotelDetail::find($request->id);
+		if($hotel){
+			if(User::where('email', '=', $request->email)->exists()){
+				Session::flash('error', array('This email already registered'));
+				return Redirect::to("admin/hotel-vs-user/user?hotel=$request->id")->withInput($request->all());
+			} else {
+				$user = new User();
+				$user->email = $request->email;
+				$user->password = uniqId();
+				$user->save();
+
+				$hotel->mst001_id = $user->id;
+				$hotel->save();
+			}
+
+		} else {
+			Session::flash('error', array('The data hotel must be valid'));
+			return Redirect::to("admin/hotel-vs-user");
+		}
+
+		Session::flash('message', 'The user successfully registed');
+		return Redirect::to('admin/hotel-vs-user');
 	}
 
 

@@ -8,7 +8,7 @@
 	        </div>
 	        <ul class="breadcrumbs pull-right">
 	            <li><a href="#">Admin</a></li>
-                <li><a href="#">Hotel Vs User</a></li>
+                <li><a href="{{ url('admin/hotel-vs-user') }}">Hotel Vs User</a></li>
 	            <li class="active">Hotel Picture</li>
 	        </ul>
 	    </div>

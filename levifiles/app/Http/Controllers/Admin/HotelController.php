@@ -35,6 +35,7 @@ class HotelController extends Controller {
 					: $result;
 
 		$hotelList = $result->paginate(20);
+		$hotelList->setPath('hotel');
 		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'country_name');
 		return view('admin.hotel.admin-hotel-browse')
 				->with('hotelList', $hotelList)

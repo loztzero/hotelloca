@@ -7,7 +7,7 @@
 	            <h2 class="entry-title">Hotel Room</h2>
 	        </div>
 	        <ul class="breadcrumbs pull-right">
-	            <li><a href="#">Hotel</a></li>
+	            <li><a href="{{ url('admin/hotel-vs-user') }}">Hotel</a></li>
 	            <li class="active">Hotel Room</li>
 	        </ul>
 	    </div>

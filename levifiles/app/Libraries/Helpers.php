@@ -74,6 +74,11 @@ class Helpers {
 		return $returnObj;
 	}
 
+	public static function isValidDateFormat($date){
+		$dt = DateTime::createFromFormat("Y-m-d", $date);
+		return $dt !== false && !array_sum($dt->getLastErrors());
+	}
+
 
 }
 

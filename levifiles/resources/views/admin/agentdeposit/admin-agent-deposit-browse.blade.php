@@ -19,14 +19,13 @@
 
 		<div class="travelo-box">
 			<form action="{{ url('/admin/agent-deposit') }}" method="get" >
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 				<h3>Deposit Agent</h3>
 				@include('layouts.message-helper')
 			    <div class="row form-group">
 			        <div class="col-xs-12">
 			            <label>Agent</label>
-			            <input type="text" class="input-text full-width" value="{{ Request::get('hotel_name') }}" id="hotelName" name="hotel_name">
+			            <input type="text" class="input-text full-width" value="{{ Request::get('email') }}" id="email" name="email">
 			        </div>
 			    </div>
 

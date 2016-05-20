@@ -1,7 +1,7 @@
 @extends('layouts.general-travel-layout')
 @section('content')
 <div class="container" ng-controller="MainCtrl">
-	
+
 	<div class="travelo-box">
 
 		<h3>Register as Agent</h3>
@@ -20,7 +20,7 @@
 		    <div class="form-group">
 				<div class="col-xs-12">
 		            <label>Address *</label>
-		          	<textarea type="text" class="input-text full-width" value="{{ old('address') }}" id="address" name="address" required></textarea>
+		          	<textarea type="text" class="input-text full-width" id="address" name="address" required>{{ old('address') }}</textarea>
 		        </div>
 		    </div>
 
@@ -42,7 +42,7 @@
 			    <div class="col-xs-6">
 		            <label>City *</label>
 		            <div class="selector" id="citySelector">
-			            <select ng-model="field.city" name="mst003_id" required id="city" class="full-width">
+			            <select ng-model="field.city" name="city" required id="city" class="full-width">
 				          	<option value="">Select A City</option>
 				          	<option ng-repeat="city in cities" value="@{{city.id}}" ng-selected="field.city == city.id">@{{city.city_name}}</option>
 			          	</select>
@@ -90,7 +90,7 @@
 					<button type="submit" class="button small">Register</button>
 		        </div>
 		    </div>
-	    	
+
 		</form>
 	</div>
 </div>

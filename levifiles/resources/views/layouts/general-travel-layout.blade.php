@@ -90,7 +90,7 @@
                                         <a href="{{ url('agent/booking-history') }}" title="My Booking">My Booking</a>
                                     </li>
                                     <li {{ Request::segment('2') == 'confirmation-payment' ? 'class=active' : '' }} >
-                                        <a href="{{ url('agent/confirmation-payment') }}" title="Confirmation Payment">Confirmation Payment</a>
+                                        <a href="{{ url('agent/confirmation-payment') }}" title="Payment Confirmation">Payment Confirmation</a>
                                     </li>
                                     <li>
                                         <a href="{{ url('auth/logout') }}" title="Logout">Logout</a>
@@ -151,11 +151,11 @@
                             <li class="ribbon">
                                 <a href="#">Hotel</a>
                                 <ul class="menu mini">
-                                    <!-- <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
-                                        <a href="{{url('admin/hotel')}}">Hotel Register</a>
-                                    </li> -->
                                     <li {{ Request::segment('2') == 'hotel-vs-user' ? 'class=active' : '' }} >
                                         <a href="{{url('admin/hotel-vs-user')}}">Hotel Register</a>
+                                    </li>
+                                    <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
+                                        <a href="{{url('admin/hotel')}}">Hotels</a>
                                     </li>
                                 </ul>
                             </li>
