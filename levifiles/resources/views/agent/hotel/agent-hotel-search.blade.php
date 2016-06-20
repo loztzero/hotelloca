@@ -38,7 +38,7 @@
                             </div><!-- end content -->
                         </div>
                     </div>
-                    
+
                     <div class="panel style1 arrow-right">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#rating-filter" class="collapsed">User Rating</a>
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="panel style1 arrow-right">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#modify-search-panel" class="collapsed">Modify Search</a>
@@ -122,16 +122,16 @@
                 <div class="sort-by-section clearfix">
                     <h4 class="sort-by-title block-sm">Sort results by:</h4><br>
                     <h4 class="sort-by-title block-sm">
-                        <?php 
-                            $url = $request->url() 
-                            . '?adults=' . $request->adults 
-                            . '&child=' . $request->child 
-                            . '&city=' . $request->city 
-                            . '&country=' . $request->country 
-                            . '&date_from=' . $request->date_from 
-                            . '&date_to=' . $request->date_to 
-                            . '&hotel_name=' . $request->hotel_name 
-                            . '&nationality=' . $request->nationality 
+                        <?php
+                            $url = $request->url()
+                            . '?adults=' . $request->adults
+                            . '&child=' . $request->child
+                            . '&city=' . $request->city
+                            . '&country=' . $request->country
+                            . '&date_from=' . $request->date_from
+                            . '&date_to=' . $request->date_to
+                            . '&hotel_name=' . $request->hotel_name
+                            . '&nationality=' . $request->nationality
                             . '&room=' . $request->room;
                         ?>
                         {{-- $url . '&order_by=' --}}
@@ -154,7 +154,7 @@
                             </a>
                         </li>
                     </ul>
-                    
+
                 </div>
                 <div class="hotel-list listing-style3 hotel">
                     @foreach($hotels as $hotel)
@@ -185,7 +185,7 @@
                                 </div>
                                 <div>
                                     <p>
-                                        {{ $hotel->description }}
+                                        {{ strip_tags($hotel->description) }}
                                     </p>
                                     <div>
                                         <span class="price"><small>RATE / Night / Rp</small>{{ number_format($hotel->nett_value, 0, ',', '.') }}</span>

@@ -85,7 +85,7 @@
 				<div class="col-xs-6">
 		          	<label>Bed Type *</label>
 		          	<div class="selector">
-			         	{!! Form::select('bed_type', array('Queen' => 'Queen', 'King' => 'King') , old('bed_type'), array('required', 'id' => 'bedType', 'class' => 'full-width')) !!}
+			         	{!! Form::select('bed_type', Config::get('enums.bedTypes') , old('bed_type'), array('required', 'id' => 'bedType', 'class' => 'full-width')) !!}
 			        </div>
 		        </div>
 

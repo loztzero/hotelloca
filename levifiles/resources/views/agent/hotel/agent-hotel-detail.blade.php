@@ -67,9 +67,9 @@
                             </div>
                             <div class="long-description">
                                 <h2>About {{ $hotel->hotel_name }}</h2>
-                                <p>
-                                    {{ $hotel->description }}
-                                </p>
+                                <div>
+                                    {!! $hotel->description !!}
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade in active" id="hotel-availability">

@@ -4,7 +4,7 @@ return [
     'activeState' => [
         'Active' => "Active",
         'Inactive' => "Inactive",
-    ], 
+    ],
 
     'role' => [
         'Agent' => "Agent",
@@ -16,7 +16,7 @@ return [
         'BNI' => "BNI",
         'CIMB' => "CIMB",
         'MANDIRI' => "MANDIRI",
-    ], 
+    ],
 
     'hotelTypes' => [
         'Hotel' => "Hotel",
@@ -31,6 +31,14 @@ return [
     ],
 
     'rupiah' => 'IDR',
+
+    'bedTypes' => [
+        'Queen' => 'Queen',
+        'King' => 'King',
+        'Twin' => 'Twin',
+        'Triple' => 'Triple',
+        'Quad' => 'Quad'
+    ]
 
 
 ];

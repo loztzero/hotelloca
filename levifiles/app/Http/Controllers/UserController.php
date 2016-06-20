@@ -31,7 +31,7 @@ class Usercontroller extends Controller {
 
 			if($userDetail == null){
 				Session::flash('error', 'Maaf Data user tidak ditemukan.. silahkan reload halaman ini.');
-				return Redirect::to('user'); 				
+				return Redirect::to('user');
 			}
 
 			$userDetail = $userDetail->doParams($userDetail, $data);
@@ -39,7 +39,7 @@ class Usercontroller extends Controller {
 
 
 			Session::flash('message', 'Data anda berhasil di modifikasi');
-			return Redirect::to('user')->with('userDetail', $userDetail); 
+			return Redirect::to('user')->with('userDetail', $userDetail);
 
 		} else {
 			$userDetail = $userDetail->doParams($userDetail, $data);
@@ -48,7 +48,7 @@ class Usercontroller extends Controller {
 			$userDetail->save();
 
 			Session::flash('message', 'Data anda berhasil di input');
-			return Redirect::to('user')->with('userDetail', $userDetail); 
+			return Redirect::to('user')->with('userDetail', $userDetail);
 		}
 
 	}
@@ -63,7 +63,7 @@ class Usercontroller extends Controller {
 
 			if($passenger == null){
 				Session::flash('error', 'Maaf Data user tidak ditemukan..'.$data['id'].' silahkan reload halaman ini.');
-				return Redirect::to('user/passenger-list'); 				
+				return Redirect::to('user/passenger-list');
 			}
 
 			$passenger = $passenger->doParams($passenger, $data);
@@ -71,7 +71,7 @@ class Usercontroller extends Controller {
 
 
 			Session::flash('message', 'Data anda berhasil di modifikasi');
-			return Redirect::to('user/passenger-list');//->with('passen', $userDetail); 
+			return Redirect::to('user/passenger-list');//->with('passen', $userDetail);
 
 		} else {
 			$passenger = $passenger->doParams($passenger, $data);
@@ -80,7 +80,7 @@ class Usercontroller extends Controller {
 			$passenger->save();
 
 			Session::flash('message', 'Data anda berhasil di input');
-			return Redirect::to('user/passenger-list'); //->with('userDetail', $userDetail); 
+			return Redirect::to('user/passenger-list'); //->with('userDetail', $userDetail);
 		}
 
 	}
@@ -95,7 +95,7 @@ class Usercontroller extends Controller {
             } else {
                 Session::flash('error', 'Tidak ada data yang dapat di hapus');
             }
-            
+
         } else {
             Session::flash('error', 'Maaf permintaan anda tidak dapat di proses, silahkan dicoba kembali');
         }
