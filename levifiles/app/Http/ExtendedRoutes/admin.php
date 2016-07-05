@@ -17,6 +17,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'role:Admin'], function() {
 	Route::controller('agent-booking', 'Admin\AgentBookingController');
 	Route::controller('hotel-vs-user', 'Admin\HotelVsUserController');
 	Route::controller('display-confirmation-payment', 'Admin\DisplayConfirmationPaymentController');
+	Route::controller('notification', 'Admin\NotificationController');
 });
 
 ?>
