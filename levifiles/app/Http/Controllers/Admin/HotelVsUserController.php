@@ -41,6 +41,8 @@ class HotelVsUserController extends Controller {
 
 		$result = $result->orderBy('a.created_at', 'desc');
 		$hotelList = $result->paginate(20);
+		$hotelList->setPath('hotel-vs-user');
+		
 		$countries = Country::orderBy('country_name', 'asc')->lists('country_name', 'id');
 		return view('admin.hotelvsuser.admin-hotel-vs-user-browse')
 				->with('hotelList', $hotelList)
@@ -76,14 +78,7 @@ class HotelVsUserController extends Controller {
 		}
 
 		$hotelDetail = $hotelDetail->doParams($hotelDetail, $data);
-		// echo '<pre>';
-		// echo 'Wait A Moment, tested data';
-		// print_r($data['description']);
-		//die();
     	$hotelDetail->save();
-		// echo '=========';
-		// print_r($hotelDetail->description);
-		// die();
 
 		DB::commit();
 

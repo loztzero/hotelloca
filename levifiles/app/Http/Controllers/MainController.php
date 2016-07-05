@@ -20,10 +20,6 @@ class MainController extends Controller {
 		return view('main.main-page');
 	}
 
-	public function getTest(){
-		echo "\x61\x6c\x66\x69\x40\x61\x6c\x65\x78\x69\x73\x2e\x69\x64";
-	}
-
 	public function getCompanyProfile()
 	{
 		return view('main.main-company-profile');

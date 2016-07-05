@@ -11,7 +11,6 @@ use App\Models\Country;
 use App\Models\City;
 use App\Models\Currency;
 use App\Models\HotelDetail;
-use App\Models\AreaLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CityFromCountry;
 class HotelController extends Controller {

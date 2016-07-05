@@ -146,6 +146,9 @@
                                     <li {{ Request::segment('2') == 'report' ? 'class=active' : '' }} >
                                         <a href="{{ url('admin/report-booking') }}" title="Report Booking">Report Booking</a>
                                     </li>
+                                    <li {{ Request::segment('2') == 'report' ? 'class=active' : '' }} >
+                                        <a href="{{ url('admin/display-confirmation-payment') }}" title="Display Confirmation Payment">Display Confirmation Payment</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="ribbon">
@@ -157,6 +160,12 @@
                                     <li {{ Request::segment('2') == 'hotel' ? 'class=active' : '' }} >
                                         <a href="{{url('admin/hotel')}}">Hotels</a>
                                     </li>
+                                </ul>
+                            </li>
+                            <li class="ribbon">
+                                <a href="{{ url('admin/notification') }}" onmouseover="resetNotificationCounter()">Notification (<span id="notificationCounter">0</span>)</a>
+                                <ul class="menu mini" id="notification">
+                                    <li><a href="{{ url('admin/notification') }}">Go To Notification</a></li>
                                 </ul>
                             </li>
                         @elseif(Auth::check() && Auth::user()->role == 'Hotel')
@@ -331,6 +340,42 @@
             });
         });
     </script>
+
+    @if(Auth::check())
+        @if(Auth::user()->role == 'Admin')
+        <script>
+            var counter = 0;
+            function resetNotificationCounter(){
+                counter = 0;
+            }
+            setInterval(function(){
+                //counter++;
+            	tjq(this).hide();
+            	tjq.ajax({
+                    url : "{{ url('admin/notification/notification-unread-list') }}",
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+            			counter = data.length;
+                        tjq("#notificationCounter").html(counter);
+
+                        tjq("#notification").html('');
+                        tjq.each(data, function(i, item) {
+                            tjq("#notification").prepend('<li><a href="{{ url('admin/notification') }}">Order No ' + data[i].order_no +'</a></li>');
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+            			// alert('error');
+                    },
+
+                });
+
+            }, 30000);
+        </script>
+        @endif
+    @endif
 
     @yield('script')
 </body>

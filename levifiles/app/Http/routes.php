@@ -16,6 +16,18 @@ Route::get('login-paksa', function(){
 	return redirect('/');
 });
 
+Route::get('halaman', function(){
+	echo url('agent/booking-history/order-detail/' . 'aaaa');
+});
+
+Route::get('artistik', function(){
+ // 	Artisan::call('list');
+	// echo '<pre>';
+	// print_r(Artisan::output());
+	// print_r(exec('php artisan --help'));
+	echo getcwd();
+});
+
 Route::get('react', function(){
 	//menambahkan ini tujuannya untuk mengijinkan web dari url yang berbeda untuk menagkases situs ini
 	header("Access-Control-Allow-Origin: http://localhost:8090");
@@ -157,6 +169,7 @@ Route::controller('api', 'ApiController');
 
 Route::get('/facebook', 'FacebookController@facebook');
 Route::get('/callback', 'FacebookController@callback');
+Route::get('/cronjob', 'CronJobController@logInfo');
 
 /*LOTS OF SAMPLE BELOW*/
 

@@ -662,6 +662,8 @@ class BookingController extends Controller {
 				$balanceOrderBooking->tot_payment = $orderBooking->tot_payment;
 				$balanceOrderBooking->save();
 
+				//flag untuk kirim email jika menggunakan deposit
+				$settledEmail = false;
 				if($request->payment_method == 'Balance'){
 					//potong deposit jika pembayarannya balance
 					$deposit = BalanceAgentDeposit::where('mst001_id', '=', Auth::user()->id)->first();
@@ -678,9 +680,93 @@ class BookingController extends Controller {
 					$logDeposit->deposit_value = $balanceOrderBooking->tot_payment;
 					$logDeposit->save();
 
+					$settledEmail = true;
+
 				}
 
 
+			}
+
+			//untuk kirim email ke hotel
+			$mailParams = [
+				'orderNumber' => $orderBooking->order_no,
+				'bookingDate' => $orderBooking->order_date,
+				'title' => $orderSummaryDetail->title,
+				'firstName' => $orderSummaryDetail->first_name,
+				'lastName' => $orderSummaryDetail->last_name,
+				'hotelName' => $bookingData->hotel->hotel_name,
+				'roomName' => $orderSummaryDetail->room_name,
+				'roomNums' => $orderSummaryDetail->room_num,
+				'checkInDate' => $orderSummaryDetail->check_in_date,
+				'checkOutDate' => $orderSummaryDetail->check_out_date,
+				'nights' => $orderSummaryDetail->night,
+				'type' => $orderSummaryDetail->type,
+				'numAdults' => $orderSummaryDetail->num_adults,
+				'numChilds' => $orderSummaryDetail->num_child,
+				'numBreakfast' => $orderSummaryDetail->num_breakfast,
+				'nonSmokingFlag' => $orderSummaryDetail->non_smoking_flag,
+				'interConnectionFlag' => $orderSummaryDetail->interconnetion_flag,
+				'earlyCheckInFlag' => $orderSummaryDetail->early_check_in_flag,
+				'lateCheckInFlag' => $orderSummaryDetail->late_check_in_flag,
+				'highFloorFlag' => $orderSummaryDetail->high_floor_flag,
+				'lowFloorFlag' => $orderSummaryDetail->low_floor_flag,
+				'twinFlag' => $orderSummaryDetail->twin_flag,
+				'honeymoonFlag' => $orderSummaryDetail->honeymoon_flag
+			];
+
+			//send email to hotel
+			Mail::send('agent.booking.agent-booking-success-email-to-hotel',
+				$mailParams,
+				function($message) use ($request, $hotelDetail) {
+				$message->to($hotelDetail->email, $hotelDetail->email)->subject('Booking for Order No ' . $orderBooking->order_no);
+			});
+
+			//untuk kirim email ke agent
+			$mailParamsAgent = [
+				'orderNumber' => $orderBooking->order_no,
+				'bookingDate' => $orderBooking->order_date,
+				'title' => $orderSummaryDetail->title,
+				'firstName' => $orderSummaryDetail->first_name,
+				'lastName' => $orderSummaryDetail->last_name,
+				'hotelName' => $bookingData->hotel->hotel_name,
+				'roomName' => $orderSummaryDetail->room_name,
+				'roomNums' => $orderSummaryDetail->room_num,
+				'checkInDate' => $orderSummaryDetail->check_in_date,
+				'checkOutDate' => $orderSummaryDetail->check_out_date,
+				'nights' => $orderSummaryDetail->night,
+				'type' => $orderSummaryDetail->type,
+				'numAdults' => $orderSummaryDetail->num_adults,
+				'numChilds' => $orderSummaryDetail->num_child,
+				'numBreakfast' => $orderSummaryDetail->num_breakfast,
+				'nonSmokingFlag' => $orderSummaryDetail->non_smoking_flag,
+				'interConnectionFlag' => $orderSummaryDetail->interconnetion_flag,
+				'earlyCheckInFlag' => $orderSummaryDetail->early_check_in_flag,
+				'lateCheckInFlag' => $orderSummaryDetail->late_check_in_flag,
+				'highFloorFlag' => $orderSummaryDetail->high_floor_flag,
+				'lowFloorFlag' => $orderSummaryDetail->low_floor_flag,
+				'twinFlag' => $orderSummaryDetail->twin_flag,
+				'honeymoonFlag' => $orderSummaryDetail->honeymoon_flag
+			];
+
+			//send email to agent
+			Mail::send('agent.booking.agent-booking-success-email-to-agent',
+				$mailParamsAgent,
+				function($message) use ($request) {
+				$message->to(Auth::user()->email, Auth::user()->email)->subject('Booking for Order No ' . $orderBooking->order_no);
+			});
+
+
+			//jika pembayarannya balance harus mengirimkan email
+			if($settledEmail){
+				$mailSettledPayment = [
+					'invoiceNumber' => $orderBooking->order_no,
+					'bookingHistoryLink' => url('agent/booking-history/order-detail/' . $orderBooking->order_no),
+				];
+				Mail::send('agent.booking.agent-booking-success-email-settled-payment',
+					$mailSettledPayment,
+					function($message) use ($request) {
+					$message->to(Auth::user()->email, Auth::user()->email)->subject('Payment for Order No ' . $orderBooking->order_no);
+				});
 			}
 
 		} catch (\Exception $e) {

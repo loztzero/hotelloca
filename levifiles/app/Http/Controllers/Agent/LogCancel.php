@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 use App\Emodel;
-class Hotel extends Emodel {
-	protected $table = 'HOTELS';
+use Validator;
+class LogCancel extends Emodel {
+	protected $table = 'LOG030';
 
 }

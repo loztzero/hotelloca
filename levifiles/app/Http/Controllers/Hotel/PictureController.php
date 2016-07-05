@@ -33,7 +33,7 @@ class PictureController extends ActivatedController {
 			return Redirect::to('hotel/picture');
 		}
 
-		//try {
+		//try {			
 
 			$uniqId = uniqid();
 			$idHotelDetail = HotelDetail::where('mst001_id', '=', Auth::user()->id)->first();

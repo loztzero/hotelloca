@@ -4,11 +4,11 @@
 	<div class="page-title-container">
 	    <div class="container">
 	        <div class="page-title pull-left">
-	            <h2 class="entry-title">Request</h2>
+	            <h2 class="entry-title">Booking</h2>
 	        </div>
 	        <ul class="breadcrumbs pull-right">
 	            <li><a href="#">Agent</a></li>
-	            <li class="active">Request</li>
+	            <li class="active">Booking</li>
 	        </ul>
 	    </div>
 	</div>
@@ -21,19 +21,19 @@
         <div class="row">
             <div id="main" class="col-sm-8 col-md-9">
                 <div class="booking-information travelo-box">
-                    <h2>Request Confirmation</h2>
+                    <h2>Booking Confirmation</h2>
                     <hr />
                     <div class="booking-confirmation clearfix">
                         <i class="soap-icon-recommend icon circle"></i>
                         <div class="message">
-                            <h4 class="main-message">Thank You. Your Request Order is Confirmed Now.</h4>
+                            <h4 class="main-message">Thank You. Your Booking Order is Confirmed Now.</h4>
                             <p>A confirmation email has been sent to your provided email address.</p>
                         </div>
                     </div>
                     <hr />
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
-                        <dt>Request number:</dt><dd>{{ $data->orderNumber }}</dd>
+                        <dt>Booking number:</dt><dd>{{ $data->orderNumber }}</dd>
                         <dt>Title:</dt><dd>{{ $data->title }}</dd>
                         <dt>First name:</dt><dd>{{ $data->firstName }}</dd>
                         <dt>Last name:</dt><dd>{{ $data->lastName }}</dd>
@@ -44,7 +44,7 @@
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <hr />
-                    <h2>View Request Details</h2>
+                    <h2>View Booking Details</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />
                     <?php //<a href="#" class="red-color underline view-link">https://www.travelo.com/booking-details/?=f4acb19f-9542-4a5c-b8ee</a>

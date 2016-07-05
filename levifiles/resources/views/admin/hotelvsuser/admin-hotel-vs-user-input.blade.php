@@ -41,7 +41,7 @@
 			        <div class="col-xs-6">
 			            <label>Type *</label>
 			            <div class="selector">
-		             		{!! Form::select('type', $hotelTypes , old('type'), array('required', 'class' => 'full-width')) !!}
+		             		{!! Form::select('types', $hotelTypes , old('types'), array('required', 'class' => 'full-width')) !!}
 			            </div>
 			        </div>
 			    </div>

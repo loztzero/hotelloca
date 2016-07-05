@@ -60,7 +60,7 @@
 				</caption>
 				<thead>
 					<tr>
-						<th width="100px">Action</th>
+						<th width="100px">Action</th> 	
 						<th>Hotel Name</th>
 						<th class="hide-for-small">Country</th>
 						<th class="hide-for-small">City</th>

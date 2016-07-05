@@ -1,6 +1,6 @@
 @extends('layouts.foundation-login')
 @section('content')
-
+	
 <div class="row" ng-controller="MainCtrl">
 	<div class="large-12 columns">
 		<ul class="breadcrumbs">
@@ -37,7 +37,7 @@
 							<td>Nama Hotel</td>
 							<td>Nama Hotel</td>
 						</tr>
-
+						
 					</table>
 				</div>
 			</div>
@@ -47,12 +47,12 @@
 					<label>Total Payment : xxx</label>
 				</div>
 			</div>
-
+			
 			<div class="row">
 				<div class="large-2 medium-3 small-12 column">
 					<input id="checkbox1" type="checkbox"><label for="checkbox1">Use Deposit</label>
 				</div>
-
+				
 				<div class="large-3 medium-6 small-12 column left">
 					<input type="text">
 				</div>

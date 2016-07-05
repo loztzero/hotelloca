@@ -40,7 +40,7 @@
 	@endforeach
 @endif
 
-
+	
 </div>
 @stop
 
