@@ -75,14 +75,14 @@
 					<tr>
 						<th>No Order</th>
 						<th>Order Date</th>
-						<th>Payment Value</th>
-						<th class="td-right">Transfer Date</th>
+						<th class="td-right">Payment Value</th>
+						<th>Transfer Date</th>
 						<th>Bank Transfer</th>
 						<th>Account Transfer</th>
 						<th>Name</th>
-						<th>Note</th>
 						<th>Status Booking</th>
 						<th>Status Payment</th>
+						<th>Note</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -97,13 +97,15 @@
 						<td>{{ $confirmation->name }}</td>
 						<td>{{ $confirmation->status_flag }}</td>
 						<td>{{ $confirmation->status_pymnt }}</td>
+						<td>{{ $confirmation->note }}</td>
 					</tr>
 					@endforeach
 				</tbody>
 				<tfoot>
 					<tr>
 						<td colspan="7" id="pagination">
-							{!! str_replace('/?', '?', $confirmations->appends(Request::only('tranfer_date_from', 'tranfer_date_to', 'order_no', 'order_date_from', 'order_date_to'))->render()) !!}
+							{{-- str_replace('/?', '?', $confirmations->appends(Request::only('tranfer_date_from', 'tranfer_date_to', 'order_no', 'order_date_from', 'order_date_to'))->render()) --}}
+							{!! $confirmations->appends(Request::only('tranfer_date_from', 'tranfer_date_to', 'order_no', 'order_date_from', 'order_date_to'))->render() !!}
 						</td>
 					</tr>
 				</tfoot>
